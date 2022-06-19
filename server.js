@@ -6,12 +6,12 @@ import fs from 'fs'
 
 const app = express();
 const PORT = process.env.PORT
-//const fs = require('fs') // this engine requires the fs module
 
 app.use(express.urlencoded({
     extended: true
 }))
 
+// below segment adapted from https://expressjs.com/en/advanced/developing-template-engines.html
 app.engine('ntl', (filePath, options, callback) => { // define the template engine
     fs.readFile(filePath, (err, content) => {
         if (err) return callback(err)
