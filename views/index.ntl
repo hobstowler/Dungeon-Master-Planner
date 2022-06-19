@@ -1,0 +1,13 @@
+<html>
+    <head>
+        #title#
+    </head>
+    <body>
+        #navigation#
+        #header#
+        #subHeader#
+        #description#
+        #table#
+        #input#
+    </body>
+</html>
