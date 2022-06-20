@@ -1,0 +1,16 @@
+body {
+    font-family: Calibri, sans-serif;
+}
+
+nav a {
+    margin-right: 10px;
+    padding-right: 10px;
+    border-right: 2px solid black;
+    text-decoration: none;
+    color: blue;
+    font-weight: 800;
+}
+
+nav a:last-child {
+    border-right: none;
+}

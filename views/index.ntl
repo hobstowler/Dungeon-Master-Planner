@@ -1,6 +1,7 @@
 <html>
     <head>
         #title#
+        <link href="/app.css" rel="stylesheet">
     </head>
     <body>
         #navigation#

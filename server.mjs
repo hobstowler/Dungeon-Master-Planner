@@ -3,6 +3,7 @@
 import 'dotenv/config'
 import express from "express"
 import fs from 'fs'
+import {navigationBar} from "./misc.js";
 
 const app = express();
 const PORT = process.env.PORT
@@ -10,6 +11,7 @@ const PORT = process.env.PORT
 app.use(express.urlencoded({
     extended: true
 }))
+app.use(express.static('style'))
 
 // below segment adapted from https://expressjs.com/en/advanced/developing-template-engines.html
 app.engine('ntl', (filePath, options, callback) => { // define the template engine
@@ -33,9 +35,9 @@ app.set('view engine', 'ntl') // register the template engine
 app.get('/', (req, res) => {
     return res.render('index', {
         title: 'new view',
-        header: 'This iss a header',
+        header: 'This is a header',
         subHeader: 'this is the subheader',
-        nav: '',
+        nav: navigationBar(),
         description: '',
         table: '',
         input: ''
