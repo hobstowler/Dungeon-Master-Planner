@@ -3,7 +3,7 @@
 import 'dotenv/config'
 import express from "express"
 import fs from 'fs'
-import {navigationBar} from "./misc.js";
+import {createForm, createTable, navigationBar} from "./misc.js";
 
 const app = express();
 const PORT = process.env.PORT
@@ -34,13 +34,13 @@ app.set('view engine', 'ntl') // register the template engine
 
 app.get('/', (req, res) => {
     return res.render('index', {
-        title: 'new view',
-        header: 'This is a header',
-        subHeader: 'this is the subheader',
+        title: 'The Home Page',
+        header: 'This is the Home Page',
+        subHeader: 'Welcome to the Home Page',
         nav: navigationBar(),
-        description: '',
-        table: '',
-        input: ''
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
     })
 })
 
