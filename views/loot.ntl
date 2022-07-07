@@ -1,0 +1,24 @@
+<html>
+    <head>
+        #title#
+        <link href="/app.css" rel="stylesheet">
+    </head>
+    <body>
+        #navigation#
+        #header#
+        #subHeader#
+        #description#
+        <table>
+            <thead>
+                <th>
+                    <td>Name</td>
+                    <td>Description</td>
+                    <td>Weight</td>
+                    <td>Value</td>
+                </tr>
+            </thead>
+            #table#
+        </table>
+        #input#
+    </body>
+</html>

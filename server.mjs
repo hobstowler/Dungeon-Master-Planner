@@ -44,6 +44,66 @@ app.get('/', (req, res) => {
     })
 })
 
+app.get('/scenarios', (req, res) => {
+    return res.render('scenarios', {
+        title: 'Scenarios',
+        header: 'These are your scenarios',
+        subHeader: 'Welcome to the Home Page',
+        nav: navigationBar(),
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
+    })
+})
+
+app.get('/dungeons', (req, res) => {
+    return res.render('dungeons', {
+        title: 'Dungeons',
+        header: 'These are your dungeons',
+        subHeader: '',
+        nav: navigationBar(),
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
+    })
+})
+
+app.get('/biomes', (req, res) => {
+    return res.render('biomes', {
+        title: 'Biomes',
+        header: 'These are your biomes',
+        subHeader: 'Welcome to the Home Page',
+        nav: navigationBar(),
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
+    })
+})
+
+app.get('/monsters', (req, res) => {
+    return res.render('monsters', {
+        title: 'Monsters',
+        header: 'These are your monsters',
+        subHeader: 'Welcome to the Home Page',
+        nav: navigationBar(),
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
+    })
+})
+
+app.get('/loot', (req, res) => {
+    return res.render('loot', {
+        title: 'Loot',
+        header: 'This is your loot',
+        subHeader: 'Welcome to the Home Page',
+        nav: navigationBar(),
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
+    })
+})
+
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
