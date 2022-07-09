@@ -2,16 +2,19 @@
 
 import 'dotenv/config'
 import express from "express"
+import mysql from "mysql"
 import fs from 'fs'
 import {createForm, createTable, navigationBar} from "./misc.js";
 
 const app = express();
+const conn = mysql.createConnection()
 const PORT = process.env.PORT
 
 app.use(express.urlencoded({
     extended: true
 }))
 app.use(express.static('style'))
+app.use(bodyParser.json())
 
 // below segment adapted from https://expressjs.com/en/advanced/developing-template-engines.html
 app.engine('ntl', (filePath, options, callback) => { // define the template engine
