@@ -1,5 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
-DROP TABLES Dungeon_Masters, Biomes, Dungeons, Dungeons_has_Monsters, Items, Monsters, Scenarios, Scenarios_has_Items, Types;
+DROP TABLE IF EXISTS Dungeon_Masters, Biomes, Dungeons, Dungeons_has_Monsters, Items, Monsters, Scenarios, Scenarios_has_Items, Types;
 
 -- -----------------------------------------------------
 -- Table Dungeon_Masters
@@ -259,3 +259,5 @@ VALUES ((select scenario_id from Scenarios where name = 'First Adventure'), (sel
        ((select scenario_id from Scenarios where name = 'Bad Things Happen (But Not To Us)'), (select item_id from Items where name = 'Potion of Fly'), 3),
        ((select scenario_id from Scenarios where name = 'Strange Happenings'), (select item_id from Items where name = 'Scimitar'), 1),
        ((select scenario_id from Scenarios where name = 'Strange Happenings'), (select item_id from Items where name = 'Scroll of Enlarge Person'), 2);
+
+SET FOREIGN_KEY_CHECKS = 1
