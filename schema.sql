@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS Dungeon_Masters, Biomes, Dungeons, Dungeons_has_Monsters, I
 -- -----------------------------------------------------
 CREATE OR REPLACE TABLE `Dungeon_Masters` (
   dungeon_master_id INT NOT NULL AUTO_INCREMENT,
-  name varchar(45) NOT NULL,
+  dungeon_master_name varchar(45) NOT NULL,
   lucky_dice varchar(45) NULL,
   PRIMARY KEY (dungeon_master_id)
 );
@@ -28,7 +28,7 @@ CREATE OR REPLACE TABLE Biomes (
 -- -----------------------------------------------------
 CREATE OR REPLACE TABLE Dungeons (
   dungeon_id INT NOT NULL AUTO_INCREMENT,
-  name varchar(45) NOT NULL,
+  dungeon_name varchar(45) NOT NULL,
   description TEXT NULL,
   light_level INT NOT NULL,
   Biomes_biome_id INT NOT NULL,
@@ -41,7 +41,7 @@ CREATE OR REPLACE TABLE Dungeons (
 -- -----------------------------------------------------
 CREATE OR REPLACE TABLE Scenarios (
   scenario_id INT NOT NULL AUTO_INCREMENT,
-  name varchar(45) NOT NULL,
+  scenario_name varchar(45) NOT NULL,
   summary TEXT NULL,
   target_level INT NOT NULL,
   session_time DATE NULL,
@@ -69,7 +69,7 @@ CREATE OR REPLACE TABLE Scenarios (
 -- -----------------------------------------------------
 CREATE OR REPLACE TABLE Monsters (
   monster_id INT NOT NULL AUTO_INCREMENT,
-  name varchar(45) NOT NULL,
+  monster_name varchar(45) NOT NULL,
   description TEXT NULL,
   challenge_rating INT NOT NULL,
   health_points INT NOT NULL,
@@ -104,7 +104,7 @@ CREATE OR REPLACE TABLE Types (
 -- -----------------------------------------------------
 CREATE OR REPLACE TABLE Items (
   item_id INT NOT NULL AUTO_INCREMENT,
-  name varchar(45) NOT NULL,
+  item_name varchar(45) NOT NULL,
   description TEXT NULL,
   weight DECIMAL(6,2) NOT NULL,
   value INT NOT NULL,
@@ -170,7 +170,7 @@ CREATE OR REPLACE TABLE Dungeons_has_Monsters (
 );
 
 
-INSERT INTO Dungeon_Masters (name, lucky_dice)
+INSERT INTO Dungeon_Masters (dungeon_master_name, lucky_dice)
 VALUES ('Damian Russ', 'sparkly purple d20'),
        ('Hobs Towler', 'some tiny dice inside of the dice'),
        ('Mysterious Stranger','they like rolling their eyes');
@@ -187,7 +187,7 @@ VALUES ('cave', 'Dark and gloomy; mostly rock and bat guano. Slightly damp. All 
        ('field', 'Big and open. Lots of grass. Plenty of room for a fight, but not many places to take cover.'),
        ('city', 'Lots of people. Too many people. Has everything you could ever want. Really bad place for a fight, unless you''re a fan of collateral damage.');
 
-INSERT INTO Monsters (name, description, challenge_rating, health_points, strength, dexterity, constitution, intelligence, wisdom, charisma, armor_class, talent)
+INSERT INTO Monsters (monster_name, description, challenge_rating, health_points, strength, dexterity, constitution, intelligence, wisdom, charisma, armor_class, talent)
 VALUES ('Giant Spider', 'Big. Lots of legs. Eight, to be exact.',
             1, 16, 11, 17, 12, 0, 10, 2, 14, 'Poison'),
        ('Bugbear', 'Not a bug, but maybe a bear. Furry, floppy ears, big eyes, and lots of teeth.',
@@ -201,14 +201,14 @@ VALUES ('Giant Spider', 'Big. Lots of legs. Eight, to be exact.',
        ('Solar Angel', 'Metallic skin and three pairs of wings. Literally an amalgamation of Good. It takes a lot of dedication to get attacked by one, so congratulations.',
             23, 363, 28, 20, 30, 23, 27, 25, 44, 'Slaying Arrow, Spellcasting');
 
-INSERT INTO Items (name, description, weight, value, Types_type_id)
+INSERT INTO Items (item_name, description, weight, value, Types_type_id)
 VALUES ('Scimitar', 'A one-handed curved sword that deals slashing damage.', 4, 1500, (select type_id from Types where type_name = 'weapon')),
        ('Longbow', 'Requires two hands and arrows.', 3, 7500, (select type_id from Types where type_name = 'weapon')),
        ('Scroll of Enlarge Person', 'Can make one of you really, really, big.', 0.1, 2500, (select type_id from Types where type_name = 'scroll')),
        ('Potion of Fly', 'Drink to forget gravity for a bit. Try to remember before the potion wears off.', 0.1, 75000, (select type_id from Types where type_name = 'potion')),
        ('Full Plate', 'Lets adventures live out their dreams of becoming a walking tin can.', 50, 150000, (select type_id from Types where type_name = 'armor'));
 
-INSERT INTO Dungeons (name, description, light_level, Biomes_biome_id)
+INSERT INTO Dungeons (dungeon_name, description, light_level, Biomes_biome_id)
 VALUES ('Cavesploration', 'A generic cave with few monsters, safe for new players.', 0,
             (select biome_id from Biomes where biome_name = 'cave')),
        ('Armageddon', 'A big, open field with nowhere to hide. Good for a final scenario, when you''re sick of your players and ready to start a new campaign.', 2,
@@ -218,7 +218,7 @@ VALUES ('Cavesploration', 'A generic cave with few monsters, safe for new player
        ('Hit the Town', 'Allows for players to go shopping! Also features a mysterious figure.', 1,
             (select biome_id from Biomes where biome_name = 'town'));
 
-INSERT INTO Scenarios (name, summary, target_level, session_time, Dungeon_Masters_dungeon_master_id, Dungeons_dungeon_id)
+INSERT INTO Scenarios (scenario_name, summary, target_level, session_time, Dungeon_Masters_dungeon_master_id, Dungeons_dungeon_id)
 VALUES ('First Adventure', 'The party meets in a tavern, is approached by a mysterious cloaked stranger, and is asked to retrieve an artifact hidden in a nearby cave.', 1, '2022-07-23',
             (select dungeon_master_id from Dungeon_Masters where name = 'Damian Russ'),
             (select dungeon_id from Dungeons where name = 'Cavesploration')),
