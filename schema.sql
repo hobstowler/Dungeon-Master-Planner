@@ -55,7 +55,7 @@ CREATE OR REPLACE TABLE Scenarios (
   target_level INT NOT NULL,
   session_time DATE NULL,
   Dungeon_Masters_dungeon_master_id INT NOT NULL,
-  Dungeons_dungeon_id INT NOT NULL DEFAULT 1,
+  Dungeons_dungeon_id INT NULL DEFAULT 1,
   PRIMARY KEY (scenario_id),
   UNIQUE INDEX scenario_id_UNIQUE (scenario_id ASC) VISIBLE,
   INDEX fk_Scenarios_Dungeon_Masters1_idx (Dungeon_Masters_dungeon_master_id ASC) VISIBLE,
