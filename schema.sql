@@ -4,11 +4,12 @@ DROP TABLE IF EXISTS Dungeon_Masters, Biomes, Dungeons, Dungeons_has_Monsters, I
 -- -----------------------------------------------------
 -- Table Dungeon_Masters
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE `Dungeon_Masters` (
+CREATE OR REPLACE TABLE Dungeon_Masters (
   dungeon_master_id INT NOT NULL AUTO_INCREMENT,
   dungeon_master_name varchar(45) NOT NULL,
   lucky_dice varchar(45) NULL,
-  PRIMARY KEY (dungeon_master_id)
+  PRIMARY KEY (dungeon_master_id),
+  UNIQUE INDEX dungeon_master_id_UNIQUE (dungeon_master_id ASC) VISIBLE
 );
 
 
@@ -19,7 +20,8 @@ CREATE OR REPLACE TABLE Biomes (
   biome_id INT NOT NULL AUTO_INCREMENT,
   biome_name varchar(45) NOT NULL,
   description TEXT NULL,
-  PRIMARY KEY (biome_id)
+  PRIMARY KEY (biome_id),
+  UNIQUE INDEX biome_id_UNIQUE (biome_id ASC) VISIBLE
 );
 
 
@@ -31,8 +33,15 @@ CREATE OR REPLACE TABLE Dungeons (
   dungeon_name varchar(45) NOT NULL,
   description TEXT NULL,
   light_level INT NOT NULL,
-  Biomes_biome_id INT NOT NULL,
-  PRIMARY KEY (dungeon_id)
+  Biomes_biome_id INT NOT NULL DEFAULT 1,
+  PRIMARY KEY (dungeon_id),
+  UNIQUE INDEX dungeon_id_UNIQUE (dungeon_id ASC) VISIBLE,
+  INDEX fk_Dungeons_Biomes1_idx (Biomes_biome_id ASC) VISIBLE,
+  CONSTRAINT fk_Dungeons_Biomes1
+    FOREIGN KEY (Biomes_biome_id)
+    REFERENCES Biomes (biome_id)
+    ON DELETE RESTRICT
+    ON UPDATE NO ACTION
 );
 
 
@@ -46,7 +55,7 @@ CREATE OR REPLACE TABLE Scenarios (
   target_level INT NOT NULL,
   session_time DATE NULL,
   Dungeon_Masters_dungeon_master_id INT NOT NULL,
-  Dungeons_dungeon_id INT NOT NULL,
+  Dungeons_dungeon_id INT NOT NULL DEFAULT 1,
   PRIMARY KEY (scenario_id),
   UNIQUE INDEX scenario_id_UNIQUE (scenario_id ASC) VISIBLE,
   INDEX fk_Scenarios_Dungeon_Masters1_idx (Dungeon_Masters_dungeon_master_id ASC) VISIBLE,
@@ -54,12 +63,12 @@ CREATE OR REPLACE TABLE Scenarios (
   CONSTRAINT fk_Scenarios_Dungeon_Masters1
     FOREIGN KEY (Dungeon_Masters_dungeon_master_id)
     REFERENCES Dungeon_Masters (dungeon_master_id)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT fk_Scenarios_Dungeons1
     FOREIGN KEY (Dungeons_dungeon_id)
     REFERENCES Dungeons (dungeon_id)
-    ON DELETE NO ACTION
+    ON DELETE SET NULL
     ON UPDATE NO ACTION
 );
 
@@ -94,8 +103,7 @@ CREATE OR REPLACE TABLE Types (
   type_name varchar(45) NOT NULL,
   description TEXT NULL,
   PRIMARY KEY (type_id),
-  UNIQUE INDEX type_id_UNIQUE (type_id ASC) VISIBLE,
-  UNIQUE INDEX type_UNIQUE (type_name ASC) VISIBLE
+  UNIQUE INDEX type_id_UNIQUE (type_id ASC) VISIBLE
 );
 
 
@@ -115,7 +123,7 @@ CREATE OR REPLACE TABLE Items (
   CONSTRAINT fk_Items_Types1
     FOREIGN KEY (Types_type_id)
     REFERENCES Types (type_id)
-    ON DELETE NO ACTION
+    ON DELETE RESTRICT
     ON UPDATE NO ACTION
 );
 
@@ -135,12 +143,12 @@ CREATE OR REPLACE TABLE Scenarios_has_Items (
   CONSTRAINT fk_Scenarios_has_Items_Scenarios
     FOREIGN KEY (Scenarios_scenario_id)
     REFERENCES Scenarios (scenario_id)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT fk_Scenarios_has_Items_Items1
     FOREIGN KEY (Items_item_id)
     REFERENCES Items (item_id)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
 );
 
@@ -160,12 +168,12 @@ CREATE OR REPLACE TABLE Dungeons_has_Monsters (
   CONSTRAINT fk_Dungeons_has_Monsters_Dungeons1
     FOREIGN KEY (Dungeons_dungeon_id)
     REFERENCES Dungeons (dungeon_id)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT fk_Dungeons_has_Monsters_Monsters1
     FOREIGN KEY (Monsters_monster_id)
     REFERENCES Monsters (monster_id)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
 );
 
@@ -182,7 +190,8 @@ VALUES ('weapon', 'Swords, shields, bows, arrows, etc. Things that hurt.'),
        ('armor', 'Get hurt slightly less. Better armor = less hurt.');
 
 INSERT INTO Biomes (biome_name, description)
-VALUES ('cave', 'Dark and gloomy; mostly rock and bat guano. Slightly damp. All good adventurers will explore one at least once.'),
+VALUES ('no biome', 'You have not chosen a biome.'),
+       ('cave', 'Dark and gloomy; mostly rock and bat guano. Slightly damp. All good adventurers will explore one at least once.'),
        ('town', 'People live here. Good for resting and stocking up on goods, but maybe not the smartest place for a fight.'),
        ('field', 'Big and open. Lots of grass. Plenty of room for a fight, but not many places to take cover.'),
        ('city', 'Lots of people. Too many people. Has everything you could ever want. Really bad place for a fight, unless you''re a fan of collateral damage.');
@@ -194,7 +203,7 @@ VALUES ('Giant Spider', 'Big. Lots of legs. Eight, to be exact.',
             2, 16, 16, 13, 13, 10, 10, 9, 17, 'Stalker'),
        ('Darkmantle', 'Gross octopus thing that clings to cave ceilings and drops on unsuspecting adventurers.',
             1, 15, 11, 15, 14, 2, 11, 10, 15, NULL),
-       ('Tarrasque', 'Basically Godzilla. Technically survivable, but wouldn’t it be easier to just give up?',
+       ('Tarrasque', 'Basically Godzilla. Technically survivable, but wouldn''t it be easier to just give up?',
             25, 525, 41, 16, 34, 3, 15, 14, 40, 'Carapace, Powerful Leaper, Regeneration, Rush, Spines'),
        ('Gold Dragon, Great Wyrm', 'A golden dragon, and the goody two-shoes of dragonkind.',
             23, 465, 43, 6, 29, 26, 27, 26, 40, 'Change Shape, Detect Gems, Divine Aid, Fast Flight, Fire Aura, Luck, Weakening Breath'),
@@ -209,7 +218,9 @@ VALUES ('Scimitar', 'A one-handed curved sword that deals slashing damage.', 4, 
        ('Full Plate', 'Lets adventures live out their dreams of becoming a walking tin can.', 50, 150000, (select type_id from Types where type_name = 'armor'));
 
 INSERT INTO Dungeons (dungeon_name, description, light_level, Biomes_biome_id)
-VALUES ('Cavesploration', 'A generic cave with few monsters, safe for new players.', 0,
+VALUES ('OH NO', 'You haven''t chosen or created a dungeon for this scenario yet!', -1,
+            (select biome_id from Biomes where biome_name = 'no biome')),
+       ('Cavesploration', 'A generic cave with few monsters, safe for new players.', 0,
             (select biome_id from Biomes where biome_name = 'cave')),
        ('Armageddon', 'A big, open field with nowhere to hide. Good for a final scenario, when you''re sick of your players and ready to start a new campaign.', 2,
             (select biome_id from Biomes where biome_name = 'field')),
@@ -220,44 +231,44 @@ VALUES ('Cavesploration', 'A generic cave with few monsters, safe for new player
 
 INSERT INTO Scenarios (scenario_name, summary, target_level, session_time, Dungeon_Masters_dungeon_master_id, Dungeons_dungeon_id)
 VALUES ('First Adventure', 'The party meets in a tavern, is approached by a mysterious cloaked stranger, and is asked to retrieve an artifact hidden in a nearby cave.', 1, '2022-07-23',
-            (select dungeon_master_id from Dungeon_Masters where name = 'Damian Russ'),
-            (select dungeon_id from Dungeons where name = 'Cavesploration')),
+            (select dungeon_master_id from Dungeon_Masters where dungeon_master_name = 'Damian Russ'),
+            (select dungeon_id from Dungeons where dungeon_name = 'Cavesploration')),
        ('Bad Things Happen', 'The party angers an Elder God and is forced to fight its minions.', 20, '2022-07-24',
-            (select dungeon_master_id from Dungeon_Masters where name = 'Hobs Towler'),
-            (select dungeon_id from Dungeons where name = 'Armageddon')),
-       ('Second Adventure', 'The party delivers the artifact to the cloacked stranger, only to discover that they are the Big Bad! The party must track them down and recover the artifact before they use it to destroy the whole town!', 2, NULL,
-            (select dungeon_master_id from Dungeon_Masters where name = 'Damian Russ'),
-            (select dungeon_id from Dungeons where name = 'Hit the Town')),
+            (select dungeon_master_id from Dungeon_Masters where dungeon_master_name = 'Hobs Towler'),
+            (select dungeon_id from Dungeons where dungeon_name = 'Armageddon')),
+       ('Second Adventure', 'The party delivers the artifact to the cloaked stranger, only to discover that they are the Big Bad! The party must track them down and recover the artifact before they use it to destroy the whole town!', 2, NULL,
+            (select dungeon_master_id from Dungeon_Masters where dungeon_master_name = 'Damian Russ'),
+            (select dungeon_id from Dungeons where dungeon_name = 'Hit the Town')),
        ('Bad Things Happen (But Not To Us)', 'The party befriends an Elder God and tries to conquer the world!', 20, '2022-07-24',
-            (select dungeon_master_id from Dungeon_Masters where name = 'Mysterious Stranger'),
-            (select dungeon_id from Dungeons where name = 'Metropopocalypse')),
+            (select dungeon_master_id from Dungeon_Masters where dungeon_master_name = 'Mysterious Stranger'),
+            (select dungeon_id from Dungeons where dungeon_name = 'Metropopocalypse')),
        ('Strange Happenings', 'There''s a new cult in town, and the adventures must get to the bottom of their wicked plot!', 1, NULL,
-            (select dungeon_master_id from Dungeon_Masters where name = 'Hobs Towler'),
-            (select dungeon_id from Dungeons where name = 'Hit the Town'));
+            (select dungeon_master_id from Dungeon_Masters where dungeon_master_name = 'Hobs Towler'),
+            (select dungeon_id from Dungeons where dungeon_name = 'Hit the Town'));
 
 INSERT INTO Dungeons_has_Monsters (Dungeons_dungeon_id, Monsters_monster_id, quantity)
-VALUES ((select dungeon_id from Dungeons where name = 'Cavesploration'),
-            (select monster_id from Monsters where name='Giant Spider'), 1),
-       ((select dungeon_id from Dungeons where name = 'Cavesploration'),
-            (select monster_id from Monsters where name='Darkmantle'), 2),
-       ((select dungeon_id from Dungeons where name = 'Armageddon'),
-            (select monster_id from Monsters where name='Tarrasque'), 1),
-       ((select dungeon_id from Dungeons where name = 'Metropopocalypse'),
-            (select monster_id from Monsters where name='Gold Dragon, Great Wyrm'), 1),
-       ((select dungeon_id from Dungeons where name = 'Metropopocalypse'),
-            (select monster_id from Monsters where name='Solar Angel'), 1),
-       ((select dungeon_id from Dungeons where name = 'Hit the Town'),
-            (select monster_id from Monsters where name='Bugbear'), 1);
+VALUES ((select dungeon_id from Dungeons where dungeon_name = 'Cavesploration'),
+            (select monster_id from Monsters where monster_name='Giant Spider'), 1),
+       ((select dungeon_id from Dungeons where dungeon_name = 'Cavesploration'),
+            (select monster_id from Monsters where monster_name='Darkmantle'), 2),
+       ((select dungeon_id from Dungeons where dungeon_name = 'Armageddon'),
+            (select monster_id from Monsters where monster_name='Tarrasque'), 1),
+       ((select dungeon_id from Dungeons where dungeon_name = 'Metropopocalypse'),
+            (select monster_id from Monsters where monster_name='Gold Dragon, Great Wyrm'), 1),
+       ((select dungeon_id from Dungeons where dungeon_name = 'Metropopocalypse'),
+            (select monster_id from Monsters where monster_name='Solar Angel'), 1),
+       ((select dungeon_id from Dungeons where dungeon_name = 'Hit the Town'),
+            (select monster_id from Monsters where monster_name='Bugbear'), 1);
 
 INSERT INTO Scenarios_has_Items (Scenarios_scenario_id, Items_item_id, quantity)
-VALUES ((select scenario_id from Scenarios where name = 'First Adventure'), (select item_id from Items where name = 'Scimitar'), 1),
-       ((select scenario_id from Scenarios where name = 'First Adventure'), (select item_id from Items where name = 'Longbow'), 1),
-       ((select scenario_id from Scenarios where name = 'Bad Things Happen'), (select item_id from Items where name = 'Scroll of Enlarge Person'), 8),
-       ((select scenario_id from Scenarios where name = 'Bad Things Happen'), (select item_id from Items where name = 'Potion of Fly'), 1),
-       ((select scenario_id from Scenarios where name = 'Second Adventure'), (select item_id from Items where name = 'Scroll of Enlarge Person'), 2),
-       ((select scenario_id from Scenarios where name = 'Bad Things Happen (But Not To Us)'), (select item_id from Items where name = 'Scroll of Enlarge Person'), 2),
-       ((select scenario_id from Scenarios where name = 'Bad Things Happen (But Not To Us)'), (select item_id from Items where name = 'Potion of Fly'), 3),
-       ((select scenario_id from Scenarios where name = 'Strange Happenings'), (select item_id from Items where name = 'Scimitar'), 1),
-       ((select scenario_id from Scenarios where name = 'Strange Happenings'), (select item_id from Items where name = 'Scroll of Enlarge Person'), 2);
+VALUES ((select scenario_id from Scenarios where scenario_name = 'First Adventure'), (select item_id from Items where item_name = 'Scimitar'), 1),
+       ((select scenario_id from Scenarios where scenario_name = 'First Adventure'), (select item_id from Items where item_name = 'Longbow'), 1),
+       ((select scenario_id from Scenarios where scenario_name = 'Bad Things Happen'), (select item_id from Items where item_name = 'Scroll of Enlarge Person'), 8),
+       ((select scenario_id from Scenarios where scenario_name = 'Bad Things Happen'), (select item_id from Items where item_name = 'Potion of Fly'), 1),
+       ((select scenario_id from Scenarios where scenario_name = 'Second Adventure'), (select item_id from Items where item_name = 'Scroll of Enlarge Person'), 2),
+       ((select scenario_id from Scenarios where scenario_name = 'Bad Things Happen (But Not To Us)'), (select item_id from Items where item_name = 'Scroll of Enlarge Person'), 2),
+       ((select scenario_id from Scenarios where scenario_name = 'Bad Things Happen (But Not To Us)'), (select item_id from Items where item_name = 'Potion of Fly'), 3),
+       ((select scenario_id from Scenarios where scenario_name = 'Strange Happenings'), (select item_id from Items where item_name = 'Scimitar'), 1),
+       ((select scenario_id from Scenarios where scenario_name = 'Strange Happenings'), (select item_id from Items where item_name = 'Scroll of Enlarge Person'), 2);
 
 SET FOREIGN_KEY_CHECKS = 1
