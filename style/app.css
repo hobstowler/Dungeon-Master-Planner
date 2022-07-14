@@ -4,10 +4,14 @@ body {
 }
 
 nav {
+    display:inline;
+    margin:0;
+    padding:0;
 }
 
 nav a {
     padding: 3px 10px;
+    margin:0px;
     border-right: 1px solid black;
     border-left: 1px solid black;
     text-decoration: none;

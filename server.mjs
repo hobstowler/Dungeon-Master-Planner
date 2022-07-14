@@ -2,12 +2,12 @@
 
 import 'dotenv/config'
 import express from "express"
-import mysql from "mysql"
 import fs from 'fs'
 import {createForm, createTable, navigationBar} from "./misc.js";
+import bodyParser from "express";
 
 const app = express();
-const conn = mysql.createConnection()
+//const conn = mysql.createConnection()
 const PORT = process.env.PORT
 
 app.use(express.urlencoded({
@@ -17,7 +17,7 @@ app.use(express.static('style'))
 app.use(bodyParser.json())
 
 // below segment adapted from https://expressjs.com/en/advanced/developing-template-engines.html
-app.engine('ntl', (filePath, options, callback) => { // define the template engine
+app.engine('html', (filePath, options, callback) => { // define the template engine
     fs.readFile(filePath, (err, content) => {
         if (err) return callback(err)
         // this is an extremely simple template engine
@@ -33,23 +33,35 @@ app.engine('ntl', (filePath, options, callback) => { // define the template engi
     })
 })
 app.set('views', './views') // specify the views directory
-app.set('view engine', 'ntl') // register the template engine
+app.set('view engine', 'html') // register the template engine
 
 app.get('/', (req, res) => {
     return res.render('index', {
-        title: 'The Home Page',
-        header: 'This is the Home Page',
+        title: 'The Dungeon Master\'s Planner',
+        header: 'The Dungeon Master\'s Planner',
         subHeader: 'Welcome to the Home Page',
         nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
+        description: 'Choose one of the links above to get started.',
+        table: '',
+        input: ''
+    })
+})
+
+app.get('/dungeon_masters', (req, res) => {
+    return res.render('dungeon_masters', {
+        title: 'The Dungeon Master\'s Planner - DMs',
+        header: 'These are your Dungeon Masters',
+        subHeader: '',
+        nav: navigationBar(),
+        description: '',
+        table: createTable(), // TODO
+        input: ''
     })
 })
 
 app.get('/scenarios', (req, res) => {
     return res.render('scenarios', {
-        title: 'Scenarios',
+        title: 'The Dungeon Master\'s Planner - Scenarios',
         header: 'These are your scenarios',
         subHeader: 'Welcome to the Home Page',
         nav: navigationBar(),
@@ -61,7 +73,7 @@ app.get('/scenarios', (req, res) => {
 
 app.get('/dungeons', (req, res) => {
     return res.render('dungeons', {
-        title: 'Dungeons',
+        title: 'The Dungeon Master\'s Planner - Dungeons',
         header: 'These are your dungeons',
         subHeader: '',
         nav: navigationBar(),
@@ -71,21 +83,9 @@ app.get('/dungeons', (req, res) => {
     })
 })
 
-app.get('/biomes', (req, res) => {
-    return res.render('biomes', {
-        title: 'Biomes',
-        header: 'These are your biomes',
-        subHeader: 'Welcome to the Home Page',
-        nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
-    })
-})
-
 app.get('/monsters', (req, res) => {
     return res.render('monsters', {
-        title: 'Monsters',
+        title: 'The Dungeon Master\'s Planner - Monsters',
         header: 'These are your monsters',
         subHeader: 'Welcome to the Home Page',
         nav: navigationBar(),
@@ -95,10 +95,34 @@ app.get('/monsters', (req, res) => {
     })
 })
 
-app.get('/loot', (req, res) => {
-    return res.render('loot', {
-        title: 'Loot',
+app.get('/items', (req, res) => {
+    return res.render('items', {
+        title: 'The Dungeon Master\'s Planner - Items',
         header: 'This is your loot',
+        subHeader: 'Welcome to the Home Page',
+        nav: navigationBar(),
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
+    })
+})
+
+app.get('/biomes', (req, res) => {
+    return res.render('biomes', {
+        title: 'The Dungeon Master\'s Planner - Biomes',
+        header: 'These are your biomes',
+        subHeader: 'Welcome to the Home Page',
+        nav: navigationBar(),
+        description: 'This is where the description goes.',
+        table: createTable(),
+        input: createForm()
+    })
+})
+
+app.get('/types', (req, res) => {
+    return res.render('types', {
+        title: 'The Dungeon Master\'s Planner - Types',
+        header: 'These are your biomes',
         subHeader: 'Welcome to the Home Page',
         nav: navigationBar(),
         description: 'This is where the description goes.',
