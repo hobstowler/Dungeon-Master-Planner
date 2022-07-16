@@ -38,3 +38,11 @@ nav a:first-child {
     background-color: lightgray;
     border-left: 2px solid black;
 }
+
+table td {
+    width: fit-content;
+    max-width: 400px;
+    height: fit-content;
+    border: 1px solid black;
+    padding: 2 5;
+}

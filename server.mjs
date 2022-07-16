@@ -3,7 +3,7 @@
 import 'dotenv/config'
 import express from "express"
 import fs from 'fs'
-import {createForm, createTable, navigationBar} from "./misc.js";
+import {createForm, buildTable, navigationBar} from "./misc.js";
 import bodyParser from "express";
 import {pool} from "./db.js";
 
@@ -55,86 +55,94 @@ app.get('/dungeon_masters', (req, res) => {
         subHeader: '',
         nav: navigationBar(),
         description: '',
-        table: createTable(), // TODO
+        table: buildTable(results),
         input: ''
     })
 })
 
 app.get('/scenarios', (req, res) => {
-    return res.render('scenarios', {
-        title: 'The Dungeon Master\'s Planner - Scenarios',
-        header: 'These are your scenarios',
-        subHeader: 'Welcome to the Home Page',
-        nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
+    db.query('SELECT * FROM Scenarios', (err, results) => {
+        return res.render('scenarios', {
+            title: 'The Dungeon Master\'s Planner - Scenarios',
+            header: 'These are your scenarios',
+            subHeader: 'Welcome to the Home Page',
+            nav: navigationBar(),
+            description: 'This is where the description goes.',
+            table: buildTable(results),
+            input: createForm()
+        })
     })
 })
 
 app.get('/dungeons', (req, res) => {
-    return res.render('dungeons', {
-        title: 'The Dungeon Master\'s Planner - Dungeons',
-        header: 'These are your dungeons',
-        subHeader: '',
-        nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
+    db.query('SELECT * FROM Dungeons', (err, results) => {
+        return res.render('dungeons', {
+            title: 'The Dungeon Master\'s Planner - Dungeons',
+            header: 'These are your dungeons',
+            subHeader: '',
+            nav: navigationBar(),
+            description: 'This is where the description goes.',
+            table: buildTable(results),
+            input: createForm()
+        })
     })
 })
 
 app.get('/monsters', (req, res) => {
-    return res.render('monsters', {
-        title: 'The Dungeon Master\'s Planner - Monsters',
-        header: 'These are your monsters',
-        subHeader: 'Welcome to the Home Page',
-        nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
+    db.query('SELECT * FROM Monsters', (err, results) => {
+        return res.render('monsters', {
+            title: 'The Dungeon Master\'s Planner - Monsters',
+            header: 'These are your monsters',
+            subHeader: 'Welcome to the Home Page',
+            nav: navigationBar(),
+            description: 'This is where the description goes.',
+            table: buildTable(results),
+            input: createForm()
+        })
     })
 })
 
 app.get('/items', (req, res) => {
-    return res.render('items', {
-        title: 'The Dungeon Master\'s Planner - Items',
-        header: 'This is your loot',
-        subHeader: 'Welcome to the Home Page',
-        nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
+    db.query('SELECT * FROM Items', (err, result) => {
+        return res.render('items', {
+            title: 'The Dungeon Master\'s Planner - Items',
+            header: 'This is your loot',
+            subHeader: 'Welcome to the Home Page',
+            nav: navigationBar(),
+            description: 'This is where the description goes.',
+            table: buildTable(results),
+            input: createForm()
+        })
     })
 })
 
 app.get('/biomes', (req, res) => {
-    db.query('SELECT biome_name, description FROM Biomes', (err, results) => {
-        console.log('yeah...')
-        console.log(results[0])
+    db.query('SELECT * FROM Biomes', (err, results) => {
         return res.render('biomes', {
             title: 'The Dungeon Master\'s Planner - Biomes',
             header: 'These are your biomes',
             subHeader: 'Welcome to the Home Page',
             nav: navigationBar(),
             description: 'This is where the description goes.',
-            table: results,
+            table: buildTable(results),
             input: createForm()
         })
     })
 })
 
 app.get('/types', (req, res) => {
-    db.query('SELECT * FROM Types')
-    return res.render('types', {
-        title: 'The Dungeon Master\'s Planner - Types',
-        header: 'These are possible item types',
-        subHeader: 'Welcome to the Home Page',
-        nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
+    db.query('SELECT * from Types', (err, results) => {
+        return res.render('types', {
+            title: 'The Dungeon Master\'s Planner - Types',
+            header: 'Item Types',
+            subHeader: 'Item classifications and categories.',
+            nav: navigationBar(),
+            description: 'This is a list of all of the possible item types.',
+            table: buildTable(results),
+            input: createForm()
+        })
     })
+    
 })
 
 app.get('/reload_data', (req, res) => {

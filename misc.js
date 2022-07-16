@@ -13,15 +13,16 @@ export function navigationBar() {
     `.replace(/>\s*</g, '><'))
 }
 
-export function createTable() {
-    return(
-        '<tbody>' +
-        '<tr>' +
-        '<td>cell 1</td>' +
-        '<td>cell 2</td>' +
-        '</tr>' +
-        '</tbody>'
-    )
+export function createTable(data) {
+    let table = ''
+    for (let i = 0; i < data.length; i++) {
+        table += '<tr>'
+        for (let key in data[i]) {
+            table += `<td>${data[i][key]}</td>`
+        }
+        table += '</tr>'
+    }
+    return table
 }
 
 export function createForm() {
