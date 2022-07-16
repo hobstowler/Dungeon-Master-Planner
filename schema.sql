@@ -154,7 +154,7 @@ CREATE OR REPLACE TABLE Scenarios_Has_Items (
 
 
 -- -----------------------------------------------------
--- Table Dungeons_has_Monsters
+-- Table Dungeons_Has_Monsters
 -- -----------------------------------------------------
 CREATE OR REPLACE TABLE Dungeons_Has_Monsters (
   dungeon_has_monster_id INT NOT NULL AUTO_INCREMENT,
@@ -164,7 +164,7 @@ CREATE OR REPLACE TABLE Dungeons_Has_Monsters (
   PRIMARY KEY (dungeon_has_monster_id),
   INDEX fk_Dungeons_Has_Monsters_Monsters1_idx (monster_id ASC) VISIBLE,
   INDEX fk_Dungeons_Has_Monsters_Dungeons1_idx (dungeon_id ASC) VISIBLE,
-  UNIQUE INDEX dungeon_has_monster_id_UNIQUE (dungeon_has_monsters_id ASC) VISIBLE,
+  UNIQUE INDEX dungeon_has_monster_id_UNIQUE (dungeon_has_monster_id ASC) VISIBLE,
   CONSTRAINT fk_Dungeons_Has_Monsters_Dungeons1
     FOREIGN KEY (dungeon_id)
     REFERENCES Dungeons (dungeon_id)
