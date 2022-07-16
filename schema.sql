@@ -33,12 +33,12 @@ CREATE OR REPLACE TABLE Dungeons (
   dungeon_name varchar(45) NOT NULL,
   description TEXT NULL,
   light_level INT NOT NULL,
-  Biomes_biome_id INT NOT NULL DEFAULT 1,
+  biome_id INT NOT NULL DEFAULT 1,
   PRIMARY KEY (dungeon_id),
   UNIQUE INDEX dungeon_id_UNIQUE (dungeon_id ASC) VISIBLE,
-  INDEX fk_Dungeons_Biomes1_idx (Biomes_biome_id ASC) VISIBLE,
+  INDEX fk_Dungeons_Biomes1_idx (biome_id ASC) VISIBLE,
   CONSTRAINT fk_Dungeons_Biomes1
-    FOREIGN KEY (Biomes_biome_id)
+    FOREIGN KEY (biome_id)
     REFERENCES Biomes (biome_id)
     ON DELETE RESTRICT
     ON UPDATE NO ACTION
@@ -54,19 +54,19 @@ CREATE OR REPLACE TABLE Scenarios (
   summary TEXT NULL,
   target_level INT NOT NULL,
   session_time DATE NULL,
-  Dungeon_Masters_dungeon_master_id INT NOT NULL,
-  Dungeons_dungeon_id INT NULL DEFAULT 1,
+  dungeon_master_id INT NOT NULL,
+  dungeon_id INT NULL DEFAULT 1,
   PRIMARY KEY (scenario_id),
   UNIQUE INDEX scenario_id_UNIQUE (scenario_id ASC) VISIBLE,
-  INDEX fk_Scenarios_Dungeon_Masters1_idx (Dungeon_Masters_dungeon_master_id ASC) VISIBLE,
-  INDEX fk_Scenarios_Dungeons1_idx (Dungeons_dungeon_id ASC) VISIBLE,
+  INDEX fk_Scenarios_Dungeon_Masters1_idx (dungeon_master_id ASC) VISIBLE,
+  INDEX fk_Scenarios_Dungeons1_idx (dungeon_id ASC) VISIBLE,
   CONSTRAINT fk_Scenarios_Dungeon_Masters1
-    FOREIGN KEY (Dungeon_Masters_dungeon_master_id)
+    FOREIGN KEY (dungeon_master_id)
     REFERENCES Dungeon_Masters (dungeon_master_id)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT fk_Scenarios_Dungeons1
-    FOREIGN KEY (Dungeons_dungeon_id)
+    FOREIGN KEY (dungeon_id)
     REFERENCES Dungeons (dungeon_id)
     ON DELETE SET NULL
     ON UPDATE NO ACTION
@@ -116,12 +116,12 @@ CREATE OR REPLACE TABLE Items (
   description TEXT NULL,
   weight DECIMAL(6,2) NOT NULL,
   value INT NOT NULL,
-  Types_type_id INT NOT NULL,
+  type_id INT NOT NULL,
   PRIMARY KEY (item_id),
   UNIQUE INDEX item_id_UNIQUE (item_id ASC) VISIBLE,
-  INDEX fk_Items_Types1_idx (Types_type_id ASC) VISIBLE,
+  INDEX fk_Items_Types1_idx (type_id ASC) VISIBLE,
   CONSTRAINT fk_Items_Types1
-    FOREIGN KEY (Types_type_id)
+    FOREIGN KEY (type_id)
     REFERENCES Types (type_id)
     ON DELETE RESTRICT
     ON UPDATE NO ACTION
@@ -131,22 +131,22 @@ CREATE OR REPLACE TABLE Items (
 -- -----------------------------------------------------
 -- Table Scenarios_has_Items
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Scenarios_has_Items (
-  Scenarios_has_Items_id INT NOT NULL AUTO_INCREMENT,
-  Scenarios_scenario_id INT NOT NULL,
-  Items_item_id INT NOT NULL,
+CREATE OR REPLACE TABLE Scenarios_Has_Items (
+  scenario_has_item_id INT NOT NULL AUTO_INCREMENT,
+  scenario_id INT NOT NULL,
+  item_id INT NOT NULL,
   quantity INT NOT NULL DEFAULT 0,
-  PRIMARY KEY (Scenarios_has_Items_id),
-  INDEX fk_Scenarios_has_Items_Items1_idx (Items_item_id ASC) VISIBLE,
-  INDEX fk_Scenarios_has_Items_Scenarios_idx (Scenarios_scenario_id ASC) VISIBLE,
-  UNIQUE INDEX Scenarios_has_Items_id_UNIQUE (Scenarios_has_Items_id ASC) VISIBLE,
-  CONSTRAINT fk_Scenarios_has_Items_Scenarios
-    FOREIGN KEY (Scenarios_scenario_id)
+  PRIMARY KEY (scenario_has_item_id),
+  INDEX fk_Scenarios_Has_Items_Items1_idx (item_id ASC) VISIBLE,
+  INDEX fk_Scenarios_Has_Items_Scenarios_idx (scenario_id ASC) VISIBLE,
+  UNIQUE INDEX scenario_has_item_id_UNIQUE (scenario_has_item_id ASC) VISIBLE,
+  CONSTRAINT fk_Scenarios_Has_Items_Scenarios
+    FOREIGN KEY (scenario_id)
     REFERENCES Scenarios (scenario_id)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_Scenarios_has_Items_Items1
-    FOREIGN KEY (Items_item_id)
+  CONSTRAINT fk_Scenarios_Has_Items_Items1
+    FOREIGN KEY (item_id)
     REFERENCES Items (item_id)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -156,22 +156,22 @@ CREATE OR REPLACE TABLE Scenarios_has_Items (
 -- -----------------------------------------------------
 -- Table Dungeons_has_Monsters
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Dungeons_has_Monsters (
-  Dungeons_has_Monsters_id INT NOT NULL AUTO_INCREMENT,
-  Dungeons_dungeon_id INT NOT NULL,
-  Monsters_monster_id INT NOT NULL,
+CREATE OR REPLACE TABLE Dungeons_Has_Monsters (
+  dungeon_has_monster_id INT NOT NULL AUTO_INCREMENT,
+  dungeon_id INT NOT NULL,
+  monster_id INT NOT NULL,
   quantity INT NOT NULL DEFAULT 0,
-  PRIMARY KEY (Dungeons_has_Monsters_id),
-  INDEX fk_Dungeons_has_Monsters_Monsters1_idx (Monsters_monster_id ASC) VISIBLE,
-  INDEX fk_Dungeons_has_Monsters_Dungeons1_idx (Dungeons_dungeon_id ASC) VISIBLE,
-  UNIQUE INDEX Dungeons_has_Monsters_id_UNIQUE (Dungeons_has_Monsters_id ASC) VISIBLE,
-  CONSTRAINT fk_Dungeons_has_Monsters_Dungeons1
-    FOREIGN KEY (Dungeons_dungeon_id)
+  PRIMARY KEY (dungeon_has_monster_id),
+  INDEX fk_Dungeons_Has_Monsters_Monsters1_idx (monster_id ASC) VISIBLE,
+  INDEX fk_Dungeons_Has_Monsters_Dungeons1_idx (dungeon_id ASC) VISIBLE,
+  UNIQUE INDEX dungeon_has_monster_id_UNIQUE (dungeon_has_monsters_id ASC) VISIBLE,
+  CONSTRAINT fk_Dungeons_Has_Monsters_Dungeons1
+    FOREIGN KEY (dungeon_id)
     REFERENCES Dungeons (dungeon_id)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_Dungeons_has_Monsters_Monsters1
-    FOREIGN KEY (Monsters_monster_id)
+  CONSTRAINT fk_Dungeons_Has_Monsters_Monsters1
+    FOREIGN KEY (monster_id)
     REFERENCES Monsters (monster_id)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -210,14 +210,14 @@ VALUES ('Giant Spider', 'Big. Lots of legs. Eight, to be exact.',
        ('Solar Angel', 'Metallic skin and three pairs of wings. Literally an amalgamation of Good. It takes a lot of dedication to get attacked by one, so congratulations.',
             23, 363, 28, 20, 30, 23, 27, 25, 44, 'Slaying Arrow, Spellcasting');
 
-INSERT INTO Items (item_name, description, weight, value, Types_type_id)
+INSERT INTO Items (item_name, description, weight, value, type_id)
 VALUES ('Scimitar', 'A one-handed curved sword that deals slashing damage.', 4, 1500, (select type_id from Types where type_name = 'weapon')),
        ('Longbow', 'Requires two hands and arrows.', 3, 7500, (select type_id from Types where type_name = 'weapon')),
        ('Scroll of Enlarge Person', 'Can make one of you really, really, big.', 0.1, 2500, (select type_id from Types where type_name = 'scroll')),
        ('Potion of Fly', 'Drink to forget gravity for a bit. Try to remember before the potion wears off.', 0.1, 75000, (select type_id from Types where type_name = 'potion')),
        ('Full Plate', 'Lets adventures live out their dreams of becoming a walking tin can.', 50, 150000, (select type_id from Types where type_name = 'armor'));
 
-INSERT INTO Dungeons (dungeon_name, description, light_level, Biomes_biome_id)
+INSERT INTO Dungeons (dungeon_name, description, light_level, biome_id)
 VALUES ('OH NO', 'You haven''t chosen or created a dungeon for this scenario yet!', -1,
             (select biome_id from Biomes where biome_name = 'no biome')),
        ('Cavesploration', 'A generic cave with few monsters, safe for new players.', 0,
@@ -229,7 +229,7 @@ VALUES ('OH NO', 'You haven''t chosen or created a dungeon for this scenario yet
        ('Hit the Town', 'Allows for players to go shopping! Also features a mysterious figure.', 1,
             (select biome_id from Biomes where biome_name = 'town'));
 
-INSERT INTO Scenarios (scenario_name, summary, target_level, session_time, Dungeon_Masters_dungeon_master_id, Dungeons_dungeon_id)
+INSERT INTO Scenarios (scenario_name, summary, target_level, session_time, dungeon_master_id, dungeon_id)
 VALUES ('First Adventure', 'The party meets in a tavern, is approached by a mysterious cloaked stranger, and is asked to retrieve an artifact hidden in a nearby cave.', 1, '2022-07-23',
             (select dungeon_master_id from Dungeon_Masters where dungeon_master_name = 'Damian Russ'),
             (select dungeon_id from Dungeons where dungeon_name = 'Cavesploration')),
@@ -246,7 +246,7 @@ VALUES ('First Adventure', 'The party meets in a tavern, is approached by a myst
             (select dungeon_master_id from Dungeon_Masters where dungeon_master_name = 'Hobs Towler'),
             (select dungeon_id from Dungeons where dungeon_name = 'Hit the Town'));
 
-INSERT INTO Dungeons_has_Monsters (Dungeons_dungeon_id, Monsters_monster_id, quantity)
+INSERT INTO Dungeons_Has_Monsters (dungeon_id, monster_id, quantity)
 VALUES ((select dungeon_id from Dungeons where dungeon_name = 'Cavesploration'),
             (select monster_id from Monsters where monster_name='Giant Spider'), 1),
        ((select dungeon_id from Dungeons where dungeon_name = 'Cavesploration'),
@@ -260,7 +260,7 @@ VALUES ((select dungeon_id from Dungeons where dungeon_name = 'Cavesploration'),
        ((select dungeon_id from Dungeons where dungeon_name = 'Hit the Town'),
             (select monster_id from Monsters where monster_name='Bugbear'), 1);
 
-INSERT INTO Scenarios_has_Items (Scenarios_scenario_id, Items_item_id, quantity)
+INSERT INTO Scenarios_Has_Items (scenario_id, item_id, quantity)
 VALUES ((select scenario_id from Scenarios where scenario_name = 'First Adventure'), (select item_id from Items where item_name = 'Scimitar'), 1),
        ((select scenario_id from Scenarios where scenario_name = 'First Adventure'), (select item_id from Items where item_name = 'Longbow'), 1),
        ((select scenario_id from Scenarios where scenario_name = 'Bad Things Happen'), (select item_id from Items where item_name = 'Scroll of Enlarge Person'), 8),
