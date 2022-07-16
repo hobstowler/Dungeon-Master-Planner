@@ -5,10 +5,11 @@ import express from "express"
 import fs from 'fs'
 import {createForm, createTable, navigationBar} from "./misc.js";
 import bodyParser from "express";
+import {pool} from "./db.js";
 
 const app = express();
-//const conn = mysql.createConnection()
 const PORT = process.env.PORT
+const db = pool
 
 app.use(express.urlencoded({
     extended: true
@@ -108,18 +109,23 @@ app.get('/items', (req, res) => {
 })
 
 app.get('/biomes', (req, res) => {
-    return res.render('biomes', {
-        title: 'The Dungeon Master\'s Planner - Biomes',
-        header: 'These are your biomes',
-        subHeader: 'Welcome to the Home Page',
-        nav: navigationBar(),
-        description: 'This is where the description goes.',
-        table: createTable(),
-        input: createForm()
+    db.query('SELECT biome_name, description FROM Biomes', (err, results) => {
+        console.log('yeah...')
+        console.log(results[0])
+        return res.render('biomes', {
+            title: 'The Dungeon Master\'s Planner - Biomes',
+            header: 'These are your biomes',
+            subHeader: 'Welcome to the Home Page',
+            nav: navigationBar(),
+            description: 'This is where the description goes.',
+            table: results,
+            input: createForm()
+        })
     })
 })
 
 app.get('/types', (req, res) => {
+    db.query('SELECT * FROM Types')
     return res.render('types', {
         title: 'The Dungeon Master\'s Planner - Types',
         header: 'These are possible item types',
@@ -129,6 +135,12 @@ app.get('/types', (req, res) => {
         table: createTable(),
         input: createForm()
     })
+})
+
+app.get('/reload_data', (req, res) => {
+    let result = db.query('schema.sql')
+    console.log(result)
+    return res.send('Database Reloaded.<br /><a href="/">Home</a>')
 })
 
 app.listen(PORT, () => {
