@@ -122,7 +122,7 @@ app.get('/biomes', (req, res) => {
 app.get('/types', (req, res) => {
     return res.render('types', {
         title: 'The Dungeon Master\'s Planner - Types',
-        header: 'These are your biomes',
+        header: 'These are possible item types',
         subHeader: 'Welcome to the Home Page',
         nav: navigationBar(),
         description: 'This is where the description goes.',
