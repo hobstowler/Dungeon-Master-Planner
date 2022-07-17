@@ -49,14 +49,16 @@ app.get('/', (req, res) => {
 })
 
 app.get('/dungeon_masters', (req, res) => {
-    return res.render('dungeon_masters', {
-        title: 'The Dungeon Master\'s Planner - DMs',
-        header: 'These are your Dungeon Masters',
-        subHeader: '',
-        nav: navigationBar(),
-        description: '',
-        table: buildTable(results),
-        input: ''
+    db.query('SELECT * from Dungeon_Masters', (err, results) => {
+        return res.render('dungeon_masters', {
+            title: 'The Dungeon Master\'s Planner - DMs',
+            header: 'These are your Dungeon Masters',
+            subHeader: '',
+            nav: navigationBar(),
+            description: '',
+            table: buildTable(results),
+            input: ''
+        })
     })
 })
 
@@ -89,57 +91,69 @@ app.get('/dungeons', (req, res) => {
 })
 
 app.get('/monsters', (req, res) => {
-    db.query('SELECT * FROM Monsters', (err, results) => {
-        return res.render('monsters', {
-            title: 'The Dungeon Master\'s Planner - Monsters',
-            header: 'These are your monsters',
-            subHeader: 'Welcome to the Home Page',
-            nav: navigationBar(),
-            description: 'This is where the description goes.',
-            table: buildTable(results),
-            input: createForm()
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * FROM Monsters', (err, results) => {
+            return res.render('monsters', {
+                title: 'The Dungeon Master\'s Planner - Monsters',
+                header: 'These are your monsters',
+                subHeader: 'Welcome to the Home Page',
+                nav: navigationBar(),
+                description: 'This is where the description goes.',
+                table: buildTable(results, metadata),
+                input: createForm()
+            })
         })
     })
 })
 
 app.get('/items', (req, res) => {
-    db.query('SELECT * FROM Items', (err, result) => {
-        return res.render('items', {
-            title: 'The Dungeon Master\'s Planner - Items',
-            header: 'This is your loot',
-            subHeader: 'Welcome to the Home Page',
-            nav: navigationBar(),
-            description: 'This is where the description goes.',
-            table: buildTable(results),
-            input: createForm()
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * FROM Items', (err, results) => {
+            return res.render('items', {
+                title: 'The Dungeon Master\'s Planner - Items',
+                header: 'This is your loot',
+                subHeader: 'Welcome to the Home Page',
+                nav: navigationBar(),
+                description: 'This is where the description goes.',
+                table: buildTable(results, metadata),
+                input: createForm()
+            })
         })
     })
 })
 
 app.get('/biomes', (req, res) => {
-    db.query('SELECT * FROM Biomes', (err, results) => {
-        return res.render('biomes', {
-            title: 'The Dungeon Master\'s Planner - Biomes',
-            header: 'These are your biomes',
-            subHeader: 'Welcome to the Home Page',
-            nav: navigationBar(),
-            description: 'This is where the description goes.',
-            table: buildTable(results),
-            input: createForm()
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * FROM Biomes', (err, results) => {
+            return res.render('biomes', {
+                title: 'The Dungeon Master\'s Planner - Biomes',
+                header: 'These are your biomes',
+                subHeader: 'Welcome to the Home Page',
+                nav: navigationBar(),
+                description: 'This is where the description goes.',
+                table: buildTable(results, metadata),
+                input: createForm()
+            })
         })
     })
 })
 
 app.get('/types', (req, res) => {
-    db.query('SELECT * from Types', (err, results) => {
-        return res.render('types', {
-            title: 'The Dungeon Master\'s Planner - Types',
-            header: 'Item Types',
-            subHeader: 'Item classifications and categories.',
-            nav: navigationBar(),
-            description: 'This is a list of all of the possible item types.',
-            table: buildTable(results),
-            input: createForm()
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Types'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * from Types', (err, results) => {
+            return res.render('types', {
+                title: 'The Dungeon Master\'s Planner - Types',
+                header: 'Item Types',
+                subHeader: 'Item classifications and categories.',
+                nav: navigationBar(),
+                description: 'This is a list of all of the possible item types.',
+                table: buildTable(results, metadata),
+                input: createForm()
+            })
         })
     })
     
@@ -149,6 +163,13 @@ app.get('/reload_data', (req, res) => {
     let result = db.query('schema.sql')
     console.log(result)
     return res.send('Database Reloaded.<br /><a href="/">Home</a>')
+})
+
+app.get('/meta', (req, res) => {
+    db.query("SELECT * FROM `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
+        console.log(results)
+        res.send(results)
+    })
 })
 
 app.listen(PORT, () => {
