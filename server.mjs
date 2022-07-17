@@ -49,43 +49,52 @@ app.get('/', (req, res) => {
 })
 
 app.get('/dungeon_masters', (req, res) => {
-    db.query('SELECT * from Dungeon_Masters', (err, results) => {
-        return res.render('dungeon_masters', {
-            title: 'The Dungeon Master\'s Planner - DMs',
-            header: 'These are your Dungeon Masters',
-            subHeader: '',
-            nav: navigationBar(),
-            description: '',
-            table: buildTable(results),
-            input: ''
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeon_Masters'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * from Dungeon_Masters', (err, results) => {
+            return res.render('dungeon_masters', {
+                title: 'The Dungeon Master\'s Planner - DMs',
+                header: 'These are your Dungeon Masters',
+                subHeader: '',
+                nav: navigationBar(),
+                description: '',
+                table: buildTable(results, metadata),
+                input: ''
+            })
         })
     })
 })
 
 app.get('/scenarios', (req, res) => {
-    db.query('SELECT * FROM Scenarios', (err, results) => {
-        return res.render('scenarios', {
-            title: 'The Dungeon Master\'s Planner - Scenarios',
-            header: 'These are your scenarios',
-            subHeader: 'Welcome to the Home Page',
-            nav: navigationBar(),
-            description: 'This is where the description goes.',
-            table: buildTable(results),
-            input: createForm()
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * FROM Scenarios', (err, results) => {
+            return res.render('scenarios', {
+                title: 'The Dungeon Master\'s Planner - Scenarios',
+                header: 'These are your scenarios',
+                subHeader: 'Welcome to the Home Page',
+                nav: navigationBar(),
+                description: 'This is where the description goes.',
+                table: buildTable(results, metadata),
+                input: ''
+            })
         })
     })
 })
 
 app.get('/dungeons', (req, res) => {
-    db.query('SELECT * FROM Dungeons', (err, results) => {
-        return res.render('dungeons', {
-            title: 'The Dungeon Master\'s Planner - Dungeons',
-            header: 'These are your dungeons',
-            subHeader: '',
-            nav: navigationBar(),
-            description: 'This is where the description goes.',
-            table: buildTable(results),
-            input: createForm()
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * FROM Dungeons', (err, results) => {
+            return res.render('dungeons', {
+                title: 'The Dungeon Master\'s Planner - Dungeons',
+                header: 'These are your dungeons',
+                subHeader: '',
+                nav: navigationBar(),
+                description: 'This is where the description goes.',
+                table: buildTable(results, metadata),
+                input: ''
+            })
         })
     })
 })
@@ -101,7 +110,7 @@ app.get('/monsters', (req, res) => {
                 nav: navigationBar(),
                 description: 'This is where the description goes.',
                 table: buildTable(results, metadata),
-                input: createForm()
+                input: ''
             })
         })
     })
@@ -118,7 +127,7 @@ app.get('/items', (req, res) => {
                 nav: navigationBar(),
                 description: 'This is where the description goes.',
                 table: buildTable(results, metadata),
-                input: createForm()
+                input: ''
             })
         })
     })
@@ -135,7 +144,7 @@ app.get('/biomes', (req, res) => {
                 nav: navigationBar(),
                 description: 'This is where the description goes.',
                 table: buildTable(results, metadata),
-                input: createForm()
+                input: ''
             })
         })
     })
@@ -152,7 +161,7 @@ app.get('/types', (req, res) => {
                 nav: navigationBar(),
                 description: 'This is a list of all of the possible item types.',
                 table: buildTable(results, metadata),
-                input: createForm()
+                input: ''
             })
         })
     })

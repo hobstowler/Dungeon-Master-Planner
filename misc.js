@@ -3,6 +3,9 @@
 import {pool} from "./db.js";
 const reg_varchar = new RegExp('varchar*')
 const reg_text = new RegExp('text*')
+const reg_int = new RegExp('int*')
+const reg_dec = new RegExp('decimal*')
+const db = pool
 
 export function navigationBar() {
     return (`
@@ -44,7 +47,6 @@ export function buildTable(data, metadata) {
     }
 
     table += '</tbody></table>'
-    console.log(table)
 
     return table
 }
@@ -57,15 +59,20 @@ export function parseForm(metadata) {
     let formRow = '<tr><form>'
     for (let i = 0; i < metadata.length; i++) {
         let column = metadata[i]
+        //console.log(column)
         if (column['COLUMN_KEY'] === 'PRI') {
             formRow += "<td><input type='submit' value='Add New' /></td>"
-        } 
-        else if (reg_varchar.test(column['COLUMN_TYPE'])) {
+        } else if (column['COLUMN_KEY'] === 'MUL') {
+            let fkValues = getForeignKeyValues(column['COLUMN_NAME'], column['TABLE_NAME'])
+        } else if (reg_varchar.test(column['COLUMN_TYPE'])) {
             let max_char = column['CHARACTER_MAXIMUM_LENGTH']
-            formRow += `<td><input type='text' maxlength=${max_char} /></td>`
+            formRow += `<td><input type='text' class='char' maxlength=${max_char} /></td>`
         } else if (reg_text.test(column['COLUMN_TYPE'])) {
             let max_char = column['CHARACTER_MAXIMUM_LENGTH']
             formRow += `<td><textarea maxlength="${max_char}"></textarea></td>`
+        } else if (reg_int.test(column['COLUMN_TYPE']) || reg_dec.test(column['COLUMN_TYPE'])) {
+            let max_char = column['CHARACTER_MAXIMUM_LENGTH']
+            formRow += `<td><input type='number' class='num' maxlength=${max_char} /></td>`
         }
     }
     formRow += '</form></tr>'
@@ -73,8 +80,19 @@ export function parseForm(metadata) {
     return formRow
 }
 
-function getForeignKey(foreignKey, table, id) {
-    db.query(`SELECT ${foreignKey} FROM ${table} WHERE ${foreignKey}=${id}`)
+function getForeignKeyValues(foreignKey, table, id) {
+    db.query(`SELECT referenced_table_name, referenced_column_name FROM information_schema.key_column_usage WHERE table_name='${table}' and column_name='${foreignKey}'`, (err, results) => {
+        let fkColumn = results[0]['referenced_column_name']
+        let fkTable = results[0]['referenced_table_name']
+        console.log(fkColumn)
+        
+        console.log(fkTable)
+        console.log(`SELECT ${fkTable.toLowerCase().slice(0,fkTable.length - 1)}_name FROM ${fkTable}`)
+        db.query(`SELECT ${fkTable.toLowerCase().slice(0,fkTable.length - 1)}_name FROM ${fkTable}`, (err, results) => {
+            console.log(results)
+            return results
+        })
+    })
 }
 
 export function createForm() {
