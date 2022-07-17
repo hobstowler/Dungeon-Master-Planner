@@ -1,0 +1,48 @@
+body {
+    font-family: Calibri, sans-serif;
+    margin: 20px 30px;
+}
+
+nav {
+    display:inline;
+    margin:0;
+    padding:0;
+}
+
+nav a {
+    padding: 3px 10px;
+    margin:0px;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    text-decoration: none;
+    color: blue;
+    font-weight: 800;
+}
+
+nav a:hover {
+    background-color: darkgray;
+    color: white;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;;
+}
+
+nav a:last-child {
+    border-right: none;
+}
+
+nav a:last-child:hover {
+    border-right: 2px solid black;
+}
+
+nav a:first-child {
+    background-color: lightgray;
+    border-left: 2px solid black;
+}
+
+table td {
+    width: fit-content;
+    max-width: 400px;
+    height: fit-content;
+    border: 1px solid black;
+    padding: 2 5;
+}
