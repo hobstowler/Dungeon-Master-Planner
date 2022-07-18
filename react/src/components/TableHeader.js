@@ -10,6 +10,10 @@ export default function TableHeader({meta}) {
     }, [meta])
 
     return(
-        <tr>{metaData.map((data) => <th key={data.COLUMN_NAME}>{data.COLUMN_NAME}</th>)}</tr>
+        <tr>
+            {metaData.map((data) => <th key={data.COLUMN_NAME}>{data.COLUMN_NAME}</th>)}
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
     )
 }

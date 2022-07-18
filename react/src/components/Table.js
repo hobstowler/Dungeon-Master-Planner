@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TableForm from "./TableForm";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
+import EditForm from "./EditForm";
 
 export default function Table({data, meta}) {
     const [rowData, setRowData] = useState([])
@@ -34,6 +35,7 @@ export default function Table({data, meta}) {
             <tbody>
                 {rowData.map((row, i) => <TableRow key={i} dataRow={row} />)}
                 <TableForm meta={metaData} reg={reg} />
+                <EditForm meta={metaData} reg={reg} />
             </tbody>
         </table>
     )

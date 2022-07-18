@@ -1,0 +1,46 @@
+import React, { useState, useEffect } from "react"
+
+export default function TableFormCell({cell, reg}) {
+
+    if (cell !== undefined) {
+        if (cell.COLUMN_KEY === 'PRI') {
+            return (
+                <></>
+            )
+        } else if (cell.COLUMN_KEY === 'MUL') {
+            return (
+                <>
+                <label>{cell.COLUMN_NAME}</label>
+                <select>
+                    <option value='NULL'>Null</option>
+                </select>
+                </>
+            )
+        } else if (reg.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'date') {
+            return (
+                <>
+                <label>{cell.COLUMN_NAME}</label>
+                <input type='text' maxlength={cell.CHARACTER_MAXIMUM_LENGTH} />
+                </>
+            )
+        } else if (reg.text.test(cell.COLUMN_TYPE)) {
+            return (
+                <>
+                <label>{cell.COLUMN_NAME}</label>
+                <textarea maxlength={cell.CHARACTER_MAXIMUM_LENGTH} ></textarea>
+                </>
+            )
+        } else if (reg.int.test(cell.COLUMN_TYPE) || reg.dec.test(cell.COLUMN_TYPE)) {
+            return (
+                <>
+                <label>{cell.COLUMN_NAME}</label>
+                <input type='number' maxlength={cell.CHARACTER_MAXIMUM_LENGTH} />
+                </>
+            )
+        }
+    } else {
+        return (
+            <></>
+        )
+    }
+}
