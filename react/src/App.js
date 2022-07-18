@@ -12,6 +12,7 @@ import Scenarios from './pages/scenarios'
 import ScenariosHasItems from './pages/scenarios_has_items'
 import Types from './pages/types'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React from 'react';
 
 function App() {
   return (
