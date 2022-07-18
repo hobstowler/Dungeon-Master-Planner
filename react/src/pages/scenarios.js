@@ -21,6 +21,7 @@ export default function Scenarios() {
 
     return(
         <div>
+            <h2>Scenarios Table</h2>
             <Table data={data} meta={metadata} />
         </div>
     )

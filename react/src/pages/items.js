@@ -21,6 +21,7 @@ export default function Items() {
 
     return(
         <div>
+            <h2>Items Table</h2>
             <Table data={data} meta={metadata} />
         </div>
     )

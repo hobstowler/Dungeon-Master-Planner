@@ -21,6 +21,7 @@ export default function Biomes() {
 
     return(
         <div>
+            <h2>Biomes Table</h2>
             <Table data={data} meta={metadata} />
         </div>
     )

@@ -21,6 +21,7 @@ export default function Dungeons() {
 
     return(
         <div>
+            <h2>Dungeons Table</h2>
             <Table data={data} meta={metadata} />
         </div>
     )

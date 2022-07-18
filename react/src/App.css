@@ -39,10 +39,40 @@ nav a:first-child {
     border-left: 2px solid black;
 }
 
+table {
+    margin: 20px 0px 25px;
+}
+
 table td {
-    width: fit-content;
+    min-width: fit-content;
     max-width: 400px;
     height: fit-content;
     border: 1px solid black;
-    padding: 2 5;
+    padding: 2px 5px;
+}
+
+table th {
+    padding: 2px 5px;
+}
+
+table tr:last-child td {
+    border: none;
+    padding: 0;
+}
+
+table input {
+    min-width: 50px;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+table textarea {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+table select {
+    min-width: 100%;
 }

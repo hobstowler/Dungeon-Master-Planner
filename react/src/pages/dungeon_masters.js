@@ -21,6 +21,7 @@ export default function DungeonMasters() {
 
     return(
         <div>
+            <h2>Dungeon_Masters Table</h2>
             <Table data={data} meta={metadata} />
         </div>
     )

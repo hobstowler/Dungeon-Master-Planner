@@ -21,6 +21,7 @@ export default function Types() {
 
     return(
         <div>
+            <h2>Types Table</h2>
             <Table data={data} meta={metadata} />
         </div>
     )

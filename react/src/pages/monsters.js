@@ -21,6 +21,7 @@ export default function Monster() {
 
     return(
         <div>
+            <h2>Monsters Table</h2>
             <Table data={data} meta={metadata} />
         </div>
     )
