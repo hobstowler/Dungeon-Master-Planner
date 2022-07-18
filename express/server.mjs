@@ -61,6 +61,27 @@ app.get('/dungeon_masters', (req, res) => {
     })
 })
 
+app.get('/dungeon_masters/:id', (req, res) => {
+    let dm_id = req.params.id
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeon_Masters'", (err, results) => {
+        let metadata = results
+        db.query(`SELECT * FROM Dungeon_Masters WHERE dungeon_master_id=${dm_id}`, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+app.post('/dungeons_masters/:id', (req, res) => {
+
+})
+
+app.delete('/dungeon_masters/:id', (req, res) => {
+
+})
+
 app.get('/scenarios', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
         let metadata = results
@@ -71,6 +92,27 @@ app.get('/scenarios', (req, res) => {
             })
         })
     })
+})
+
+app.get('/scenarios/:id', (req, res) => {
+    let scen_id = req_params.id
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
+        let metadata = results
+        db.query(`SELECT * FROM Scenarios WHERE scenario_id=${scen_id}'`, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+app.post('/scenarios/:id', (req, res) => {
+
+})
+
+app.delete('/scenarios/:id', (req, res) => {
+
 })
 
 app.get('/dungeons', (req, res) => {
@@ -85,6 +127,27 @@ app.get('/dungeons', (req, res) => {
     })
 })
 
+app.get('/dungeons/:id', (req, res) => {
+    let dungeon_id = req.params.id
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
+        let metadata = results
+        db.query(`SELECT * FROM Dungeons WHERE dungeon_id=${dungeon_id}`, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+app.post('/dungeons/:id', (req, res) => {
+
+})
+
+app.delete('/dungeons/:id', (req, res) => {
+
+})
+
 app.get('/monsters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
         let metadata = results
@@ -95,6 +158,27 @@ app.get('/monsters', (req, res) => {
             })
         })
     })
+})
+
+app.get('/monsters/:id', (req, res) => {
+    let monster_id = req.params.id
+    b.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
+        let metadata = results
+        db.query(`SELECT * FROM Monsters WHERE monster_id=${monster_id}`, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+app.post('/monsters/:id', (req, res) => {
+
+})
+
+app.delete('/monsters/:id', (req, res) => {
+
 })
 
 app.get('/items', (req, res) => {
@@ -109,6 +193,27 @@ app.get('/items', (req, res) => {
     })
 })
 
+app.get('/items/:id', (req, res) => {
+    let item_id = req.params.id
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
+        let metadata = results
+        db.query(`SELECT * FROM Items WHERE item_id=${item_id}`, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+app.post('/items/:id', (req, res) => {
+
+})
+
+app.delete('/items/:id', (req, res) => {
+
+})
+
 app.get('/biomes', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
         let metadata = results
@@ -121,6 +226,27 @@ app.get('/biomes', (req, res) => {
     })
 })
 
+app.get('/biomes/:id', (req, res) => {
+    let biome_id = req.params.id
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
+        let metadata = results
+        db.query(`SELECT * FROM Biomes WHERE biome_id=${biome_id}`, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+app.post('/biomes/:id', (req, res) => {
+
+})
+
+app.delete('/biomes/:id', (req, res) => {
+
+})
+
 app.get('/types', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Types'", (err, results) => {
         let metadata = results
@@ -131,17 +257,39 @@ app.get('/types', (req, res) => {
             })
         })
     })
-    
 })
 
+app.get('/types/:id', (req, res) => {
+    let type_id = req.params.id
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Types'", (err, results) => {
+        let metadata = results
+        db.query(`SELECT * FROM Types WHERE type_id=${type_id}`, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+app.post('/types/:id', (req, res) => {
+
+})
+
+app.delete('/types/:id', (req, res) => {
+
+})
+
+// TODO make this work???
 app.get('/reload_data', (req, res) => {
     let result = db.query('schema.sql')
     console.log(result)
     return res.send('Database Reloaded.<br /><a href="/">Home</a>')
 })
 
-app.get('/meta', (req, res) => {
-    db.query("SELECT * FROM `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
+app.get('/metadata/:table', (req, res) => {
+    let table_name = req.params.table
+    db.query(`SELECT * FROM Information_Schema.columns where table_name='${table_name}'`, (err, results) => {
         console.log(results)
         res.send(results)
     })
