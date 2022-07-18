@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Table from '../components/Table';
+import EditForm from '../components/EditForm';
 
-export default function Monster() {
+export default function Monster({reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     useEffect(() => {
@@ -22,7 +23,8 @@ export default function Monster() {
     return(
         <div>
             <h2>Monsters Table</h2>
-            <Table data={data} meta={metadata} />
+            <Table data={data} meta={metadata} reg={reg} />
+            <EditForm meta={metadata} reg={reg} />
         </div>
     )
 }

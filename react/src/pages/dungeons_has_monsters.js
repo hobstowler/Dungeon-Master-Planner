@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Table from '../components/Table';
+import EditForm from '../components/EditForm';
 
-export default function DungeonHasMonsters() {
+export default function DungeonHasMonsters({reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     useEffect(() => {
@@ -21,7 +22,8 @@ export default function DungeonHasMonsters() {
 
     return(
         <div>
-            <Table data={data} meta={metadata} />
+            <Table data={data} meta={metadata} reg={reg} />
+            <EditForm meta={metadata} reg={reg} />
         </div>
     )
 }

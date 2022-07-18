@@ -14,6 +14,7 @@ export default function TableFormCell({cell, reg}) {
                 <select>
                     <option value='NULL'>Null</option>
                 </select>
+                <br />
                 </>
             )
         } else if (reg.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'date') {
@@ -21,6 +22,7 @@ export default function TableFormCell({cell, reg}) {
                 <>
                 <label>{cell.COLUMN_NAME}</label>
                 <input type='text' maxlength={cell.CHARACTER_MAXIMUM_LENGTH} />
+                <br />
                 </>
             )
         } else if (reg.text.test(cell.COLUMN_TYPE)) {
@@ -28,6 +30,7 @@ export default function TableFormCell({cell, reg}) {
                 <>
                 <label>{cell.COLUMN_NAME}</label>
                 <textarea maxlength={cell.CHARACTER_MAXIMUM_LENGTH} ></textarea>
+                <br />
                 </>
             )
         } else if (reg.int.test(cell.COLUMN_TYPE) || reg.dec.test(cell.COLUMN_TYPE)) {
@@ -35,6 +38,7 @@ export default function TableFormCell({cell, reg}) {
                 <>
                 <label>{cell.COLUMN_NAME}</label>
                 <input type='number' maxlength={cell.CHARACTER_MAXIMUM_LENGTH} />
+                <br />
                 </>
             )
         }

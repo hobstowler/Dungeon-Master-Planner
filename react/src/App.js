@@ -15,6 +15,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
 
 function App() {
+  const reg_varchar = new RegExp('varchar*')
+  const reg_text = new RegExp('text*')
+  const reg_int = new RegExp('int*')
+  const reg_dec = new RegExp('decimal*')
+  const reg = {
+      'char': reg_varchar,
+      'text': reg_text,
+      'int': reg_int,
+      'dec': reg_dec
+  }
+
   return (
     <div className="App">
       <div className="App">
@@ -22,15 +33,15 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/biomes" element={<Biomes />} />
-            <Route path="/dungeon_masters" element={<DungeonMasters />} />
-            <Route path="/dungeons" element={<Dungeons />} />
-            <Route path="/dungeons_has_monsters" element={<DungeonsHasMonsters />} />
-            <Route path="/items" element={<Items />} />
-            <Route path="/monsters" element={<Monsters />} />
-            <Route path="/scenarios" element={<Scenarios />} />
-            <Route path="/scenarios_has_items" element={<ScenariosHasItems />} />
-            <Route path="/types" element={<Types />} />
+            <Route path="/biomes" element={<Biomes reg={reg}/>} />
+            <Route path="/dungeon_masters" element={<DungeonMasters reg={reg} />} />
+            <Route path="/dungeons" element={<Dungeons reg={reg} />} />
+            <Route path="/dungeons_has_monsters" element={<DungeonsHasMonsters reg={reg} />} />
+            <Route path="/items" element={<Items reg={reg} />} />
+            <Route path="/monsters" element={<Monsters reg={reg} />} />
+            <Route path="/scenarios" element={<Scenarios reg={reg} />} />
+            <Route path="/scenarios_has_items" element={<ScenariosHasItems reg={reg} />} />
+            <Route path="/types" element={<Types reg={reg} />} />
           </Routes>
         </BrowserRouter>
       </div>

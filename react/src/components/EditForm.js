@@ -13,7 +13,6 @@ export default function EditForm({meta, reg}) {
 
     return (
         <form method="POST" id="EditForm">
-            <label>Test</label>
             {meta.map((cell, i) => <EditFormCell cell={cell} reg={reg} />)}
         </form>
     )

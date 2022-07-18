@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Table from '../components/Table';
+import EditForm from '../components/EditForm';
 
-export default function Types() {
+export default function Types({reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     useEffect(() => {
@@ -22,7 +23,8 @@ export default function Types() {
     return(
         <div>
             <h2>Types Table</h2>
-            <Table data={data} meta={metadata} />
+            <Table data={data} meta={metadata} reg={reg} />
+            <EditForm meta={metadata} reg={reg} />
         </div>
     )
 }

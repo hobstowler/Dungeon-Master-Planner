@@ -15,7 +15,7 @@ export default function TableRow({dataRow}) {
     return (
         <tr>
             {row.map((cell, i) => <td key={i}>{cell}</td>)}
-            <td><button type="button"><MdEdit />}</button></td>
+            <td><button type="button"><MdEdit /></button></td>
             <td><button type="button"><MdDeleteForever /></button></td>
         </tr>
     )
