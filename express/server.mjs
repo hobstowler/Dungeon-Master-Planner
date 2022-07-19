@@ -280,6 +280,33 @@ app.delete('/types/:id', (req, res) => {
 
 })
 
+
+app.get('/dungeons_has_monsters', (req, res) => {
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons_Has_Monsters'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * FROM Dungeons_Has_Monsters', (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+
+app.get('/scenarios_has_items', (req, res) => {
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios_Has_Items'", (err, results) => {
+        let metadata = results
+        db.query('SELECT * FROM Scenarios_Has_Items', (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+
 // TODO make this work???
 app.get('/reload_data', (req, res) => {
     let result = db.query('schema.sql')
