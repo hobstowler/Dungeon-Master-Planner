@@ -22,8 +22,8 @@ export default function DungeonHasMonsters({reg}) {
 
     return(
         <div>
+            <h2>Dungeons_has_Monsters Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
-            <EditForm meta={metadata} reg={reg} />
         </div>
     )
 }

@@ -26,7 +26,6 @@ export default function Biomes({reg}) {
         <div>
             <h2>Biomes Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
-            <EditForm meta={metadata} reg={reg}/>
         </div>
     )
 }

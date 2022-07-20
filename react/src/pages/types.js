@@ -24,7 +24,6 @@ export default function Types({reg}) {
         <div>
             <h2>Types Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
-            <EditForm meta={metadata} reg={reg} />
         </div>
     )
 }

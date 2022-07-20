@@ -22,9 +22,8 @@ export default function ScenariosHasItems({reg}) {
 
     return(
         <div>
-            <h2>Scenarios_Has_Items Table</h2>
+            <h2>Scenarios_has_Items Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
-            <EditForm meta={metadata} reg={reg} />
         </div>
     )
 }

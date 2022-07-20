@@ -105,3 +105,24 @@ table textarea {
 table select {
     min-width: 100%;
 }
+
+#formAddNew {
+    background-color: white;
+    border: none;
+    padding-top:15px;
+    padding-left:25px;
+    font-weight: 900;
+}
+
+#formEdit {
+    background-color: white;
+    border: none;
+    padding-top:15px;
+    padding-left:25px;
+    font-weight: 900;
+}
+
+#formCancel {
+    cursor: pointer;
+    padding-left: 15px;
+}

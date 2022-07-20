@@ -24,7 +24,6 @@ export default function DungeonMasters({reg}) {
         <div>
             <h2>Dungeon_Masters Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
-            <EditForm meta={metadata} reg={reg} />
         </div>
     )
 }
