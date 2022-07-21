@@ -49,6 +49,9 @@ app.get('/', (req, res) => {
     })
 })
 
+/***************************************************************
+********************   DUNGEON MASTERS   ***********************
+****************************************************************/
 app.get('/dungeon_masters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeon_Masters'", (err, results) => {
         let metadata = results
@@ -74,16 +77,36 @@ app.get('/dungeon_masters/:id', (req, res) => {
     })
 })
 
-app.post('/dungeons_masters/:id', (req, res) => {
+app.put('/dungeons_masters/:id', (req, res) => {
+    let dm_id = req.params.id;
+    let sql_query = `UPDATE Dungeon_Masters 
+    SET dungeon_master_name =${dungeon_master_name}, lucky_dice =${lucky_dice}
+    WHERE dungeon_master_id=${dm_id};`;
+    db.query(sql_query, (err, results) => {
+        if (err) throw err;
+    })
+})
 
+app.post('/dungeons_masters', (req, res) => {
+    let dm_id = req.params.id;
+    let sql_query = `INSERT INTO Dungeon_Masters (dungeon_master_name, lucky_dice)
+    VALUES (${dungeon_master_name}, ${lucky_dice});`;
+    db.query(sql_query, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.delete('/dungeon_masters/:id', (req, res) => {
     let dm_id = req.params.id
-    dp.query(`DELETE FROM Dungeon_Masters WHERE dungeon_master_id=${dm_id}`, (err, results) => {
+    db.query(`DELETE FROM Dungeon_Masters WHERE dungeon_master_id=${dm_id}`, (err, results) => {
         if (err) throw err;
     })
 })
+
+
+/***************************************************************
+************************  SCENARIOS   **************************
+****************************************************************/
 
 app.get('/scenarios', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
@@ -110,16 +133,40 @@ app.get('/scenarios/:id', (req, res) => {
     })
 })
 
-app.post('/scenarios/:id', (req, res) => {
+app.put('/scenarios/:id', (req, res) => {
+    let scenario_id = req.params.id;
+    let sql_query = `UPDATE Scenarios
+    SET scenario_name = :${scenario_name}, summary =${summary}, 
+    target_level =${target_level}, session_time =${session_time}, 
+    dungeon_master_id =${dungeon_master_id}, dungeon_id =${dungeon_id}
+    WHERE scenario_id=${scenario_id};`;
+    db.query(sql_query, (err, results) => {
+        if (err) throw err;
+    })
+})
 
+app.post('/scenarios', (req, res) => {
+    let scenario_id = req.params.id;
+    let sql_query = `INSERT INTO Scenarios (scenario_id, scenario_name, summary, target_level, session_time, 
+        dungeon_master_id, dungeon_id)
+        VALUES (${scenario_id}, ${scenario_name}, ${summary}, ${target_level}, 
+        ${session_time}, ${dungeon_master_id}, ${dungeon_id});`;
+    db.query(sql_query, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.delete('/scenarios/:id', (req, res) => {
     let scenario_id = req.params.id
-    dp.query(`DELETE FROM Scenarios WHERE scenario_id=${scenario_id}`, (err, results) => {
+    db.query(`DELETE FROM Scenarios WHERE scenario_id=${scenario_id}`, (err, results) => {
         if (err) throw err;
     })
 })
+
+
+/***************************************************************
+*************************  DUNGEONS   **************************
+****************************************************************/
 
 app.get('/dungeons', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
@@ -146,16 +193,29 @@ app.get('/dungeons/:id', (req, res) => {
     })
 })
 
-app.post('/dungeons/:id', (req, res) => {
-
+app.put('/dungeons/:id', (req, res) => {
+    let dungeon_id = req.params.id;
+    let sql_query = `UPDATE Dungeons
+    SET dungeon_name =${dungeon_name}, description =${description}, 
+    light_level =${light_level}, biome_id =${biome_id}
+    WHERE dungeon_id=${dungeon_id};`;
+    db.query(sql_query, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.delete('/dungeons/:id', (req, res) => {
     let dungeon_id = req.params.id
-    dp.query(`DELETE FROM Dungeons WHERE dungeon_id=${dungeon_id}`, (err, results) => {
+    db.query(`DELETE FROM Dungeons WHERE dungeon_id=${dungeon_id}`, (err, results) => {
         if (err) throw err;
     })
 })
+
+
+
+/***************************************************************
+************************  MONSTERS   **************************
+****************************************************************/
 
 app.get('/monsters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
@@ -188,10 +248,15 @@ app.post('/monsters/:id', (req, res) => {
 
 app.delete('/monsters/:id', (req, res) => {
     let monster_id = req.params.id
-    dp.query(`DELETE FROM Monsters WHERE monster_id=${monster_id}`, (err, results) => {
+    db.query(`DELETE FROM Monsters WHERE monster_id=${monster_id}`, (err, results) => {
         if (err) throw err;
     })
 })
+
+
+/***************************************************************
+**************************  ITEMS   ****************************
+****************************************************************/
 
 app.get('/items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
@@ -224,10 +289,15 @@ app.post('/items/:id', (req, res) => {
 
 app.delete('/items/:id', (req, res) => {
     let items_id = req.params.id
-    dp.query(`DELETE FROM Items WHERE item_id=${item_id}`, (err, results) => {
+    db.query(`DELETE FROM Items WHERE item_id=${item_id}`, (err, results) => {
         if (err) throw err;
     })
 })
+
+
+/***************************************************************
+**************************  BIOMES   ***************************
+****************************************************************/
 
 app.get('/biomes', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
@@ -260,10 +330,15 @@ app.post('/biomes/:id', (req, res) => {
 
 app.delete('/biomes/:id', (req, res) => {
     let biomes_id = req.params.id
-    dp.query(`DELETE FROM Biomes WHERE biome_id=${biome_id}`, (err, results) => {
+    db.query(`DELETE FROM Biomes WHERE biome_id=${biome_id}`, (err, results) => {
         if (err) throw err;
     })
 })
+
+
+/***************************************************************
+***************************  TYPES   ***************************
+****************************************************************/
 
 app.get('/types', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Types'", (err, results) => {
@@ -296,11 +371,15 @@ app.post('/types/:id', (req, res) => {
 
 app.delete('/types/:id', (req, res) => {
     let type_id = req.params.id
-    dp.query(`DELETE FROM Types WHERE type_id=${type_id}`, (err, results) => {
+    db.query(`DELETE FROM Types WHERE type_id=${type_id}`, (err, results) => {
         if (err) throw err;
     })
 })
 
+
+/***************************************************************
+******************  DUNGEONS HAS MONSTERS   ********************
+****************************************************************/
 
 app.get('/dungeons_has_monsters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons_Has_Monsters'", (err, results) => {
@@ -317,11 +396,15 @@ app.get('/dungeons_has_monsters', (req, res) => {
 
 app.delete('/dungeons_has_monsters/:id', (req, res) => {
     let dungeon_has_monster_id = req.params.id
-    dp.query(`DELETE FROM Dungeons_Has_Monsters WHERE dungeon_has_monster_id=${dungeon_has_monster_id}`, (err, results) => {
+    db.query(`DELETE FROM Dungeons_Has_Monsters WHERE dungeon_has_monster_id=${dungeon_has_monster_id}`, (err, results) => {
         if (err) throw err;
     })
 })
 
+
+/***************************************************************
+*******************  SCENARIOS HAS ITEMS   *********************
+****************************************************************/
 
 app.get('/scenarios_has_items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios_Has_Items'", (err, results) => {
@@ -338,7 +421,7 @@ app.get('/scenarios_has_items', (req, res) => {
 
 app.delete('/scenarios_has_items/:id', (req, res) => {
     let scenario_has_item_id = req.params.id
-    dp.query(`DELETE FROM Scenarios_Has_Items WHERE scenario_has_item_id=${scenario_has_item_id}`, (err, results) => {
+    db.query(`DELETE FROM Scenarios_Has_Items WHERE scenario_has_item_id=${scenario_has_item_id}`, (err, results) => {
         if (err) throw err;
     })
 })
