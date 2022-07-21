@@ -79,7 +79,10 @@ app.post('/dungeons_masters/:id', (req, res) => {
 })
 
 app.delete('/dungeon_masters/:id', (req, res) => {
-
+    let dm_id = req.params.id
+    dp.query(`DELETE FROM Dungeon_Masters WHERE dungeon_master_id=${dm_id}`, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.get('/scenarios', (req, res) => {
@@ -112,7 +115,10 @@ app.post('/scenarios/:id', (req, res) => {
 })
 
 app.delete('/scenarios/:id', (req, res) => {
-
+    let scenario_id = req.params.id
+    dp.query(`DELETE FROM Scenarios WHERE scenario_id=${scenario_id}`, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.get('/dungeons', (req, res) => {
@@ -145,7 +151,10 @@ app.post('/dungeons/:id', (req, res) => {
 })
 
 app.delete('/dungeons/:id', (req, res) => {
-
+    let dungeon_id = req.params.id
+    dp.query(`DELETE FROM Dungeons WHERE dungeon_id=${dungeon_id}`, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.get('/monsters', (req, res) => {
@@ -178,7 +187,10 @@ app.post('/monsters/:id', (req, res) => {
 })
 
 app.delete('/monsters/:id', (req, res) => {
-
+    let monster_id = req.params.id
+    dp.query(`DELETE FROM Monsters WHERE monster_id=${monster_id}`, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.get('/items', (req, res) => {
@@ -211,7 +223,10 @@ app.post('/items/:id', (req, res) => {
 })
 
 app.delete('/items/:id', (req, res) => {
-
+    let items_id = req.params.id
+    dp.query(`DELETE FROM Items WHERE item_id=${item_id}`, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.get('/biomes', (req, res) => {
@@ -244,7 +259,10 @@ app.post('/biomes/:id', (req, res) => {
 })
 
 app.delete('/biomes/:id', (req, res) => {
-
+    let biomes_id = req.params.id
+    dp.query(`DELETE FROM Biomes WHERE biome_id=${biome_id}`, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 app.get('/types', (req, res) => {
@@ -277,7 +295,10 @@ app.post('/types/:id', (req, res) => {
 })
 
 app.delete('/types/:id', (req, res) => {
-
+    let type_id = req.params.id
+    dp.query(`DELETE FROM Types WHERE type_id=${type_id}`, (err, results) => {
+        if (err) throw err;
+    })
 })
 
 
@@ -294,6 +315,14 @@ app.get('/dungeons_has_monsters', (req, res) => {
 })
 
 
+app.delete('/dungeons_has_monsters/:id', (req, res) => {
+    let dungeon_has_monster_id = req.params.id
+    dp.query(`DELETE FROM Dungeons_Has_Monsters WHERE dungeon_has_monster_id=${dungeon_has_monster_id}`, (err, results) => {
+        if (err) throw err;
+    })
+})
+
+
 app.get('/scenarios_has_items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios_Has_Items'", (err, results) => {
         let metadata = results
@@ -303,6 +332,14 @@ app.get('/scenarios_has_items', (req, res) => {
                 'metadata': metadata
             })
         })
+    })
+})
+
+
+app.delete('/scenarios_has_items/:id', (req, res) => {
+    let scenario_has_item_id = req.params.id
+    dp.query(`DELETE FROM Scenarios_Has_Items WHERE scenario_has_item_id=${scenario_has_item_id}`, (err, results) => {
+        if (err) throw err;
     })
 })
 
