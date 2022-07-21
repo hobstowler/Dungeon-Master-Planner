@@ -250,7 +250,7 @@ app.delete('/biomes/:id', (req, res) => {
 app.get('/types', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Types'", (err, results) => {
         let metadata = results
-        db.query('SELECT * from Types', (err, results) => {
+        db.query('SELECT type_id from Types', (err, results) => {
             return res.json({
                 'data': results,
                 'metadata': metadata

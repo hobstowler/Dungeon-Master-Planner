@@ -22,7 +22,7 @@ export default function Types({reg}) {
 
     return(
         <div>
-            <h2>Types Table</h2>
+            <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
         </div>
     )

@@ -12,7 +12,6 @@ export default function Table({data, meta, reg}) {
 
     useEffect(() => {
         if (data !== undefined && meta !== undefined) {
-            console.log('meta', meta, 'data',data)
             setMetadata(meta)
             setRowData(data)
         }
@@ -24,7 +23,8 @@ export default function Table({data, meta, reg}) {
                 <TableHeader meta={metaData} />
             </thead>
             <tbody>
-                {rowData.map((row, i) => <TableRow key={i} tid={i} dataRow={row} setEditMode={setEditMode} setEditId={setEditId} />)}
+            {(rowData.length === 0) ? <tr><td colSpan={5}>No data to display</td></tr> :
+                    rowData.map((row, i) => <TableRow key={i} tid={i} dataRow={row} editMode={editMode} setEditMode={setEditMode} editId={editId} setEditId={setEditId} />)}
                 <tr><td id={editMode ? 'formEdit' : 'formAddNew'} colSpan={3}>{editMode ? 'Edit:' : 'Add New Entry'}</td></tr>
                 <TableForm meta={metaData} rowData={rowData[editId]} reg={reg} editMode={editMode} setEditMode={setEditMode} />
             </tbody>

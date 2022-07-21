@@ -126,3 +126,17 @@ table select {
     cursor: pointer;
     padding-left: 15px;
 }
+
+.rowEdit {
+    cursor: pointer;
+}
+
+.rowDelete {
+    cursor: pointer;
+}
+
+svg {
+    position: relative;
+    display: block;
+    vertical-align: center;
+}

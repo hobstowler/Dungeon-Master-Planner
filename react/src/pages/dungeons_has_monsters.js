@@ -22,7 +22,7 @@ export default function DungeonHasMonsters({reg}) {
 
     return(
         <div>
-            <h2>Dungeons_has_Monsters Table</h2>
+            <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
         </div>
     )

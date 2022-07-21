@@ -17,6 +17,7 @@ export default function Biomes({reg}) {
         .then(json => {
             setData(json.data)
             setMetadata(json.metadata)
+            console.log(json.metadata)
         })
         .catch(error => console.log(error))
     }, [])
@@ -24,7 +25,7 @@ export default function Biomes({reg}) {
 
     return(
         <div>
-            <h2>Biomes Table</h2>
+            <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
             <Table data={data} meta={metadata} reg={reg} />
         </div>
     )
