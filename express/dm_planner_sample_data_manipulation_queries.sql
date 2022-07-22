@@ -189,7 +189,7 @@ DELETE FROM Dungeons_Has_Monsters WHERE dungeon_has_monster_id = :dungeon_has_mo
 
 -- Update a relationship's information
 UPDATE Dungeons_Has_Monsters
-SET dungeon_id = :dungeon_id_from_dropdown, monster_id = :monster_id_from_dropdown
+SET dungeon_id = :dungeon_id_from_dropdown, monster_id = :monster_id_from_dropdown, quantity = :quantity_input
 WHERE dungeon_has_monster_id = :dungeon_has_monster_id_selected;
 
 -- -----------------------------------------------------
@@ -218,5 +218,5 @@ DELETE FROM Scenarios_Has_Items WHERE scenario_has_item_id = :scenario_has_item_
 
 -- Update a relationship's information
 UPDATE Scenarios_Has_Items
-SET scenario_id = :scenario_id_from_dropdown, item_id = :item_id_from_dropdown
+SET scenario_id = :scenario_id_from_dropdown, item_id = :item_id_from_dropdown, quantity = :quantity_input
 WHERE scenario_has_item_id = :scenario_has_item_id_selected;
