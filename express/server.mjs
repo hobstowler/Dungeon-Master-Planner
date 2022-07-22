@@ -283,14 +283,35 @@ app.get('/items/:id', (req, res) => {
     })
 })
 
-app.post('/items/:id', (req, res) => {
+app.post('/items', (req, res) => {
+    let item_name = req.body.item_name
+    let description = req.body.description
+    let weight = req.body.weight
+    let value = req.body.value
+    let type_id = req.body.type_id
 
+    let query = `INSERT INTO Items (item_name, description, weight, value, type_id) `
+    query += `VALUES ('${item_name}', '${description}', ${weight}, ${value}, ${type_id})`
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json({'error': err})
+        } else {
+            return res.status(201).json({'message': 'Success'})
+        }
+    })
 })
 
 app.delete('/items/:id', (req, res) => {
-    let items_id = req.params.id
+    let item_id = req.params.id
     db.query(`DELETE FROM Items WHERE item_id=${item_id}`, (err, results) => {
-        if (err) throw err;
+        if (err) {
+            return res.status(500).json({'error': err})
+        } else if (results.affectedRows === 0) {
+            return res.status(404).json({'message': 'Row not found.'})
+        } else {
+            return res.status(204).json({'message': 'Success'})
+        }
     })
 })
 

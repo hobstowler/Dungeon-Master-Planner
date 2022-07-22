@@ -1,0 +1,17 @@
+### request 1
+DELETE http://localhost:7124/items/5 HTTP/1.1
+
+### request 2
+GET http://localhost:7124/items HTTP/1.1
+
+### request 3
+POST http://localhost:7124/items HTTP/1.1
+content-type: application/json
+
+{
+  "item_name": "sword",
+  "description": "a thousand truths",
+  "weight": 10,
+  "value": 25,
+  "type_id": 1
+}
