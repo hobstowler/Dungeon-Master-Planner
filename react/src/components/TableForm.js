@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import TableFormCell from "./TableFormCell"
 
-export default function TableForm({meta, rowData, reg, editMode, setEditMode}) {
+export default function TableForm({meta, rowData, regex, editMode, setEditMode}) {
     const [metaData, setMetadata] = useState([])
     const [data, setData] = useState([])
 
@@ -40,7 +40,16 @@ export default function TableForm({meta, rowData, reg, editMode, setEditMode}) {
 
     return (
         <tr>
-            {meta.map((cell, i) => <TableFormCell cell={cell} i={i} changeData={changeData} updateData={updateData} datum={data[i]} reg={reg} editMode={editMode} />)}
+            {meta.map((cell, i) =>
+                <TableFormCell
+                    cell={cell}
+                    changeData={changeData}
+                    updateData={updateData}
+                    datum={data[i]}
+                    regex={regex}
+                    editMode={editMode}
+                    key={i} />
+            )}
             {editMode ? <td colSpan={2} id='formCancel' onClick={cancelEdit}>Cancel</td> : <td></td>}
         </tr>
     )

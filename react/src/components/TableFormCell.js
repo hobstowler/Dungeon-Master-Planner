@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-export default function TableFormCell({cell, datum, i, changeData, updateData, reg, editMode}) {
+export default function TableFormCell({cell, datum, i, changeData, updateData, regex, editMode}) {
     const [value, setValue] = useState('')
     const [drop, setDrop] = useState([])
 
@@ -54,24 +54,24 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, r
             return (
                 <td>
                     <select onChange={handleChange}>
-                        <option value={(editMode) ? value : 'NULL'}>
-                            {(editMode) ? value : 'NULL'}
+                        <option value={(editMode) ? value : ''}>
+                            {(editMode) ? value : ''}
                         </option>
                         {drop.map((opt, i) => {
-                            return (<option value={opt[0]}>{opt[1]}</option>)
+                            return (<option value={opt[0]} key={i}>{opt[1]}</option>)
                         })}
                     </select>
                 </td>
             )
-        } else if (reg.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'date') {
+        } else if (regex.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'date') {
             return (
                 <td><input type='text' maxLength={cell.CHARACTER_MAXIMUM_LENGTH} onChange={handleChange} value={value || ''} /></td>
             )
-        } else if (reg.text.test(cell.COLUMN_TYPE)) {
+        } else if (regex.text.test(cell.COLUMN_TYPE)) {
             return (
                 <td><textarea maxLength={cell.CHARACTER_MAXIMUM_LENGTH} onChange={handleChange} value={value || ''}></textarea></td>
             )
-        } else if (reg.int.test(cell.COLUMN_TYPE) || reg.dec.test(cell.COLUMN_TYPE)) {
+        } else if (regex.int.test(cell.COLUMN_TYPE) || regex.dec.test(cell.COLUMN_TYPE)) {
             return (
                 <td><input type='number' maxLength={cell.CHARACTER_MAXIMUM_LENGTH} onChange={handleChange} value={value || 0} /></td>
             )

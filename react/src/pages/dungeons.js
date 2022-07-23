@@ -6,7 +6,6 @@ export default function Dungeons({reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     useEffect(() => {
-        console.log('hello')
         fetch('/dungeons', {
             method: "GET",
             headers: {'Content-Type': 'application/json'}

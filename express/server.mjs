@@ -829,6 +829,10 @@ app.get('/reload_data', (req, res) => {
     return res.send('Database Reloaded.<br /><a href="/">Home</a>')
 })
 
+app.get('/testing', (req, res) => {
+    db.query(`SELECT type_id,mon`)
+})
+
 app.get('/get_fk/:table/:column', (req, res) => {
     let table = req.params.table
     let column = req.params.column

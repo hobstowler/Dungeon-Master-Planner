@@ -8,7 +8,6 @@ export default function Biomes({reg}) {
 
 
     useEffect(() => {
-        console.log('hello')
         fetch('/biomes', {
             method: "GET",
             headers: {'Content-Type': 'application/json'}

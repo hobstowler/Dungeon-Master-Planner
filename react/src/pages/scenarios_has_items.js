@@ -6,7 +6,6 @@ export default function ScenariosHasItems({reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     useEffect(() => {
-        console.log('hello')
         fetch('/scenarios_has_items', {
             method: "GET",
             headers: {'Content-Type': 'application/json'}

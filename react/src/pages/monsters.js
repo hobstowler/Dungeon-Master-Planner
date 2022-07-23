@@ -6,7 +6,6 @@ export default function Monster({reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     useEffect(() => {
-        console.log('hello')
         fetch('/monsters', {
             method: "GET",
             headers: {'Content-Type': 'application/json'}

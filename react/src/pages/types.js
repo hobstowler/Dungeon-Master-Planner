@@ -6,7 +6,6 @@ export default function Types({reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     useEffect(() => {
-        console.log('hello')
         fetch('/types', {
             method: "GET",
             headers: {'Content-Type': 'application/json'}
