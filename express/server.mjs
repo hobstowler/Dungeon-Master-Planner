@@ -433,6 +433,11 @@ app.get('/items/:id', (req, res) => {
 // Update an item
 app.put('/items/:id', (req, res) => {
     let item_id = req.params.id;
+    let item_name = req.params.item_name;
+    let description = req.params.description;
+    let weight = req.params.weight;
+    let value = req.params.value;
+    let type_id = req.params.type_id;
     let query = `UPDATE Items `;
     query += `SET item_name =${item_name}, description =${description}, weight =${weight}, `; 
     query += `value =${value}, type_id =${type_id} `;
