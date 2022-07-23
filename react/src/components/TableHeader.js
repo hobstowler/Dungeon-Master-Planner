@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
-export default function TableHeader({meta}) {
-    const [metaData, setMetadata] = useState([])
+export default function TableHeader({header}) {
+    const [head, setHead] = useState([])
 
     useEffect(() => {
-        if (meta !== undefined) {
-            setMetadata(meta)
+        if (header.length > 0) {
+            setHead(header)
         }
-    }, [meta])
+    }, [header])
 
     return(
         <tr>
-            {metaData.map((data) => <th key={data.COLUMN_NAME}>{data.COLUMN_NAME}</th>)}
-            <th>Edit</th>
-            <th>Delete</th>
+            {head.map((display, i) => <th key={i}>{display}</th>)}
+            {(header.length > 0) ? <th>Edit</th> : ''}
+            {(header.length > 0) ? <th>Delete</th> : ''}
         </tr>
     )
 }

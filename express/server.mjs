@@ -792,13 +792,18 @@ app.get('/get_fk/:table/:column', (req, res) => {
     let table = req.params.table
     let column = req.params.column
     db.query(`SELECT * FROM Information_Schema.key_column_usage where table_name='${table}' and column_name='${column}'`, (err, results) => {
-        let id = results[0].REFERENCED_COLUMN_NAME
-        let target_table = results[0].REFERENCED_TABLE_NAME
-        let table_len = target_table.length
-        let target_col = results[0].REFERENCED_TABLE_NAME.slice(0,table_len-1) + '_name'
-        db.query(`SELECT ${id}, ${target_col} FROM ${target_table}`, (err, results) => {
-            return res.json(results)
-        })
+        if (results.length > 0 ) {
+            let id = results[0].REFERENCED_COLUMN_NAME
+            let target_table = results[0].REFERENCED_TABLE_NAME
+            let table_len = target_table.length
+            let target_col = results[0].REFERENCED_TABLE_NAME.slice(0, table_len - 1) + '_name'
+            db.query(`SELECT ${id}, ${target_col} FROM ${target_table}`, (err, results) => {
+                return res.json(results)
+            })
+        }
+        else {
+            return res.status(404)
+        }
     })
 })
 

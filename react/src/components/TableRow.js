@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react"
 import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
+import { useNavigate } from "react-router-dom"
 
-export default function TableRow({dataRow, editMode, setEditMode, cancelEdit, editId, setEditId, tid}) {
+export default function TableRow({dataRow, metadata, editMode, setEditMode, editId, setEditId, tid}) {
     const [row, setRow] = useState([])
+    const navigate = useNavigate()
+    console.log('meta', row)
 
     const edit = () => {
         setEditId(tid)
@@ -12,8 +15,19 @@ export default function TableRow({dataRow, editMode, setEditMode, cancelEdit, ed
         setEditMode(false)
     }
     const del = () => {
-
+        let table = metadata[0].TABLE_NAME
+        fetch(`/${table}/${row[0]}`, {
+            method: "DELETE",
+            headers: {'Content-Type': 'application/json'}
+        })
+            .then(response => {
+                if (response.status === 204) {
+                    console.log(`/`)
+                    navigate(`/`)
+                }
+            })
     }
+
 
     useEffect(() => {
         let compiled = []
