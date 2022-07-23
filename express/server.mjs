@@ -522,12 +522,17 @@ app.delete('/items/:id', (req, res) => {
 
 // Display all biomes
 app.get('/biomes', (req, res) => {
+    let nameQuery = req.query.name
+    console.log(req.query)
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
         let metadata = results
-        console.log(metadata)
         let query = `SELECT biome_id AS "Biome ID", biome_name AS "Biome Name", description AS "Description" `;
-        query += `FROM Biomes;`;
+        query += `FROM Biomes`
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE biome_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
+            console.log(results)
             return res.json({
                 'data': results,
                 'metadata': metadata

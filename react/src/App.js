@@ -15,10 +15,12 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import React from 'react';
 import {useState} from "react";
 import {tab} from "@testing-library/user-event/dist/tab";
+import SearchForm from "./components/SearchForm";
 
 function App() {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
+    const [curTable, setCurTable] = useState([])
     const reg_varchar = new RegExp('varchar*')
     const reg_text = new RegExp('text*')
     const reg_int = new RegExp('int*')
@@ -30,10 +32,16 @@ function App() {
         'dec': reg_dec
     }
     const refreshData = (tableName, nameFilter) => {
-        let url = `/${tableName}`
-        if (nameFilter !== undefined) {
-            url += `?name=${nameFilter}`
+        console.log(tableName)
+        if (tableName === undefined) {
+            tableName = curTable
         }
+        else {setCurTable(tableName)}
+        if (nameFilter !== undefined) {
+            nameFilter += ` `
+        }
+        let url = `/${tableName}?name=${nameFilter}`
+        console.log(url)
         fetch(url, {
             method: "GET",
             headers: {'Content-Type': 'application/json'}
@@ -51,6 +59,8 @@ function App() {
             <div className="App">
                 <BrowserRouter>
                     <Header/>
+                    <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
+                    <SearchForm refreshData={refreshData} />
                     <Routes>
                         <Route path="/" element={<HomePage/>}/>
                         <Route path="/biomes" element={<Biomes reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
