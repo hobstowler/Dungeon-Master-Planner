@@ -4,7 +4,7 @@ import EditForm from '../components/EditForm';
 
 export default function Types({reg, refreshData, data, metadata}) {
     useEffect(() => {
-        refreshData('biomes')
+        refreshData('types')
     }, [])
 
     if (data !== undefined && metadata !== undefined) {
