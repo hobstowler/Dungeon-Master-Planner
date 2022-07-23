@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
 
 export default function TableFormCell({cell, datum, i, changeData, updateData, reg, editMode}) {
-    console.log(cell)
     const [value, setValue] = useState('')
+    const [drop, setDrop] = useState([])
 
     useEffect(() => {
         let new_val = (editMode) ? datum : ''
@@ -10,12 +10,32 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, r
     }, [datum])
 
     useEffect(() => {
-        if (editMode === false) {
-            setValue('')
-        } else {
+        if (!editMode) {setValue('')}
+        else {
             setValue(datum)
+            setDrop([])
         }
     },[editMode])
+
+    const compileDrop = (drop) => {
+        let compiled = []
+        for (let i = 0; i < drop.length; i++) {
+            let row = []
+            for (let x in drop[i]) {
+                row.push(drop[i][x])
+            }
+            compiled.push(row)
+        }
+        setDrop(compiled)
+    }
+
+    const getDropdown = () => {
+        let table = cell.TABLE_NAME
+        let column = cell.COLUMN_NAME
+        fetch(`/get_fk/${table}/${column}`)
+            .then(response => response.json())
+            .then(json => {compileDrop(json)})
+    }
 
     const handleChange = (e) => {
         setValue(e.target.value)
@@ -28,10 +48,18 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, r
                 <td><input type='submit' onClick={updateData} value={editMode ? 'Update': 'Add New'} /></td>
             )
         } else if (cell.COLUMN_KEY === 'MUL') {
+            if (drop.length === 0) {
+                getDropdown()
+            }
             return (
                 <td>
-                    <select>
-                        <option value='NULL'>Null</option>
+                    <select onChange={handleChange}>
+                        <option value={(editMode) ? value : 'NULL'}>
+                            {(editMode) ? value : 'NULL'}
+                        </option>
+                        {drop.map((opt, i) => {
+                            return (<option value={opt[0]}>{opt[1]}</option>)
+                        })}
                     </select>
                 </td>
             )

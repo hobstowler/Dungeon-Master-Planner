@@ -1,7 +1,7 @@
 'use strict'
 
 import 'dotenv/config'
-import express, { query, query } from "express"
+import express, { query } from "express"
 import fs from 'fs'
 import {createForm, buildTable, navigationBar} from "./misc.js";
 import bodyParser from "express";
@@ -188,7 +188,7 @@ app.post('/scenarios', (req, res) => {
     query += `dungeon_master_id, dungeon_id) `
     query += `VALUES (${scenario_id}, ${scenario_name}, ${summary}, ${target_level}, ` 
     query += `${session_time}, ${dungeon_master_id}, ${dungeon_id});`;
-    db.query(sql_query, (err, results) => {
+    db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
         } else {
@@ -341,6 +341,7 @@ app.put('/monsters/:id', (req, res) => {
     let charisma = req.params.charisma;
     let armor_class = req.params.armor_class;
     let talent = req.params.talent;
+
     let query = `UPDATE Monsters`;
     query += `SET monster_name = ${monster_name}, description = ${description}, challenge_rating = ${challenge_rating}, `;
     query += `health_points = ${health_points}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, ` ;
@@ -775,12 +776,30 @@ app.delete('/scenarios_has_items/:id', (req, res) => {
     })
 })
 
+/* ####################################
+    METADATA QUERIES
+#################################### */
+
 
 // TODO make this work???
 app.get('/reload_data', (req, res) => {
     let result = db.query('schema.sql')
     console.log(result)
     return res.send('Database Reloaded.<br /><a href="/">Home</a>')
+})
+
+app.get('/get_fk/:table/:column', (req, res) => {
+    let table = req.params.table
+    let column = req.params.column
+    db.query(`SELECT * FROM Information_Schema.key_column_usage where table_name='${table}' and column_name='${column}'`, (err, results) => {
+        let id = results[0].REFERENCED_COLUMN_NAME
+        let target_table = results[0].REFERENCED_TABLE_NAME
+        let table_len = target_table.length
+        let target_col = results[0].REFERENCED_TABLE_NAME.slice(0,table_len-1) + '_name'
+        db.query(`SELECT ${id}, ${target_col} FROM ${target_table}`, (err, results) => {
+            return res.json(results)
+        })
+    })
 })
 
 app.get('/metadata/:table', (req, res) => {
