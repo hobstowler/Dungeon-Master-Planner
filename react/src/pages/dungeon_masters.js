@@ -9,7 +9,6 @@ export default function DungeonMasters({reg, refreshData, data, metadata}) {
 
     return(
         <div>
-            <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
             <Table data={data} metadata={metadata} refreshData={refreshData} reg={reg}/>
         </div>
     )
