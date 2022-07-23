@@ -2,22 +2,17 @@ import React, { useEffect, useState } from "react";
 import TableForm from "./TableForm";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-import EditForm2 from "./EditForm2";
 
-export default function Table({tableName, data, meta, reg}) {
-    const [rowData, setRowData] = useState([])
-    const [metaData, setMetadata] = useState([])
+export default function Table({refreshData, data, metadata, reg}) {
     const [editMode, setEditMode] = useState(false)
     const [editId, setEditId] = useState([])
     const [header, setHeader] = useState([])
 
     useEffect(() => { // move to refreshData
-        if (data !== undefined && meta !== undefined) {
+        if (data !== undefined && data.length > 0) {
             compileHeader()
-            setMetadata(meta)
-            setRowData(data)
         }
-    }, [data, meta])
+    }, [data])
 
     const compileHeader = () => {
         let compiled = []
@@ -28,18 +23,6 @@ export default function Table({tableName, data, meta, reg}) {
         }
         setHeader(compiled)
     }
-    const refreshData = () => {
-        fetch(`/${metaData[0].TABLE_NAME}`, {
-            method: "GET",
-            headers: {'Content-Type': 'application/json'}
-        })
-            .then(response => response.json())
-            .then(json => {
-                setRowData(json.data)
-                setMetadata(json.metadata)
-            })
-            .catch(error => console.log(error))
-    }
 
     return (
         <table cellSpacing={0}>
@@ -47,10 +30,10 @@ export default function Table({tableName, data, meta, reg}) {
                 <TableHeader header={header} />
             </thead>
             <tbody>
-            {(rowData.length === 0) ? <tr><td colSpan={5}>No data to display</td></tr> :
-                    rowData.map((row, i) => <TableRow
+            {(data.length === 0) ? <tr><td colSpan={5}>No data to display</td></tr> :
+                    data.map((row, i) => <TableRow
                         dataRow={row}
-                        metadata={metaData}
+                        metadata={metadata}
                         editMode={editMode}
                         setEditMode={setEditMode}
                         editId={editId}
@@ -60,8 +43,8 @@ export default function Table({tableName, data, meta, reg}) {
                         key={i} />)}
                 <tr><td id={editMode ? 'formEdit' : 'formAddNew'} colSpan={3}>{editMode ? 'Edit:' : 'Add New Entry'}</td></tr>
                 <TableForm
-                    meta={metaData}
-                    rowData={rowData[editId]}
+                    meta={metadata}
+                    rowData={data[editId]}
                     regex={reg}
                     editMode={editMode}
                     setEditMode={setEditMode} />

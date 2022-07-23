@@ -524,6 +524,7 @@ app.delete('/items/:id', (req, res) => {
 app.get('/biomes', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
         let metadata = results
+        console.log(metadata)
         let query = `SELECT biome_id AS "Biome ID", biome_name AS "Biome Name", description AS "Description" `;
         query += `FROM Biomes;`;
         db.query(query, (err, results) => {
@@ -830,7 +831,7 @@ app.get('/reload_data', (req, res) => {
 })
 
 app.get('/testing', (req, res) => {
-    db.query(`SELECT type_id,mon`)
+    db.query(`SELECT * from inform`)
 })
 
 app.get('/get_fk/:table/:column', (req, res) => {

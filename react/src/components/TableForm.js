@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import TableFormCell from "./TableFormCell"
 
 export default function TableForm({meta, rowData, regex, editMode, setEditMode}) {
-    const [metaData, setMetadata] = useState([])
+    const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
 
     const cancelEdit = () => {
@@ -32,7 +32,7 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode})
 
     useEffect(() => {resetData()},[editMode])
     useEffect(() => {
-        if (meta !== undefined && rowData !== undefined) {
+        if (meta !== undefined) {
             setMetadata(meta)
             resetData()
         }
@@ -40,7 +40,7 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode})
 
     return (
         <tr>
-            {meta.map((cell, i) =>
+            {metadata.map((cell, i) =>
                 <TableFormCell
                     cell={cell}
                     changeData={changeData}

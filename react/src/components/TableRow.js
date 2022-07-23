@@ -3,6 +3,18 @@ import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
 
 export default function TableRow({dataRow, metadata, editMode, setEditMode, editId, setEditId, refreshData, tid}) {
     const [row, setRow] = useState([])
+    const [fkData, setFkData] = useState([])
+
+    useEffect(() => {
+        let compiled = []
+        let i = 0
+        for (let x in dataRow) {
+            compiled.push(dataRow[x])
+            i++
+        }
+        setRow(compiled)
+    }, [dataRow])
+
 
     const edit = () => {
         setEditId(tid)
@@ -24,15 +36,9 @@ export default function TableRow({dataRow, metadata, editMode, setEditMode, edit
             })
             .catch(error => console.log(error))
     }
+    const getFkData = () => {
 
-
-    useEffect(() => {
-        let compiled = []
-        for (let x in dataRow) {
-            compiled.push(dataRow[x])
-        }
-        setRow(compiled)
-    }, [dataRow])
+    }
     
     return (
         <tr>
