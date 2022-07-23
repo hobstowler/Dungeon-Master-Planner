@@ -57,8 +57,12 @@ app.get('/', (req, res) => {
 app.get('/dungeon_masters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeon_Masters'", (err, results) => {
         let metadata = results
+        let nameQuery = req.query.name;
         let query = `SELECT dungeon_master_id AS "Dungeon Master ID", dungeon_master_name AS "Dungeon Master Name", lucky_dice AS "Lucky Dice" `;
-        query +=  `FROM Dungeon_Masters;`;
+        query +=  `FROM Dungeon_Masters`;
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE dungeon_master_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -140,8 +144,12 @@ app.delete('/dungeon_masters/:id', (req, res) => {
 app.get('/scenarios', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
         let metadata = results
-        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", dungeon_master_id AS "Dungeon Master", dungeon_id AS "Dungeon" `;
-        query += `FROM Scenarios;`;
+        let nameQuery = req.query.name
+        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", dungeon_master_id AS "Dungeon Master", dungeon_id AS "Dungeon" `
+        query += `FROM Scenarios`
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE scenario_name LIKE '%${nameQuery}%';`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -235,8 +243,12 @@ app.delete('/scenarios/:id', (req, res) => {
 app.get('/dungeons', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
         let metadata = results
-        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", description AS "Description", light_level AS "Light Level", biome_id AS "Biome" `;
-        query += `FROM Dungeons;`;
+        let nameQuery = req.query.name
+        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", description AS "Description", light_level AS "Light Level", biome_id AS "Biome" `
+        query += `FROM Dungeons`
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -324,8 +336,12 @@ app.delete('/dungeons/:id', (req, res) => {
 app.get('/monsters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
         let metadata = results
+        let nameQuery = req.query.name;
         let query = `SELECT monster_id AS "Monster ID", monster_name AS "Monster Name", description AS "Description", challenge_rating AS "Challenge Rating", health_points AS "Health Points", strength AS "Strength", dexterity AS "Dexterity", constitution AS "Constitution", intelligence AS "Intelligence", wisdom AS "Wisdom", charisma AS "Charisma", armor_class AS "Armor Class", talent AS "Talent(s)" `;
-        query += `FROM Monsters;`;
+        query += `FROM Monsters`;
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE monster_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -432,8 +448,12 @@ app.delete('/monsters/:id', (req, res) => {
 app.get('/items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
         let metadata = results
+        let nameQuery = req.query.name
         let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", description AS "Description", weight AS "Weight", value AS "Value (in copper)", type_id AS "Type" `;
-        query += `FROM Items;`;
+        query += `FROM Items`;
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE item_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -613,8 +633,12 @@ app.delete('/biomes/:id', (req, res) => {
 app.get('/types', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Types'", (err, results) => {
         let metadata = results
+        let nameQuery = req.query.name
         let query = `SELECT type_id AS "Type ID", type_name AS "Type Name", description AS "Description" `;
-        query += `FROM Types;`;
+        query += `FROM Types`;
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE type_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
