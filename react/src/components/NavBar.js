@@ -1,16 +1,17 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
-export default function NavBar() {
+export default function NavBar({clearData}) {
     return (
         <nav>
-            <a href="/">Home</a>
-            <a href="/dungeon_masters">Dungeon Masters</a>
-            <a href="/scenarios">Scenarios</a>
-            <a href="/dungeons">Dungeons</a>
-            <a href="/monsters">Monsters</a>
-            <a href="/items">Items</a>
-            <a href="/biomes">Biomes</a>
-            <a href="/types">Types</a>
+            <Link to="/" onClick={clearData} >Home</Link>
+            <Link to="/dungeon_masters" onClick={clearData} >Dungeon Masters</Link>
+            <Link to="/scenarios" onClick={clearData} >Scenarios</Link>
+            <Link to="/dungeons" onClick={clearData} >Dungeons</Link>
+            <Link to="/monsters" onClick={clearData} >Monsters</Link>
+            <Link to="/items" onClick={clearData} >Items</Link>
+            <Link to="/biomes" onClick={clearData} >Biomes</Link>
+            <Link to="/types" onClick={clearData} >Types</Link>
         </nav>
     )
 }

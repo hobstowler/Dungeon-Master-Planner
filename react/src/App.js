@@ -48,17 +48,25 @@ function App() {
         })
             .then(response => response.json())
             .then(json => {
-                setData(json.data)
-                setMetadata(json.metadata)
+                console.log(window.location.pathname.slice(1))
+                console.log(json.metadata[0])
+                if (window.location.pathname.slice(1).toLowerCase() === json.metadata[0].TABLE_NAME.toLowerCase()) {
+                    setData(json.data)
+                    setMetadata(json.metadata)
+                }
             })
             .catch(error => console.log(error))
+    }
+    const clearData = () => {
+        setMetadata([])
+        setData([])
     }
 
     return (
         <div className="App">
             <div className="App">
                 <BrowserRouter>
-                    <Header/>
+                    <Header clearData={clearData} />
                     <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
                     <SearchForm refreshData={refreshData} />
                     <Routes>

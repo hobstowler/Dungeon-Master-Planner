@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect} from 'react';
 import Table from '../components/Table';
-import EditForm from '../components/EditForm';
 
 export default function Scenarios({reg, refreshData, data, metadata}) {
     useEffect(() => {

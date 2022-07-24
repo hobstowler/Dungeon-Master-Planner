@@ -15,7 +15,6 @@ export default function TableRow({dataRow, metadata, editMode, setEditMode, edit
         setRow(compiled)
     }, [dataRow])
 
-
     const edit = () => {
         setEditId(tid)
         setEditMode(true)

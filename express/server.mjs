@@ -2,8 +2,6 @@
 
 import 'dotenv/config'
 import express, { query } from "express"
-import fs from 'fs'
-import {createForm, buildTable, navigationBar} from "./misc.js";
 import bodyParser from "express";
 import {pool} from "./db.js";
 
@@ -18,36 +16,6 @@ app.use(express.static('style'))
 app.use(bodyParser.json())
 app.use(express.json())
 
-// below segment adapted from https://expressjs.com/en/advanced/developing-template-engines.html
-app.engine('html', (filePath, options, callback) => { // define the template engine
-    fs.readFile(filePath, (err, content) => {
-        if (err) return callback(err)
-        // this is an extremely simple template engine
-        const rendered = content.toString()
-            .replace('#title#', `<title>${options.title}</title>`)
-            .replace('#navigation#', `<nav>${options.nav}</nav>`)
-            .replace('#header#', `<h1>${options.header}</h1>`)
-            .replace('#subHeader#', `<h2>${options.subHeader}</h2>`)
-            .replace('#description#', `<div>${options.description}</div>`)
-            .replace('#table#', `<table>${options.table}</table>`)
-            .replace('#input#', `<form>${options.input}</form>`)
-        return callback(null, rendered)
-    })
-})
-app.set('views', './views') // specify the views directory
-app.set('view engine', 'html') // register the template engine
-
-app.get('/', (req, res) => {
-    return res.render('index', {
-        title: 'The Dungeon Master\'s Planner',
-        header: 'The Dungeon Master\'s Planner',
-        subHeader: 'Welcome to the Home Page',
-        nav: navigationBar(),
-        description: 'Choose one of the links above to get started.',
-        table: '',
-        input: ''
-    })
-})
 
 /***************************************************************
 ********************   DUNGEON MASTERS   ***********************
@@ -246,9 +214,9 @@ app.get('/dungeons', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
-        query += `FROM Dungeons `
-        query += `INNER JOIN Biomes ON Dungeons.biome_id = Biomes.biome_id `
+        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", biome_id AS "Biome" `
+        query += `FROM Dungeons`
+        console.log(query)
         if (nameQuery !== 'undefined') {
             query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
         }

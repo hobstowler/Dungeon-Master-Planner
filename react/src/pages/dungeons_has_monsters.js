@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from '../components/Table';
-import EditForm from '../components/EditForm';
 
 export default function DungeonHasMonsters({reg}) {
     const [data, setData] = useState([])
