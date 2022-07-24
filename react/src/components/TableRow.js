@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react"
 import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
+import Cell from "./Cell";
 
-export default function TableRow({dataRow, metadata, editMode, setEditMode, editId, setEditId, refreshData, tid}) {
+export default function TableRow({dataRow, fkData, metadata, editMode, setEditMode, editId, setEditId, refreshData, tid}) {
     const [row, setRow] = useState([])
-    const [hasDetails, setHasDetails] = useState(true)
-    const [fkData, setFkData] = useState([])
+    const [hasDetails, setHasDetails] = useState(false)
 
     useEffect(() => {
         let compiled = []
-        let i = 0
         for (let x in dataRow) {
             compiled.push(dataRow[x])
-            i++
         }
         setRow(compiled)
     }, [dataRow])
@@ -36,21 +34,18 @@ export default function TableRow({dataRow, metadata, editMode, setEditMode, edit
             })
             .catch(error => console.log(error))
     }
-    const getFkData = () => {
-
-    }
     const expandDetails = () => {
 
     }
     
     return (
         <tr>
-            {row.map((cell, i) => <td key={i}>{cell}</td>)}
+            {row.map((cell, i) => <td><Cell fkData={fkData} key={i} i={i} value={cell} /></td>)}
             {(tid === editId && editMode) ?
                 <td onClick={cancel} className='rowEdit'><MdCancel /></td> :
                 <td onClick={edit} className='rowEdit'><MdEdit /></td>}
             <td onClick={del} className='rowDelete'><MdDeleteForever /></td>
-            {hasDetails ? <td><span onClick={expandDetails}>View Details</span></td> : ''}
+            {hasDetails ? <td><span onClick={expandDetails}>View Details</span></td> : <td></td>}
         </tr>
     )
 }

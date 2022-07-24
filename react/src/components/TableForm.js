@@ -15,8 +15,22 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode})
         new_data[i] = new_val
         setData(new_data)
     }
-    const updateData = () => {
-        console.log(data)
+    const addData = () => {
+        let dataToSend = {}
+        for (let i = 1; i < metadata.length; i++) {
+            if (data[i] !== undefined) {
+                dataToSend[metadata[i].COLUMN_NAME] = data[i]
+            }
+        }
+        console.log(dataToSend)
+    }
+    const updateData = () => {console.log(rowData)
+        let id = metadata[0].TABLE_NAME.slice(0,metadata[0].TABLE_NAME.length-1) + ' ID'
+        let dataToSend = {'id': rowData[id]}
+        for (let i = 1; i < metadata.length; i++) {
+            dataToSend[metadata[i].COLUMN_NAME] = data[i]
+        }
+        console.log(dataToSend)
     }
     const resetData = () => {
         if (editMode) {
@@ -45,10 +59,12 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode})
                     cell={cell}
                     changeData={changeData}
                     updateData={updateData}
+                    addData={addData}
                     datum={data[i]}
                     regex={regex}
                     editMode={editMode}
                     key={i}
+                    i={i}
                     mainTableName={metadata.length > 0 ? metadata[0].TABLE_NAME : ''} />
             )}
             {editMode ? <td colSpan={2} id='formCancel' onClick={cancelEdit}>Cancel</td> : <td></td>}

@@ -7,11 +7,13 @@ export default function Table({refreshData, data, metadata, reg}) {
     const [editMode, setEditMode] = useState(false)
     const [editId, setEditId] = useState([])
     const [header, setHeader] = useState([])
+    const [fkData, setFkData] = useState([])
 
     useEffect(() => { // move to refreshData
         if (data !== undefined && data.length > 0) {
             compileHeader()
         }
+        getFkData()
     }, [data])
 
     const compileHeader = () => {
@@ -23,6 +25,28 @@ export default function Table({refreshData, data, metadata, reg}) {
         }
         setHeader(compiled)
     }
+    const getFkData = () => {
+        for (let i = 0; i < metadata.length; i++) {
+            if (metadata[i].COLUMN_KEY === 'MUL') {
+                let table = metadata[i].TABLE_NAME
+                let column = metadata[i].COLUMN_NAME
+                fetch(`/get_fk/${table}/${column}`)
+                    .then(response => response.json())
+                    .then(json => {
+                        let new_fk = fkData
+                        if (new_fk[i] === undefined) {new_fk[i] = []}
+                        for (let j = 0; j < json.length; j++) {
+                            let temp = []
+                            for (let x in json[j]) {
+                                temp.push(json[j][x])
+                            }
+                            new_fk[i][temp[0]] = temp[1]
+                        }
+                        setFkData([new_fk])
+                    })
+            }
+        }
+    }
 
     return (
         <table cellSpacing={0}>
@@ -33,6 +57,7 @@ export default function Table({refreshData, data, metadata, reg}) {
             {(data.length === 0) ? <tr><td colSpan={metadata.length + 2}>Loading Table...</td></tr> :
                     data.map((row, i) => <TableRow
                         dataRow={row}
+                        fkData={fkData}
                         metadata={metadata}
                         editMode={editMode}
                         setEditMode={setEditMode}

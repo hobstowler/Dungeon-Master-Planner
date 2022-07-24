@@ -113,10 +113,10 @@ app.get('/scenarios', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", Dungeon_Masters.dungeon_master_name AS "Dungeon Master", Dungeons.dungeon_name AS "Dungeon" `
+        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", dungeon_master_id AS "Dungeon Master", dungeon_id AS "Dungeon" `
         query += `FROM Scenarios `
-        query += `INNER JOIN Dungeon_Masters ON Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id `
-        query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
+        //query += `INNER JOIN Dungeon_Masters ON Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id `
+        //query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE scenario_name LIKE '%${nameQuery}%';`
         }

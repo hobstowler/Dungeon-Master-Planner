@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
 
-export default function TableFormCell({cell, datum, i, changeData, updateData, regex, editMode, mainTableName}) {
+export default function TableFormCell({cell, datum, i, changeData, updateData, addData, regex, editMode}) {
     const [value, setValue] = useState('')
+    const [dispVal, setDispVal] = useState('')
     const [drop, setDrop] = useState([])
-
     useEffect(() => {
         let new_val = (editMode) ? datum : ''
         setValue(new_val)
@@ -14,7 +14,9 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, r
         else {
             setValue(datum)
             setDrop([])
+            getDispVal()
         }
+        console.log('val:',value)
     },[editMode])
 
     const compileDrop = (drop) => {
@@ -41,22 +43,32 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, r
         setValue(e.target.value)
         changeData(i, e.target.value)
     }
+    const getDispVal = () => {
+        console.log(drop.length)
+        for (let i = 0; i < drop.length; i++) {
+            console.log('d', drop[i])
+            console.log(value === drop[i][0])
+            if (value === drop[i][0]) {
+                console.log('fuck')
+                setDispVal(drop[i][1])
+            }
+        }
+        setDispVal(value)
+    }
 
     if (cell !== undefined) {
         if (cell.COLUMN_KEY === 'PRI') {
             return (
-                <td><input type='submit' onClick={updateData} value={editMode ? 'Update': 'Add New'} /></td>
+                <td><input type='submit' onClick={editMode ? updateData : addData} value={editMode ? 'Update': 'Add New'} /></td>
             )
-        } else if (cell.COLUMN_KEY === 'MUL' || cell.TABLE_NAME !== mainTableName) {  // UNDO
+        } else if (cell.COLUMN_KEY === 'MUL') {  // UNDO
             if (drop.length === 0) {
                 getDropdown()
             }
             return (
                 <td>
-                    <select onChange={handleChange}>
-                        <option value={(editMode) ? value : ''}>
-                            {(editMode) ? value : ''}
-                        </option>
+                    <select onChange={handleChange} defaultValue={value}>
+                        {cell.IS_NULLABLE === 'YES' ? <option value='null'>None</option> : null}
                         {drop.map((opt, i) => {
                             return (<option value={opt[0]} key={i}>{opt[1]}</option>)
                         })}

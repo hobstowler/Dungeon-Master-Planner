@@ -20,6 +20,7 @@ function App() {
     const [metadata, setMetadata] = useState([])
     const [curTable, setCurTable] = useState([])
     const [showDetail, setShowDetail] =  useState(false)
+    const [isHomePage, setHome] = useState(true)
     const reg_varchar = new RegExp('varchar*')
     const reg_text = new RegExp('text*')
     const reg_int = new RegExp('int*')
@@ -66,8 +67,8 @@ function App() {
             <div className="App">
                 <BrowserRouter>
                     <Header clearData={clearData} />
-                    <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
-                    <SearchForm refreshData={refreshData} />
+                    {isHomePage ? <h2>The Home Page</h2> : <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>}
+                    {isHomePage ? '' : <SearchForm refreshData={refreshData} />}
                     <Routes>
                         <Route path="/" element={<HomePage/>}/>
                         <Route path="/biomes" element={<Biomes reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
@@ -80,7 +81,7 @@ function App() {
                         <Route path="/scenarios_has_items" element={<ScenariosHasItems reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
                         <Route path="/types" element={<Types reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
                     </Routes>
-                    {!showDetail ? <Detail /> : ''}
+                    {showDetail && !isHomePage ? <Detail /> : ''}
                 </BrowserRouter>
             </div>
         </div>
