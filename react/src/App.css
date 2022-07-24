@@ -89,6 +89,15 @@ table tr:last-child td {
     padding: 0;
 }
 
+table tr td:last-child {
+    border: none;
+    background-color: white;
+}
+
+table tr td:last-child span {
+    cursor: pointer;
+}
+
 table input {
     min-width: 50px;
     width: 100%;

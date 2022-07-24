@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import HomePage from './pages';
 import Header from './components/Header'
@@ -11,16 +10,16 @@ import Monsters from './pages/monsters'
 import Scenarios from './pages/scenarios'
 import ScenariosHasItems from './pages/scenarios_has_items'
 import Types from './pages/types'
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import React from 'react';
-import {useState} from "react";
-import {tab} from "@testing-library/user-event/dist/tab";
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import React, {useState} from 'react';
 import SearchForm from "./components/SearchForm";
+import Detail from "./components/Detail";
 
 function App() {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
     const [curTable, setCurTable] = useState([])
+    const [showDetail, setShowDetail] =  useState(false)
     const reg_varchar = new RegExp('varchar*')
     const reg_text = new RegExp('text*')
     const reg_int = new RegExp('int*')
@@ -81,6 +80,7 @@ function App() {
                         <Route path="/scenarios_has_items" element={<ScenariosHasItems reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
                         <Route path="/types" element={<Types reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
                     </Routes>
+                    {!showDetail ? <Detail /> : ''}
                 </BrowserRouter>
             </div>
         </div>
