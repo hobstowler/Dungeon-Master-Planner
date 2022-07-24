@@ -9,6 +9,7 @@ export default function Dungeons({reg, refreshData, data, metadata}) {
     if (data !== undefined && metadata !== undefined) {
         return (
             <div>
+                <h3>View the data of all dungeons in the table below, and use Edit, Delete, or Add New to modify the table.</h3>
                 <Table data={data} metadata={metadata} refreshData={refreshData} reg={reg}/>
             </div>
         )
