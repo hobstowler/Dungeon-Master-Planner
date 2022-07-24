@@ -4,56 +4,61 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
     const [value, setValue] = useState('')
     const [dispVal, setDispVal] = useState('')
     const [drop, setDrop] = useState([])
+    const [options, setOptions] = useState([])
+
     useEffect(() => {
         let new_val = (editMode) ? datum : ''
         setValue(new_val)
     }, [datum])
-
     useEffect(() => {
         if (!editMode) {setValue('')}
         else {
             setValue(datum)
-            setDrop([])
-            getDispVal()
         }
-        console.log('val:',value)
     },[editMode])
+    useEffect(() => {
+        compileDrop(options)
+    },[value])
 
-    const compileDrop = (drop) => {
+    const compileDrop = (options) => {
         let compiled = []
-        for (let i = 0; i < drop.length; i++) {
+        let display = ''
+        for (let i = 0; i < options.length; i++) {
             let row = []
-            for (let x in drop[i]) {
-                row.push(drop[i][x])
+            for (let x in options[i]) {
+                row.push(options[i][x])
             }
-            compiled.push(row)
+            console.log('row', row)
+            console.log(value)
+            if (row[0] === value) {
+                display = row[1]
+            } else {
+                compiled.push(row)
+            }
         }
+        if (cell.IS_NULLABLE === 'YES') {
+            compiled.splice(0,0,[null, 'None'])
+        }
+        if (editMode) {
+            compiled.splice(0,0,[value, display])
+            console.log('splice', value, display)
+        }
+        console.log('comped',compiled)
         setDrop(compiled)
     }
-
     const getDropdown = () => {
         let table = cell.TABLE_NAME
         let column = cell.COLUMN_NAME
         fetch(`/get_fk/${table}/${column}`)
             .then(response => response.json())
-            .then(json => {compileDrop(json)})
+            .then(json => {
+                setOptions(json)
+                compileDrop(json)
+            })
     }
-
     const handleChange = (e) => {
         setValue(e.target.value)
         changeData(i, e.target.value)
-    }
-    const getDispVal = () => {
-        console.log(drop.length)
-        for (let i = 0; i < drop.length; i++) {
-            console.log('d', drop[i])
-            console.log(value === drop[i][0])
-            if (value === drop[i][0]) {
-                console.log('fuck')
-                setDispVal(drop[i][1])
-            }
-        }
-        setDispVal(value)
     }
 
     if (cell !== undefined) {
@@ -67,8 +72,7 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
             }
             return (
                 <td>
-                    <select onChange={handleChange} defaultValue={value}>
-                        {cell.IS_NULLABLE === 'YES' ? <option value='null'>None</option> : null}
+                    <select onChange={handleChange} >
                         {drop.map((opt, i) => {
                             return (<option value={opt[0]} key={i}>{opt[1]}</option>)
                         })}

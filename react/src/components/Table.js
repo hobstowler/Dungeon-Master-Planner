@@ -72,7 +72,8 @@ export default function Table({refreshData, data, metadata, reg}) {
                     rowData={data[editId]}
                     regex={reg}
                     editMode={editMode}
-                    setEditMode={setEditMode} />
+                    setEditMode={setEditMode}
+                    refreshData={refreshData} />
             </tbody>
         </table>
     )

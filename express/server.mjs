@@ -548,30 +548,30 @@ app.get('/biomes/:id', (req, res) => {
 })
 
 // Update a biome
-app.put('/biomes/:id', (req, res) => {
-    let biome_id = req.params.id;
-    let biome_name = req.params.biome_name;
-    let description = req.params.description;
+app.put('/biomes', (req, res) => {
+    let biome_id = req.body.id;
+    let biome_name = req.body.biome_name;
+    let description = req.body.description;
     let query = `UPDATE Biomes `;
-    query += `SET biome_name = ${biome_name}, description = ${description} `;
-    query += `WHERE biome_id = ${biome_id};`;
+    query += `SET biome_name='${biome_name}', description='${description}' `;
+    query += `WHERE biome_id=${biome_id};`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
 
 // Create a new biome
 app.post('/biomes', (req, res) => {
-    let biome_name = res.body.biome_name;
-    let description = res.body.description;
+    let biome_name = req.body.biome_name;
+    let description = req.body.description;
     let query = `INSERT INTO Biomes (biome_name, description) `;
-    query += `VALUES (${biome_name}, ${description});`;
+    query += `VALUES ('${biome_name}', '${description}');`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -583,6 +583,7 @@ app.post('/biomes', (req, res) => {
 
 // Delete a biome
 app.delete('/biomes/:id', (req, res) => {
+    console.log(req.params)
     let biome_id = req.params.id;
     let query = `DELETE FROM Biomes WHERE biome_id=${biome_id}`;
     db.query(query, (err, results) => {

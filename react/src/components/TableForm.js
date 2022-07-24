@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import TableFormCell from "./TableFormCell"
 
-export default function TableForm({meta, rowData, regex, editMode, setEditMode}) {
+export default function TableForm({meta, rowData, regex, editMode, setEditMode, refreshData}) {
     const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
 
@@ -22,15 +22,36 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode})
                 dataToSend[metadata[i].COLUMN_NAME] = data[i]
             }
         }
-        console.log(dataToSend)
+        //console.log(dataToSend)
+        fetch(`${metadata[0].TABLE_NAME}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(dataToSend)
+        })
+            .then(response => {
+                if (response.status === 201) {
+                    refreshData()
+                }
+            })
     }
-    const updateData = () => {console.log(rowData)
+    const updateData = () => {
         let id = metadata[0].TABLE_NAME.slice(0,metadata[0].TABLE_NAME.length-1) + ' ID'
+        id = id.replace('_', ' ')
         let dataToSend = {'id': rowData[id]}
         for (let i = 1; i < metadata.length; i++) {
             dataToSend[metadata[i].COLUMN_NAME] = data[i]
         }
-        console.log(dataToSend)
+        console.log('data:', dataToSend)
+        fetch(`${metadata[0].TABLE_NAME}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(dataToSend)
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    refreshData()
+                }
+            })
     }
     const resetData = () => {
         if (editMode) {
