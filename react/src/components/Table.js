@@ -8,6 +8,8 @@ export default function Table({refreshData, data, metadata, reg}) {
     const [editId, setEditId] = useState([])
     const [header, setHeader] = useState([])
     const [fkData, setFkData] = useState([])
+    const [tableLoad, setTableLoadMessage] = useState("Loading Table...")
+    const dataDisplayTimer = setTimeout(() => {setTableLoadMessage("No data to display.")}, 5000)
 
     useEffect(() => { // move to refreshData
         if (data !== undefined && data.length > 0) {
@@ -54,7 +56,7 @@ export default function Table({refreshData, data, metadata, reg}) {
                 <TableHeader header={header} />
             </thead>
             <tbody>
-            {(data.length === 0) ? <tr><td colSpan={metadata.length + 2}>Loading Table...</td></tr> :
+            {(data.length === 0) ? <tr><td colSpan={metadata.length + 2}>{tableLoad}</td></tr> :
                     data.map((row, i) => <TableRow
                         dataRow={row}
                         fkData={fkData}
