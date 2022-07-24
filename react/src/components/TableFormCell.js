@@ -79,7 +79,7 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
                     </select>
                 </td>
             )
-        } else if (regex.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'date') {
+        } else if (regex.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'datetime') {
             return (
                 <td><input type='text' maxLength={cell.CHARACTER_MAXIMUM_LENGTH} onChange={handleChange} value={value || ''} /></td>
             )

@@ -53,7 +53,7 @@ CREATE OR REPLACE TABLE Scenarios (
   scenario_name varchar(45) NOT NULL,
   summary TEXT NULL,
   target_level INT NOT NULL,
-  session_time DATE NULL,
+  session_time DATETIME NULL,
   dungeon_master_id INT NOT NULL,
   dungeon_id INT NULL DEFAULT 1,
   PRIMARY KEY (scenario_id),
