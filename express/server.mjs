@@ -113,10 +113,10 @@ app.get('/scenarios', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", dungeon_master_id AS "Dungeon Master", dungeon_id AS "Dungeon" `
+        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", Dungeon_Masters.dungeon_master_name AS "Dungeon Master", Dungeons.dungeon_name AS "Dungeon" `
         query += `FROM Scenarios `
-        //query += `INNER JOIN Dungeon_Masters ON Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id `
-        //query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
+        query += `INNER JOIN Dungeon_Masters on Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id `
+        query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE scenario_name LIKE '%${nameQuery}%';`
         }
@@ -214,8 +214,9 @@ app.get('/dungeons', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", biome_id AS "Biome" `
+        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
         query += `FROM Dungeons`
+        query += ` INNER JOIN Biomes on Biomes.biome_id = Dungeons.biome_id`
         console.log(query)
         if (nameQuery !== 'undefined') {
             query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
@@ -422,7 +423,7 @@ app.get('/items', (req, res) => {
         let nameQuery = req.query.name
         let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", type_id AS "Type" `;
         query += `FROM Items`;
-        //query += `INNER JOIN Types ON Items.type_id = Types.type_id `
+        query += `INNER JOIN Types ON Items.type_id = Types.type_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE item_name LIKE '%${nameQuery}%'`
         }
@@ -693,7 +694,13 @@ app.delete('/types/:id', (req, res) => {
 app.get('/dungeons_has_monsters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons_Has_Monsters'", (err, results) => {
         let metadata = results
-        db.query('SELECT * FROM Dungeons_Has_Monsters', (err, results) => {
+        let query = `SELECT dungeon_has_monster_id as "Dungeon has Monster ID", `
+        query += `Dungeons.dungeon_name as "Dungeon Name", `
+        query += `Monsters.monster_name as "Monster Name", `
+        query += `quantity as "Quantity" FROM Dungeons_Has_Monsters `
+        query += `INNER JOIN Dungeons on Dungeons.dungeon_id = Dungeons_Has_Monsters.dungeon_id `
+        query += `INNER JOIN Monsters on Monsters.monster_id = Dungeons_Has_Monsters.monster_id `
+        db.query(query, (err, results) => {
             return res.json({
                 'data': results,
                 'metadata': metadata
@@ -761,7 +768,15 @@ app.delete('/dungeons_has_monsters/:id', (req, res) => {
 app.get('/scenarios_has_items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios_Has_Items'", (err, results) => {
         let metadata = results
-        db.query('SELECT * FROM Scenarios_Has_Items', (err, results) => {
+        let query = `SELECT scenario_has_item_id as "Scenario has Item ID",`
+        query += ` Scenarios.scenario_name as "Scenario Name",`
+        query += ` Items.item_name as "Item Name",`
+        query += ` quantity as "Quantity"`
+        query += ` FROM Scenarios_Has_Items`
+        query += ` INNER JOIN Scenarios on Scenarios.scenario_id = Scenarios_Has_Items.scenario_id`
+        query += ` INNER JOIN Items on Items.item_id = Scenarios_Has_Items.item_id`
+        console.log(query)
+        db.query(query, (err, results) => {
             return res.json({
                 'data': results,
                 'metadata': metadata

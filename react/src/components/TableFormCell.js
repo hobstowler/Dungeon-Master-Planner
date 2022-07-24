@@ -22,14 +22,15 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
 
     const compileDrop = (options) => {
         let compiled = []
-        let display = ''
+        let display = value
+        let val = -1
         for (let i = 0; i < options.length; i++) {
             let row = []
             for (let x in options[i]) {
                 row.push(options[i][x])
             }
-            if (row[0] === value) {
-                display = row[1]
+            if (row[1] === display) {
+                val = row[0]
             } else {
                 compiled.push(row)
             }
@@ -38,7 +39,7 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
             compiled.splice(0,0,[null, 'None'])
         }
         if (editMode) {
-            compiled.splice(0,0,[value, display])
+            compiled.splice(0,0,[val, display])
         }
         setDrop(compiled)
     }
