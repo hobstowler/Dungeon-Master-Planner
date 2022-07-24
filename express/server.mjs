@@ -55,12 +55,12 @@ app.get('/dungeon_masters/:id', (req, res) => {
 })
 
 // Update a dungeon master
-app.put('/dungeons_masters/:id', (req, res) => {
-    let dm_id = req.params.id;
-    let dungeon_master_name = req.params.dungeon_master_name;
-    let lucky_dice = req.params.lucky_dice;
+app.put('/dungeons_masters/', (req, res) => {
+    let dm_id = req.body.id;
+    let dungeon_master_name = req.body.dungeon_master_name;
+    let lucky_dice = req.body.lucky_dice;
     let query = `UPDATE Dungeon_Masters `;
-    query += `SET dungeon_master_name =${dungeon_master_name}, lucky_dice =${lucky_dice} `;
+    query += `SET dungeon_master_name='${dungeon_master_name}', lucky_dice='${lucky_dice}' `;
     query += `WHERE dungeon_master_id=${dm_id};`;
     db.query(query, (err, results) => {
         if (err) {
@@ -78,7 +78,7 @@ app.post('/dungeons_masters', (req, res) => {
     let dungeon_master_name = req.body.dungeon_master_name;
     let lucky_dice = req.body.lucky_dice;
     let query = `INSERT INTO Dungeon_Masters (dungeon_master_name, lucky_dice) `;
-    query += `VALUES (${dungeon_master_name}, ${lucky_dice});`;
+    query += `VALUES ('${dungeon_master_name}', '${lucky_dice}');`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -144,17 +144,17 @@ app.get('/scenarios/:id', (req, res) => {
 })
 
 // Update a scenario
-app.put('/scenarios/:id', (req, res) => {
-    let scenario_id = req.params.id;
-    let scenario_name = req.params.scenario_name;
-    let summary = req.params.summary;
-    let target_level = req.params.target_level;
-    let session_time = req.params.session_time;
-    let dungeon_master_id = req.params.dungeon_master_id;
-    let dungeon_id = req.params.dungeon_id;
+app.put('/scenarios/', (req, res) => {
+    let scenario_id = req.body.id;
+    let scenario_name = req.body.scenario_name;
+    let summary = req.body.summary;
+    let target_level = req.body.target_level;
+    let session_time = req.body.session_time;
+    let dungeon_master_id = req.body.dungeon_master_id;
+    let dungeon_id = req.body.dungeon_id;
     let query = `UPDATE Scenarios `;
-    query += `SET scenario_name = :${scenario_name}, summary =${summary}, target_level =${target_level}, `;
-    query += `session_time =${session_time}, dungeon_master_id =${dungeon_master_id}, dungeon_id =${dungeon_id} `;
+    query += `SET scenario_name='${scenario_name}', summary='${summary}', target_level=${target_level}, `;
+    query += `session_time='${session_time}', dungeon_master_id=${dungeon_master_id}, dungeon_id=${dungeon_id} `;
     query += `WHERE scenario_id=${scenario_id};`;
     db.query(query, (err, results) => {
         if (err) {
@@ -178,8 +178,8 @@ app.post('/scenarios', (req, res) => {
     let dungeon_id = req.params.dungeon_id;
     let query = `INSERT INTO Scenarios (scenario_id, scenario_name, summary, target_level, session_time, `;
     query += `dungeon_master_id, dungeon_id) `
-    query += `VALUES (${scenario_id}, ${scenario_name}, ${summary}, ${target_level}, ` 
-    query += `${session_time}, ${dungeon_master_id}, ${dungeon_id});`;
+    query += `VALUES (${scenario_id}, '${scenario_name}', '${summary}', ${target_level}, `
+    query += `'${session_time}', ${dungeon_master_id}, ${dungeon_id});`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -244,16 +244,16 @@ app.get('/dungeons/:id', (req, res) => {
 })
 
 // Update a dungeon
-app.put('/dungeons/:id', (req, res) => {
-    let dungeon_id = req.params.id;
-    let dungeon_name = req.params.dungeon_name;
-    let description = req.params.description;
-    let light_level = req.params.light_level;
-    let biome_id = req.params.biome_id;
+app.put('/dungeons/', (req, res) => {
+    let dungeon_id = req.body.id;
+    let dungeon_name = req.body.dungeon_name;
+    let description = req.body.description;
+    let light_level = req.body.light_level;
+    let biome_id = req.body.biome_id;
     let query = `UPDATE Dungeons `;
-    query += `SET dungeon_name =${dungeon_name}, description =${description}, `;
-    query += `light_level =${light_level}, biome_id =${biome_id} `;
-    query += `WHERE dungeon_id=${dungeon_id};`;
+    query += `SET dungeon_name='${dungeon_name}', description='${description}', `;
+    query += `light_level=${light_level}, biome_id=${biome_id} `;
+    query += `WHERE dungeon_id=${dungeon_id}`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -272,7 +272,7 @@ app.post('/dungeons', (req, res) => {
     let light_level = req.body.light_level;
     let biome_id = req.body.biome_id;
     let query = `INSERT INTO Dungeons (dungeon_name, description, light_level, biome_id) `;
-    query += `VALUES (${dungeon_name}, ${description}, ${light_level}, ${biome_id});`  
+    query += `VALUES ('${dungeon_name}', '${description}', ${light_level}, ${biome_id});`
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -337,25 +337,25 @@ app.get('/monsters/:id', (req, res) => {
 })
 
 // Update a monster
-app.put('/monsters/:id', (req, res) => {
-    let monster_id = req.params.id;
-    let monster_name = req.params.monster_name;
-    let description = req.params.description;
-    let challenge_rating = req.params.challenge_rating;
-    let health_points = req.params.health_points;
-    let strength = req.params.strength;
-    let dexterity = req.params.dexterity;
-    let constitution = req.params.constitution;
-    let intelligence = req.params.intelligence;
-    let wisdom = req.params.wisdom;
-    let charisma = req.params.charisma;
-    let armor_class = req.params.armor_class;
-    let talent = req.params.talent;
+app.put('/monsters/', (req, res) => {
+    let monster_id = req.body.id;
+    let monster_name = req.body.monster_name;
+    let description = req.body.description;
+    let challenge_rating = req.body.challenge_rating;
+    let health_points = req.body.health_points;
+    let strength = req.body.strength;
+    let dexterity = req.body.dexterity;
+    let constitution = req.body.constitution;
+    let intelligence = req.body.intelligence;
+    let wisdom = req.body.wisdom;
+    let charisma = req.body.charisma;
+    let armor_class = req.body.armor_class;
+    let talent = req.body.talent;
 
     let query = `UPDATE Monsters`;
-    query += `SET monster_name = ${monster_name}, description = ${description}, challenge_rating = ${challenge_rating}, `;
+    query += `SET monster_name='${monster_name}', description='${description}', challenge_rating=${challenge_rating}, `;
     query += `health_points = ${health_points}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, ` ;
-    query += `intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, armor_class = ${armor_class}, talent = ${talent} `;
+    query += `intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, armor_class = ${armor_class}, talent='${talent}' `;
     query += `WHERE monster_id = ${monster_id};`;
     db.query(query, (err, results) => {
         if (err) {
@@ -384,8 +384,8 @@ app.post('/monsters', (req, res) => {
     let talent = req.body.talent;
     let query = `INSERT INTO Monsters (monster_name, description, challenge_rating, health_points, strength, `;
     query += `dexterity, constitution, intelligence, wisdom, charisma, armor_class, talent) `;
-    query += `VALUES (${monster_name}, ${description}, ${challenge_rating}, ${health_points}, ${strength}, `;
-    query += `${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${armor_class}, ${talent});`;
+    query += `VALUES ('${monster_name}', '${description}', ${challenge_rating}, ${health_points}, ${strength}, `;
+    query += `${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${armor_class}, '${talent}');`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -420,9 +420,9 @@ app.get('/items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", Types.type_name AS "Type" `;
-        query += `FROM Items `;
-        query += `INNER JOIN Types ON Items.type_id = Types.type_id `
+        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", type_id AS "Type" `;
+        query += `FROM Items`;
+        //query += `INNER JOIN Types ON Items.type_id = Types.type_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE item_name LIKE '%${nameQuery}%'`
         }
@@ -450,17 +450,17 @@ app.get('/items/:id', (req, res) => {
 })
 
 // Update an item
-app.put('/items/:id', (req, res) => {
-    let item_id = req.params.id;
-    let item_name = req.params.item_name;
-    let description = req.params.description;
-    let weight = req.params.weight;
-    let value = req.params.value;
-    let type_id = req.params.type_id;
+app.put('/items/', (req, res) => {
+    let item_id = req.body.id;
+    let item_name = req.body.item_name;
+    let description = req.body.description;
+    let weight = req.body.weight;
+    let value = req.body.value;
+    let type_id = req.body.type_id;
     let query = `UPDATE Items `;
-    query += `SET item_name =${item_name}, description =${description}, weight =${weight}, `; 
-    query += `value =${value}, type_id =${type_id} `;
-    query += `WHERE item_id =${item_id};`;
+    query += `SET item_name='${item_name}', description='${description}', weight=${weight}, `;
+    query += `value=${value}, type_id=${type_id} `;
+    query += `WHERE item_id=${item_id};`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
@@ -636,12 +636,12 @@ app.get('/types/:id', (req, res) => {
 })
 
 // Update a type
-app.put('/types/:id', (req, res) => {
-    let type_id = req.params.id;
-    let type_name = req.params.type_name;
-    let description = req.params.description;
+app.put('/types/', (req, res) => {
+    let type_id = req.body.id;
+    let type_name = req.body.type_name;
+    let description = req.body.description;
     let query = `UPDATE Types `;
-    query += `SET type_name = ${type_name}, description = ${description} `;
+    query += `SET type_name='${type_name}', description='${description}' `;
     query += `WHERE type_id = ${type_id};`;
     db.query(query, (err, results) => {
         if (err) {
@@ -659,7 +659,7 @@ app.post('/types', (req, res) => {
     let type_name = req.body.type_name;
     let description = req.body.description;
     let query = `INSERT INTO Types (type_name, description) `;
-    query += `VALUES (${type_name}, ${description});`;
+    query += `VALUES ('${type_name}', '${description}');`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -672,6 +672,7 @@ app.post('/types', (req, res) => {
 // Delete a type
 app.delete('/types/:id', (req, res) => {
     let type_id = req.params.id;
+    console.log(type_id)
     let query = `DELETE FROM Types WHERE type_id=${type_id}`;
     db.query(query, (err, results) => {
         if (err) {
@@ -702,14 +703,14 @@ app.get('/dungeons_has_monsters', (req, res) => {
 })
 
 // Update a relationship between a dungeon and a monster
-app.put('/dungeons_has_monsters/:id', (req, res) => {
-    let dungeon_has_monster_id = req.params.id;
-    let dungeon_id = req.params.dungeon_id;
-    let monster_id = req.params.monster_id;
-    let quantity = req.params.quantity;
+app.put('/dungeons_has_monsters/', (req, res) => {
+    let dungeon_has_monster_id = req.body.id;
+    let dungeon_id = req.body.dungeon_id;
+    let monster_id = req.body.monster_id;
+    let quantity = req.body.quantity;
     let query = `UPDATE Dungeons_Has_Monsters `;
-    query += `SET dungeon_id = ${dungeon_id}, monster_id = ${monster_id}, quantity = ${quantity} `;
-    query += `WHERE dungeon_has_monster_id = ${dungeon_has_monster_id};`;
+    query += `SET dungeon_id=${dungeon_id}, monster_id=${monster_id}, quantity=${quantity} `;
+    query += `WHERE dungeon_has_monster_id=${dungeon_has_monster_id};`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -770,14 +771,14 @@ app.get('/scenarios_has_items', (req, res) => {
 })
 
 // Update a relationship between a scenario and an item
-app.put('/scenarios_has_items/:id', (req, res) => {
-    let scenario_has_item_id = req.params.id;
-    let scenario_id = req.params.dungeon_id;
-    let item_id = req.params.monster_id;
-    let quantity = req.params.quantity;
+app.put('/scenarios_has_items/', (req, res) => {
+    let scenario_has_item_id = req.body.id;
+    let scenario_id = req.body.dungeon_id;
+    let item_id = req.body.monster_id;
+    let quantity = req.body.quantity;
     let query = `UPDATE Scenarios_Has_Items `;
-    query += `SET scenario_id = ${scenario_id}, item_id = ${item_id}, quantity = ${quantity} `;
-    query += `WHERE scenario_has_item_id = ${scenario_has_item_id};`;
+    query += `SET scenario_id=${scenario_id}, item_id=${item_id}, quantity=${quantity} `;
+    query += `WHERE scenario_has_item_id=${scenario_has_item_id};`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});

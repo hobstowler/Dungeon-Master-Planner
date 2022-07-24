@@ -67,6 +67,7 @@ export default function Table({refreshData, data, metadata, reg}) {
                         setEditId={setEditId}
                         refreshData={refreshData}
                         tid={i}
+                        active={i === editId}
                         key={i} />)}
                 <tr><td id={editMode ? 'formEdit' : 'formAddNew'} colSpan={3}>{editMode ? 'Edit:' : 'Add New Entry'}</td></tr>
                 <TableForm
@@ -75,6 +76,7 @@ export default function Table({refreshData, data, metadata, reg}) {
                     regex={reg}
                     editMode={editMode}
                     setEditMode={setEditMode}
+                    setEditId={setEditId}
                     refreshData={refreshData} />
             </tbody>
         </table>

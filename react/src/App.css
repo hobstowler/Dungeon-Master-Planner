@@ -78,7 +78,7 @@ table th {
     padding: 2px 5px;
 }
 
-table tr:nth-child(even) td {
+table tr.inactive:nth-child(even) td {
     background-color: lightgray;
 }
 
@@ -89,7 +89,7 @@ table tr:last-child td {
     padding: 0;
 }
 
-table tr td:last-child {
+table tr.inactive td:last-child, table tr.active td:last-child {
     border: none;
     background-color: white;
 }
@@ -148,4 +148,8 @@ svg {
     position: relative;
     display: block;
     vertical-align: center;
+}
+
+tr.active {
+    background-color: lightblue;
 }

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react"
 
 import TableFormCell from "./TableFormCell"
 
-export default function TableForm({meta, rowData, regex, editMode, setEditMode, refreshData}) {
+export default function TableForm({meta, rowData, regex, editMode, setEditMode, setEditId, refreshData}) {
     const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
 
     const cancelEdit = () => {
         setEditMode(false)
+        setEditId(-1)
     }
 
     const changeData = (i, new_val) => {

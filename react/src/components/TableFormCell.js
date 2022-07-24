@@ -28,8 +28,6 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
             for (let x in options[i]) {
                 row.push(options[i][x])
             }
-            console.log('row', row)
-            console.log(value)
             if (row[0] === value) {
                 display = row[1]
             } else {
@@ -41,9 +39,7 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
         }
         if (editMode) {
             compiled.splice(0,0,[value, display])
-            console.log('splice', value, display)
         }
-        console.log('comped',compiled)
         setDrop(compiled)
     }
     const getDropdown = () => {

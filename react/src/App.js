@@ -31,6 +31,8 @@ function App() {
         'dec': reg_dec
     }
     const refreshData = (tableName, nameFilter) => {
+        setData([])
+        setMetadata([])
         if (tableName === undefined) {
             tableName = curTable
         }

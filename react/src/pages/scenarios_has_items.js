@@ -1,27 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import Table from '../components/Table';
 
-export default function ScenariosHasItems({reg}) {
-    const [data, setData] = useState([])
-    const [metadata, setMetadata] = useState([])
+export default function ScenariosHasItems({reg, refreshData, data, metadata}) {
     useEffect(() => {
-        fetch('/scenarios_has_items', {
-            method: "GET",
-            headers: {'Content-Type': 'application/json'}
-        })
-        .then(response => response.json())
-        .then(json => {
-            setData(json.data)
-            setMetadata(json.metadata)
-        })
-        .catch(error => console.log(error))
+        refreshData('scenarios_has_items', undefined)
     }, [])
 
-
-    return(
-        <div>
-            <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>
-            <Table data={data} meta={metadata} reg={reg} />
-        </div>
-    )
+    if (data !== undefined && metadata !== undefined) {
+        return (
+            <div>
+                <Table data={data} metadata={metadata} refreshData={refreshData} reg={reg}/>
+            </div>
+        )
+    } else {
+        return <div>Loading...</div>
+    }
 }
