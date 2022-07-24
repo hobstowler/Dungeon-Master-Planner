@@ -145,8 +145,10 @@ app.get('/scenarios', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", dungeon_master_id AS "Dungeon Master", dungeon_id AS "Dungeon" `
-        query += `FROM Scenarios`
+        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", Dungeon_Masters.dungeon_master_name AS "Dungeon Master", Dungeons.dungeon_name AS "Dungeon" `
+        query += `FROM Scenarios `
+        query += `INNER JOIN Dungeon_Masters ON Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id `
+        query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE scenario_name LIKE '%${nameQuery}%';`
         }
@@ -244,8 +246,9 @@ app.get('/dungeons', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", description AS "Description", light_level AS "Light Level", biome_id AS "Biome" `
-        query += `FROM Dungeons`
+        let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
+        query += `FROM Dungeons `
+        query += `INNER JOIN Biomes ON Dungeons.biome_id = Biomes.biome_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
         }
@@ -449,8 +452,9 @@ app.get('/items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", description AS "Description", weight AS "Weight", value AS "Value (in copper)", type_id AS "Type" `;
-        query += `FROM Items`;
+        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", Types.type_name AS "Type" `;
+        query += `FROM Items `;
+        query += `INNER JOIN Types ON Items.type_id = Types.type_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE item_name LIKE '%${nameQuery}%'`
         }

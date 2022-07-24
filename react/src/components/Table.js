@@ -30,7 +30,7 @@ export default function Table({refreshData, data, metadata, reg}) {
                 <TableHeader header={header} />
             </thead>
             <tbody>
-            {(data.length === 0) ? <tr><td colSpan={5}>No data to display</td></tr> :
+            {(data.length === 0) ? <tr><td colSpan={metadata.length + 2}>No data to display</td></tr> :
                     data.map((row, i) => <TableRow
                         dataRow={row}
                         metadata={metadata}

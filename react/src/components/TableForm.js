@@ -48,7 +48,8 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode})
                     datum={data[i]}
                     regex={regex}
                     editMode={editMode}
-                    key={i} />
+                    key={i}
+                    mainTableName={metadata.length > 0 ? metadata[0].TABLE_NAME : ''} />
             )}
             {editMode ? <td colSpan={2} id='formCancel' onClick={cancelEdit}>Cancel</td> : <td></td>}
         </tr>

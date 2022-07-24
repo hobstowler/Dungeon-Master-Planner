@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-export default function TableFormCell({cell, datum, i, changeData, updateData, regex, editMode}) {
+export default function TableFormCell({cell, datum, i, changeData, updateData, regex, editMode, mainTableName}) {
     const [value, setValue] = useState('')
     const [drop, setDrop] = useState([])
 
@@ -47,7 +47,7 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, r
             return (
                 <td><input type='submit' onClick={updateData} value={editMode ? 'Update': 'Add New'} /></td>
             )
-        } else if (cell.COLUMN_KEY === 'MUL') {
+        } else if (cell.COLUMN_KEY === 'MUL' || cell.TABLE_NAME !== mainTableName) {  // UNDO
             if (drop.length === 0) {
                 getDropdown()
             }
