@@ -69,7 +69,9 @@ export default function Table({refreshData, data, metadata, reg}) {
                         tid={i}
                         active={i === editId}
                         key={i} />)}
-                <tr><td id={editMode ? 'formEdit' : 'formAddNew'} colSpan={3}>{editMode ? 'Edit:' : 'Add New Entry'}</td></tr>
+                <tr><td id={editMode ? 'formEdit' : 'formAddNew'} colSpan={3}>{editMode ?
+                    'Edit:' :
+                    `Add new ${metadata.length > 0 ? `${metadata[0].TABLE_NAME.slice(0, metadata[0].TABLE_NAME.length - 1).replace('_', ' ')}:` : null}`}</td></tr>
                 <TableForm
                     meta={metadata}
                     rowData={data[editId]}
