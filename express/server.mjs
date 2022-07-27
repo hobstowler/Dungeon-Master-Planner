@@ -74,11 +74,11 @@ app.put('/dungeons_masters/', (req, res) => {
 })
 
 // Create a new dungeon master
-app.post('/dungeons_masters', (req, res) => {
-    let dungeon_master_name = req.body.dungeon_master_name;
-    let lucky_dice = req.body.lucky_dice;
-    let query = `INSERT INTO Dungeon_Masters (dungeon_master_name, lucky_dice) `;
-    query += `VALUES ('${dungeon_master_name}', '${lucky_dice}');`;
+app.post('/dungeon_masters', (req, res) => {
+    let dungeon_master_name = req.body.dungeon_master_name
+    let lucky_dice = req.body.lucky_dice
+    let query = `INSERT INTO Dungeon_Masters (dungeon_master_name, lucky_dice) `
+    query += `VALUES ('${dungeon_master_name}', '${lucky_dice}');`
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -169,16 +169,15 @@ app.put('/scenarios/', (req, res) => {
 
 // Create a new scenario
 app.post('/scenarios', (req, res) => {
-    let scenario_id = req.body.id;
-    let scenario_name = req.params.scenario_name;
-    let summary = req.params.summary;
-    let target_level = req.params.target_level;
-    let session_time = req.params.session_time;
-    let dungeon_master_id = req.params.dungeon_master_id;
-    let dungeon_id = req.params.dungeon_id;
-    let query = `INSERT INTO Scenarios (scenario_id, scenario_name, summary, target_level, session_time, `;
+    let scenario_name = req.body.scenario_name;
+    let summary = req.body.summary;
+    let target_level = req.body.target_level;
+    let session_time = req.body.session_time;
+    let dungeon_master_id = req.body.dungeon_master_id;
+    let dungeon_id = req.body.dungeon_id;
+    let query = `INSERT INTO Scenarios (scenario_name, summary, target_level, session_time, `;
     query += `dungeon_master_id, dungeon_id) `
-    query += `VALUES (${scenario_id}, '${scenario_name}', '${summary}', ${target_level}, `
+    query += `VALUES ('${scenario_name}', '${summary}', ${target_level}, `
     query += `'${session_time}', ${dungeon_master_id}, ${dungeon_id});`;
     db.query(query, (err, results) => {
         if (err) {
@@ -217,7 +216,6 @@ app.get('/dungeons', (req, res) => {
         let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
         query += `FROM Dungeons`
         query += ` INNER JOIN Biomes on Biomes.biome_id = Dungeons.biome_id`
-        console.log(query)
         if (nameQuery !== 'undefined') {
             query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
         }
@@ -421,8 +419,8 @@ app.get('/items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", type_id AS "Type" `;
-        query += `FROM Items`;
+        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", Items.type_id AS "Type" `
+        query += `FROM Items `
         query += `INNER JOIN Types ON Items.type_id = Types.type_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE item_name LIKE '%${nameQuery}%'`
@@ -516,7 +514,6 @@ app.delete('/items/:id', (req, res) => {
 // Display all biomes
 app.get('/biomes', (req, res) => {
     let nameQuery = req.query.name
-    console.log(req.query)
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
         let metadata = results
         let query = `SELECT biome_id AS "Biome ID", biome_name AS "Biome Name", description AS "Description" `;
@@ -525,7 +522,6 @@ app.get('/biomes', (req, res) => {
             query += ` WHERE biome_name LIKE '%${nameQuery}%'`
         }
         db.query(query, (err, results) => {
-            console.log(results)
             return res.json({
                 'data': results,
                 'metadata': metadata
@@ -584,7 +580,6 @@ app.post('/biomes', (req, res) => {
 
 // Delete a biome
 app.delete('/biomes/:id', (req, res) => {
-    console.log(req.params)
     let biome_id = req.params.id;
     let query = `DELETE FROM Biomes WHERE biome_id=${biome_id}`;
     db.query(query, (err, results) => {
@@ -673,7 +668,6 @@ app.post('/types', (req, res) => {
 // Delete a type
 app.delete('/types/:id', (req, res) => {
     let type_id = req.params.id;
-    console.log(type_id)
     let query = `DELETE FROM Types WHERE type_id=${type_id}`;
     db.query(query, (err, results) => {
         if (err) {
@@ -775,7 +769,6 @@ app.get('/scenarios_has_items', (req, res) => {
         query += ` FROM Scenarios_Has_Items`
         query += ` INNER JOIN Scenarios on Scenarios.scenario_id = Scenarios_Has_Items.scenario_id`
         query += ` INNER JOIN Items on Items.item_id = Scenarios_Has_Items.item_id`
-        console.log(query)
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
