@@ -6,17 +6,22 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
     const [drop, setDrop] = useState([])
     const [options, setOptions] = useState([])
 
+    // used to update the display when the underlying value changes
     useEffect(() => {
         let new_val = (editMode) ? datum : ''
         setValue(new_val)
     }, [datum])
+    // sets the value displayed when entering edit mode and clears it when exiting.
     useEffect(() => {
+        console.log(drop)
+        console.log(options)
         if (!editMode) {setValue('')}
         else {
             setValue(datum)
         }
     },[editMode])
     useEffect(() => {
+        console.log('coompiling')
         compileDrop(options)
     },[value])
 
@@ -40,9 +45,6 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
         }
         if (editMode) {
             compiled.splice(0,0,[val, display])
-        }
-        if (compiled[0] !== undefined && cell.COLUMN_KEY === 'MUL') {
-            changeData(i, compiled[0][0])
         }
         setDrop(compiled)
     }
@@ -68,6 +70,7 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
             )
         } else if (cell.COLUMN_KEY === 'MUL') {  // UNDO
             if (drop.length === 0) {
+                console.log('h', drop)
                 getDropdown()
             }
             return (
