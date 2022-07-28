@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react"
 
 export default function TableFormCell({cell, datum, i, changeData, updateData, addData, regex, editMode}) {
     const [value, setValue] = useState('')
-    const [dispVal, setDispVal] = useState('')
     const [drop, setDrop] = useState([])
     const [options, setOptions] = useState([])
 
+    useEffect(() => {
+        if (cell.COLUMN_KEY === 'MUL') {
+            console.log('dropping down')
+            getDropdown()
+        }
+    },[])
     // used to update the display when the underlying value changes
     useEffect(() => {
         let new_val = (editMode) ? datum : ''
@@ -35,17 +40,21 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
                 row.push(options[i][x])
             }
             if (row[1] === display) {
+                console.log('yes')
                 val = row[0]
             } else {
                 compiled.push(row)
             }
         }
         if (cell.IS_NULLABLE === 'YES') {
-            compiled.splice(0,0,[null, 'None'])
+            compiled.splice(0,0,['undefined', 'None'])
         }
         if (editMode) {
             compiled.splice(0,0,[val, display])
+        } else {
+            compiled.splice(0,0,['',''])
         }
+        console.log(compiled)
         setDrop(compiled)
     }
     const getDropdown = () => {
@@ -69,10 +78,6 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
                 <td><input type='submit' onClick={editMode ? updateData : addData} value={editMode ? 'Update': 'Add New'} /></td>
             )
         } else if (cell.COLUMN_KEY === 'MUL') {  // UNDO
-            if (drop.length === 0) {
-                console.log('h', drop)
-                getDropdown()
-            }
             return (
                 <td>
                     <select onChange={handleChange} >
