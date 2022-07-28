@@ -425,7 +425,6 @@ app.get('/items', (req, res) => {
             query += ` WHERE item_name LIKE '%${nameQuery}%'`
         }
         db.query(query, (err, results) => {
-            console.log(results)
             return res.json({
                 'data': results,
                 'metadata': metadata
@@ -451,22 +450,21 @@ app.get('/items/:id', (req, res) => {
 // Update an item
 app.put('/items', (req, res) => {
     let errors = {'error':{}}
-    if (req.body.id === undefined) errors.error['item_id'] = "Missing item ID"
-    if (req.body.item_name === undefined || req.body.item_name === '') errors.error['item_name'] = "Missing item name"
-    if (req.body.weight === undefined) errors.error['weight'] = "Missing weight"
-    if (req.body.value === undefined) errors.error['value'] = "Missing value"
-    if (errors.error.length > 0) return res.status(400).json(errors)
-    let item_id = req.body.id
-    let item_name = req.body.item_name;
-    let description = req.body.description;
-    let weight = req.body.weight;
-    let value = req.body.value;
-    let type_id = req.body.type_id;
+    console.log(req.body)
+    let item_id, item_name, description, weight, value, type_id
+    req.body.id === undefined ? errors.error['item_id'] = "Missing item ID" : item_id = req.body.id
+    req.body.item_name === undefined ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
+    req.body.description === undefined ? description = 'NULL' : description = `'${req.body.description}'`
+    req.body.weight === undefined ? 0 : weight = req.body.weight
+    req.body.value === undefined ? 0 : value = req.body.value
+    req.body.type_id === undefined || req.body.type_id === 'undefined' ? type_id = 'NULL' : type_id = req.body.type_id
+    
+    if (Object.keys(errors.error) > 0) return res.status(400).json(errors)
+
     let query = `UPDATE Items `;
-    query += `SET item_name='${item_name}', description='${description}', weight=${weight}, `;
-    query += `value=${value} `
-    if (type_id !== undefined) query += `, type_id=${type_id} `;
+    query += `SET item_name=${item_name}, description=${description}, weight=${weight}, value=${value}, type_id=${type_id} `
     query += `WHERE item_id=${item_id};`;
+    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
@@ -492,7 +490,6 @@ app.post('/items', (req, res) => {
 
     let query = `INSERT INTO Items (item_name, description, weight, value, type_id) `
     query += `VALUES (${item_name}, ${description}, ${weight}, ${value}, ${type_id})`
-    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
