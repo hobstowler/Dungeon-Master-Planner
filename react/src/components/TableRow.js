@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
 import Cell from "./Cell";
 
-export default function TableRow({dataRow, fkData, metadata, editMode, setEditMode, editId, setEditId, refreshData, tid, active}) {
+export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active}) {
     const [row, setRow] = useState([])
     const [hasDetails, setHasDetails] = useState(true)
 
@@ -16,11 +16,11 @@ export default function TableRow({dataRow, fkData, metadata, editMode, setEditMo
 
     const edit = () => {
         setEditId(tid)
-        setEditMode(true)
+        //setEditMode(true)
     }
     const cancel = () => {
         setEditId(-1)
-        setEditMode(false)
+        //setEditMode(false)
     }
     const del = () => {
         let table = metadata[0].TABLE_NAME
@@ -44,7 +44,7 @@ export default function TableRow({dataRow, fkData, metadata, editMode, setEditMo
     return (
         <tr className={active ? 'active' : 'inactive'}>
             {row.map((cell, i) => <td><Cell fkData={fkData} metadata={metadata[i]} key={i} i={i} value={cell} /></td>)}
-            {(tid === editId && editMode) ?
+            {(tid === editId && editId >= 0) ?
                 <td onClick={cancel} className='rowEdit'><MdCancel /></td> :
                 <td onClick={edit} className='rowEdit'><MdEdit /></td>}
             <td onClick={del} className='rowDelete'><MdDeleteForever /></td>

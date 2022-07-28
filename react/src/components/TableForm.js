@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import TableFormCell from "./TableFormCell"
 
-export default function TableForm({meta, rowData, regex, editMode, setEditMode, setEditId, refreshData}) {
+export default function TableForm({meta, rowData, regex, editId, setEditId, refreshData}) {
     const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
 
@@ -55,7 +55,7 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode, 
             })
     }
     const resetData = () => {
-        if (editMode) {
+        if (editId => 0) {
             let compiled = []
             for (let x in rowData) {
                 compiled.push(rowData[x])
@@ -66,7 +66,7 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode, 
         }
     }
 
-    useEffect(() => {resetData()},[editMode])
+    useEffect(() => {resetData()},[editId])
     useEffect(() => {
         if (meta !== undefined) {
             setMetadata(meta)
@@ -84,12 +84,12 @@ export default function TableForm({meta, rowData, regex, editMode, setEditMode, 
                     addData={addData}
                     datum={data[i]}
                     regex={regex}
-                    editMode={editMode}
+                    editId={editId}
                     key={i}
                     i={i}
                     mainTableName={metadata.length > 0 ? metadata[0].TABLE_NAME : ''} />
             )}
-            {editMode ? <td colSpan={2} id='formCancel' onClick={cancelEdit}>Cancel</td> : <td></td>}
+            {editId >= 0 ? <td colSpan={2} id='formCancel' onClick={cancelEdit}>Cancel</td> : <td></td>}
         </tr>
     )
 }

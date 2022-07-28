@@ -4,8 +4,9 @@ import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
 export default function Table({refreshData, data, metadata, reg}) {
-    const [editMode, setEditMode] = useState(false)
+    //const [editMode, setEditMode] = useState(false)
     const [editId, setEditId] = useState([])
+    const [formData, setFormData] = useState([])
     const [header, setHeader] = useState([])
     const [fkData, setFkData] = useState([])
     const [tableLoad, setTableLoadMessage] = useState("Loading Table...")
@@ -17,6 +18,14 @@ export default function Table({refreshData, data, metadata, reg}) {
         }
         getFkData()
     }, [data])
+
+    useEffect(() => {
+        if (editId >= 0) {
+            setFormData(data[editId])
+        } else {
+            setFormData([])
+        }
+    },[editId])
 
     const compileHeader = () => {
         let compiled = []
@@ -61,23 +70,20 @@ export default function Table({refreshData, data, metadata, reg}) {
                         dataRow={row}
                         fkData={fkData}
                         metadata={metadata}
-                        editMode={editMode}
-                        setEditMode={setEditMode}
                         editId={editId}
                         setEditId={setEditId}
                         refreshData={refreshData}
                         tid={i}
                         active={i === editId}
                         key={i} />)}
-                <tr><td id={editMode ? 'formEdit' : 'formAddNew'} colSpan={3}>{editMode ?
+                <tr><td id={editId >= 0 ? 'formEdit' : 'formAddNew'} colSpan={3}>{editId >= 0 ?
                     'Edit:' :
                     `Add new ${metadata.length > 0 ? `${metadata[0].TABLE_NAME.slice(0, metadata[0].TABLE_NAME.length - 1).replace('_', ' ')}:` : null}`}</td></tr>
                 <TableForm
                     meta={metadata}
-                    rowData={data[editId]}
+                    rowData={formData}
                     regex={reg}
-                    editMode={editMode}
-                    setEditMode={setEditMode}
+                    editId={editId}
                     setEditId={setEditId}
                     refreshData={refreshData} />
             </tbody>
