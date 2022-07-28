@@ -55,7 +55,7 @@ app.get('/dungeon_masters/:id', (req, res) => {
 })
 
 // Update a dungeon master
-app.put('/dungeons_masters/', (req, res) => {
+app.put('/dungeon_masters', (req, res) => {
     let dm_id = req.body.id;
     let dungeon_master_name = req.body.dungeon_master_name;
     let lucky_dice = req.body.lucky_dice;
@@ -336,7 +336,7 @@ app.get('/monsters/:id', (req, res) => {
 })
 
 // Update a monster
-app.put('/monsters/', (req, res) => {
+app.put('/monsters', (req, res) => {
     let monster_id = req.body.id;
     let monster_name = req.body.monster_name;
     let description = req.body.description;
@@ -350,8 +350,7 @@ app.put('/monsters/', (req, res) => {
     let charisma = req.body.charisma;
     let armor_class = req.body.armor_class;
     let talent = req.body.talent;
-
-    let query = `UPDATE Monsters`;
+    let query = `UPDATE Monsters `;
     query += `SET monster_name='${monster_name}', description='${description}', challenge_rating=${challenge_rating}, `;
     query += `health_points = ${health_points}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, ` ;
     query += `intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, armor_class = ${armor_class}, talent='${talent}' `;
@@ -449,7 +448,7 @@ app.get('/items/:id', (req, res) => {
 })
 
 // Update an item
-app.put('/items/', (req, res) => {
+app.put('/items', (req, res) => {
     let item_id = req.body.id;
     let item_name = req.body.item_name;
     let description = req.body.description;
