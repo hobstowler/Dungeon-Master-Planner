@@ -420,11 +420,12 @@ app.get('/items', (req, res) => {
         let nameQuery = req.query.name
         let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", Types.type_name AS "Type" `
         query += `FROM Items `
-        query += `INNER JOIN Types ON Items.type_id = Types.type_id `
+        query += `LEFT JOIN Types ON Items.type_id = Types.type_id ` // LEFT JOIN required for NULL FKs
         if (nameQuery !== 'undefined') {
             query += ` WHERE item_name LIKE '%${nameQuery}%'`
         }
         db.query(query, (err, results) => {
+            console.log(results)
             return res.json({
                 'data': results,
                 'metadata': metadata
@@ -480,20 +481,17 @@ app.put('/items', (req, res) => {
 // Create a new item
 app.post('/items', (req, res) => {
     let errors = {'error':{}}
-    if (req.body.id === undefined) errors.error['item_id'] = "Missing item ID"
-    if (req.body.item_name === undefined || req.body.item_name === '') errors.error['item_name'] = "Missing item name"
-    if (req.body.weight === undefined) errors.error['weight'] = "Missing weight"
-    if (req.body.value === undefined) errors.error['value'] = "Missing value"
-    if (errors.error.length > 0) return res.status(400).json(errors)
-    let item_name = req.body.item_name
-    let description = req.body.description
-    let weight = req.body.weight
-    let value = req.body.value
-    let type_id = req.body.type_id
+    let item_name, description, weight, value, type_id
+    req.body.item_name === undefined ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
+    req.body.description === undefined ? description = 'NULL' : description = `'${req.body.description}'`
+    req.body.weight === undefined ? weight = 0 : weight = req.body.weight
+    req.body.value === undefined ? value = 0 : value = req.body.value
+    req.body.type_id === undefined ? type_id = 'NULL' : type_id = req.body.type_id
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
 
     let query = `INSERT INTO Items (item_name, description, weight, value, type_id) `
-    query += `VALUES ('${item_name}', '${description}', ${weight}, ${value}`
-    type_id !== undefined ? query += `, ${type_id})` : query += ', NULL)'
+    query += `VALUES (${item_name}, ${description}, ${weight}, ${value}, ${type_id})`
     console.log(query)
     db.query(query, (err, results) => {
         if (err) {
