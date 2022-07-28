@@ -449,7 +449,13 @@ app.get('/items/:id', (req, res) => {
 
 // Update an item
 app.put('/items', (req, res) => {
-    let item_id = req.body.id;
+    let errors = {'error':{}}
+    if (req.body.id === undefined) errors.error['item_id'] = "Missing item ID"
+    if (req.body.item_name === undefined || req.body.item_name === '') errors.error['item_name'] = "Missing item name"
+    if (req.body.weight === undefined) errors.error['weight'] = "Missing weight"
+    if (req.body.value === undefined) errors.error['value'] = "Missing value"
+    if (errors.error.length > 0) return res.status(400).json(errors)
+    let item_id = req.body.id
     let item_name = req.body.item_name;
     let description = req.body.description;
     let weight = req.body.weight;
@@ -457,7 +463,8 @@ app.put('/items', (req, res) => {
     let type_id = req.body.type_id;
     let query = `UPDATE Items `;
     query += `SET item_name='${item_name}', description='${description}', weight=${weight}, `;
-    query += `value=${value}, type_id=${type_id} `;
+    query += `value=${value} `
+    if (type_id !== undefined) query += `, type_id=${type_id} `;
     query += `WHERE item_id=${item_id};`;
     db.query(query, (err, results) => {
         if (err) {
@@ -472,6 +479,12 @@ app.put('/items', (req, res) => {
 
 // Create a new item
 app.post('/items', (req, res) => {
+    let errors = {'error':{}}
+    if (req.body.id === undefined) errors.error['item_id'] = "Missing item ID"
+    if (req.body.item_name === undefined || req.body.item_name === '') errors.error['item_name'] = "Missing item name"
+    if (req.body.weight === undefined) errors.error['weight'] = "Missing weight"
+    if (req.body.value === undefined) errors.error['value'] = "Missing value"
+    if (errors.error.length > 0) return res.status(400).json(errors)
     let item_name = req.body.item_name
     let description = req.body.description
     let weight = req.body.weight
@@ -479,8 +492,9 @@ app.post('/items', (req, res) => {
     let type_id = req.body.type_id
 
     let query = `INSERT INTO Items (item_name, description, weight, value, type_id) `
-    query += `VALUES ('${item_name}', '${description}', ${weight}, ${value}, ${type_id})`
-    
+    query += `VALUES ('${item_name}', '${description}', ${weight}, ${value}`
+    type_id !== undefined ? query += `, ${type_id})` : query += ', NULL)'
+    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
