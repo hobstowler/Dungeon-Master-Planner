@@ -68,7 +68,7 @@ app.put('/dungeon_masters', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(201).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
@@ -98,7 +98,7 @@ app.delete('/dungeon_masters/:id', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
@@ -162,7 +162,7 @@ app.put('/scenarios/', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
@@ -216,6 +216,7 @@ app.get('/dungeons', (req, res) => {
         let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
         query += `FROM Dungeons`
         query += ` INNER JOIN Biomes on Biomes.biome_id = Dungeons.biome_id`
+        console.log(query)
         if (nameQuery !== 'undefined') {
             query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
         }
@@ -259,7 +260,7 @@ app.put('/dungeons/', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
@@ -350,18 +351,19 @@ app.put('/monsters', (req, res) => {
     let charisma = req.body.charisma;
     let armor_class = req.body.armor_class;
     let talent = req.body.talent;
-    let query = `UPDATE Monsters `;
+    let query = `UPDATE Monsters `
     query += `SET monster_name='${monster_name}', description='${description}', challenge_rating=${challenge_rating}, `;
     query += `health_points = ${health_points}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, ` ;
     query += `intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, armor_class = ${armor_class}, talent='${talent}' `;
-    query += `WHERE monster_id = ${monster_id};`;
+    query += `WHERE monster_id = ${monster_id};`
+    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
@@ -465,7 +467,7 @@ app.put('/items', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'})
         } else {
-            return res.status(204).json({'message': 'Success'})
+            return res.status(200).json({'message': 'Success'})
         }
     })
 })
@@ -579,6 +581,7 @@ app.post('/biomes', (req, res) => {
 
 // Delete a biome
 app.delete('/biomes/:id', (req, res) => {
+    console.log(req.params)
     let biome_id = req.params.id;
     let query = `DELETE FROM Biomes WHERE biome_id=${biome_id}`;
     db.query(query, (err, results) => {
@@ -644,7 +647,7 @@ app.put('/types/', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
@@ -717,7 +720,7 @@ app.put('/dungeons_has_monsters/', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })
@@ -792,7 +795,7 @@ app.put('/scenarios_has_items/', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(204).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'});
         }
     })
 })

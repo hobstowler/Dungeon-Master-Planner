@@ -48,7 +48,7 @@ export default function TableRow({dataRow, fkData, metadata, editMode, setEditMo
                 <td onClick={cancel} className='rowEdit'><MdCancel /></td> :
                 <td onClick={edit} className='rowEdit'><MdEdit /></td>}
             <td onClick={del} className='rowDelete'><MdDeleteForever /></td>
-            {hasDetails ? <td><span onClick={expandDetails}>View Details</span></td> : <td></td>}
+            {hasDetails ? <td><span onClick={expandDetails}>View Details >></span></td> : <td></td>}
         </tr>
     )
 }

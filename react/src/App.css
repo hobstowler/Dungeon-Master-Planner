@@ -5,6 +5,8 @@ body {
 
 .header {
     height:fit-content;
+    padding-bottom: 3px;
+    border-bottom: 3px solid black;
 }
 
 .headSpace {
@@ -25,6 +27,7 @@ body {
     padding-bottom: 5px;
     padding-top:20px;
 }
+
 
 nav {
     display:inline;
@@ -64,22 +67,29 @@ nav a:first-child {
 
 table {
     margin: 20px 0px 25px;
+    border-spacing: 0;
 }
 
 table td {
     min-width: fit-content;
     max-width: 400px;
     height: fit-content;
-    border: 1px solid black;
-    padding: 2px 5px;
+    border: none;
+    padding: 4px 8px;
+    text-align: center;
 }
 
 table th {
     padding: 2px 5px;
+    border-bottom: 1px solid black;
 }
 
 table tr.inactive:nth-child(even) td {
-    background-color: lightgray;
+    background-color: #f1f1f1;
+}
+
+table tr:nth-last-child(3) td {
+    border-bottom: 1px solid black;
 }
 
 table tr:last-child td {
@@ -87,6 +97,14 @@ table tr:last-child td {
     margin-top:20px;
     border: none;
     padding: 0;
+}
+
+table tr.active td:first-child, table tr.inactive td:first-child {
+    border-right: 1px solid black;
+}
+
+table tr.active td:nth-last-child(3), table tr.inactive td:nth-last-child(3) {
+    border-left: 1px solid black;
 }
 
 table tr.inactive td:last-child, table tr.active td:last-child {
@@ -99,20 +117,22 @@ table tr td:last-child span {
 }
 
 table input {
-    min-width: 50px;
-    width: 100%;
+    min-width: 25px;
+    width: calc(100% - 5px);
     padding: 0px;
-    margin: 0px;
+    margin: 2px;
     box-sizing: border-box;
 }
 
 table textarea {
-    min-width: 100%;
+    min-width: calc(100% - 5px);
     box-sizing: border-box;
 }
 
 table select {
-    min-width: 100%;
+    min-width: calc(100% - 5px);
+    position: relative;
+    top: -1px;
 }
 
 #formAddNew {
@@ -121,6 +141,7 @@ table select {
     padding-top:15px;
     padding-left:25px;
     font-weight: 900;
+    text-align: left;
 }
 
 #formEdit {

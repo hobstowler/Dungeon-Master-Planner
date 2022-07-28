@@ -51,7 +51,7 @@ export default function Table({refreshData, data, metadata, reg}) {
     }
 
     return (
-        <table cellSpacing={0}>
+        <table cellSpacing={5}>
             <thead>
                 <TableHeader header={header} />
             </thead>
