@@ -450,10 +450,9 @@ app.get('/items/:id', (req, res) => {
 // Update an item
 app.put('/items', (req, res) => {
     let errors = {'error':{}}
-    console.log(req.body)
     let item_id, item_name, description, weight, value, type_id
     req.body.id === undefined ? errors.error['item_id'] = "Missing item ID" : item_id = req.body.id
-    req.body.item_name === undefined ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
+    req.body.item_name === undefined || req.body.item_name === '' ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
     req.body.description === undefined ? description = 'NULL' : description = `'${req.body.description}'`
     req.body.weight === undefined ? 0 : weight = req.body.weight
     req.body.value === undefined ? 0 : value = req.body.value
@@ -480,11 +479,11 @@ app.put('/items', (req, res) => {
 app.post('/items', (req, res) => {
     let errors = {'error':{}}
     let item_name, description, weight, value, type_id
-    req.body.item_name === undefined ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
+    req.body.item_name === undefined || req.body.item_name === '' ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
     req.body.description === undefined ? description = 'NULL' : description = `'${req.body.description}'`
     req.body.weight === undefined ? weight = 0 : weight = req.body.weight
     req.body.value === undefined ? value = 0 : value = req.body.value
-    req.body.type_id === undefined ? type_id = 'NULL' : type_id = req.body.type_id
+    req.body.type_id === undefined || req.body.type_id === 'undefined' ? type_id = 'NULL' : type_id = req.body.type_id
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
 
@@ -554,11 +553,16 @@ app.get('/biomes/:id', (req, res) => {
 
 // Update a biome
 app.put('/biomes', (req, res) => {
-    let biome_id = req.body.id;
-    let biome_name = req.body.biome_name;
-    let description = req.body.description;
+    let errors = {'error':{}}
+    let biome_id, biome_name, description
+    req.body.id === undefined ? errors.error[biome_id] = "Missing biome id" : biome_id = req.body.id
+    req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error[biome_name] = "Missing biome name" : biome_name = `'${req.body.biome_name}'`
+    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `UPDATE Biomes `;
-    query += `SET biome_name='${biome_name}', description='${description}' `;
+    query += `SET biome_name=${biome_name}, description=${description} `;
     query += `WHERE biome_id=${biome_id};`;
     db.query(query, (err, results) => {
         if (err) {
@@ -573,10 +577,15 @@ app.put('/biomes', (req, res) => {
 
 // Create a new biome
 app.post('/biomes', (req, res) => {
-    let biome_name = req.body.biome_name;
-    let description = req.body.description;
+    let errors = {'error':{}}
+    let biome_name, description
+    req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error[biome_name] = "Missing biome name" : biome_name = `'${req.body.biome_name}'`
+    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `INSERT INTO Biomes (biome_name, description) `;
-    query += `VALUES ('${biome_name}', '${description}');`;
+    query += `VALUES (${biome_name}, ${description});`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
