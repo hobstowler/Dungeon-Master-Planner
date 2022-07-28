@@ -649,12 +649,17 @@ app.get('/types/:id', (req, res) => {
 })
 
 // Update a type
-app.put('/types/', (req, res) => {
-    let type_id = req.body.id;
-    let type_name = req.body.type_name;
-    let description = req.body.description;
+app.put('/types', (req, res) => {
+    let errors = {'error':{}}
+    let type_id, type_name, description
+    req.body.id === undefined ? errors.error[type_id] = "Missing type id" : type_id = req.body.id
+    req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${req.body.type_name}'`
+    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `UPDATE Types `;
-    query += `SET type_name='${type_name}', description='${description}' `;
+    query += `SET type_name=${type_name}, description=${description} `;
     query += `WHERE type_id = ${type_id};`;
     db.query(query, (err, results) => {
         if (err) {
@@ -669,10 +674,15 @@ app.put('/types/', (req, res) => {
 
 // Create a new type
 app.post('/types', (req, res) => {
-    let type_name = req.body.type_name;
-    let description = req.body.description;
+    let errors = {'error':{}}
+    let type_name, description
+    req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${req.body.type_name}'`
+    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `INSERT INTO Types (type_name, description) `;
-    query += `VALUES ('${type_name}', '${description}');`;
+    query += `VALUES (${type_name}, ${description});`;
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
