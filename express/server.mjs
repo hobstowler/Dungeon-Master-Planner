@@ -98,7 +98,7 @@ app.delete('/dungeon_masters/:id', (req, res) => {
         } else if (results.affectedRows === 0) {
             return res.status(404).json({'message': 'Row not found.'});
         } else {
-            return res.status(200).json({'message': 'Success'});
+            return res.status(204).json({'message': 'Success'});
         }
     })
 })
@@ -216,7 +216,6 @@ app.get('/dungeons', (req, res) => {
         let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
         query += `FROM Dungeons`
         query += ` INNER JOIN Biomes on Biomes.biome_id = Dungeons.biome_id`
-        console.log(query)
         if (nameQuery !== 'undefined') {
             query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
         }
@@ -356,7 +355,6 @@ app.put('/monsters', (req, res) => {
     query += `health_points = ${health_points}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, ` ;
     query += `intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, armor_class = ${armor_class}, talent='${talent}' `;
     query += `WHERE monster_id = ${monster_id};`
-    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -420,7 +418,7 @@ app.get('/items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", Items.type_id AS "Type" `
+        let query = `SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", Types.type_name AS "Type" `
         query += `FROM Items `
         query += `INNER JOIN Types ON Items.type_id = Types.type_id `
         if (nameQuery !== 'undefined') {
@@ -581,7 +579,6 @@ app.post('/biomes', (req, res) => {
 
 // Delete a biome
 app.delete('/biomes/:id', (req, res) => {
-    console.log(req.params)
     let biome_id = req.params.id;
     let query = `DELETE FROM Biomes WHERE biome_id=${biome_id}`;
     db.query(query, (err, results) => {

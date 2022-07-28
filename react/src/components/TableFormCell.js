@@ -41,6 +41,9 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
         if (editMode) {
             compiled.splice(0,0,[val, display])
         }
+        if (compiled[0] !== undefined && cell.COLUMN_KEY === 'MUL') {
+            changeData(i, compiled[0][0])
+        }
         setDrop(compiled)
     }
     const getDropdown = () => {
