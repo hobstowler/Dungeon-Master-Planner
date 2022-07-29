@@ -34,13 +34,13 @@ SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary A
 session_time AS "Session Time", Dungeon_Masters.dungeon_master_name AS "Dungeon Master", Dungeons.dungeon_name AS "Dungeon"
 FROM Scenarios
 INNER JOIN Dungeon_Masters on Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id
-INNER JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id
+LEFT JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id
 WHERE scenario_name LIKE '%:nameQuery%';
 
 -- Create a new scenario
-INSERT INTO Scenarios (scenario_id, scenario_name, summary, target_level, session_time, 
+INSERT INTO Scenarios (scenario_name, summary, target_level, session_time, 
 dungeon_master_id, dungeon_id)
-VALUES (:scenario_id_input, :scenario_name_input, :summary_input, :target_level_input, 
+VALUES (:scenario_name_input, :summary_input, :target_level_input, 
 :session_time_input, :dungeon_master_id_from_dropdown, :dungeon_id_from_dropdown);
 
 -- Delete a scenario using the id of the scenario selected on the Scenarios page
@@ -63,7 +63,7 @@ SELECT * FROM `Information_Schema`.`columns` WHERE table_name='Dungeons'
 -- Retrieve dungeons to display based on an optional search term (WHERE is only included if a value is provided for nameQuery)
 SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome"
 FROM Dungeons
-INNER JOIN Biomes on Biomes.biome_id = Dungeons.biome_id
+LEFT JOIN Biomes on Biomes.biome_id = Dungeons.biome_id
 WHERE dungeon_name LIKE '%:nameQuery%';
 
 -- Create a new dungeon
@@ -87,10 +87,11 @@ WHERE dungeon_id= :dungeon_id_selected;
 SELECT * FROM `Information_Schema`.`columns` WHERE table_name='Monsters';
 
 -- Retrieve monsters to display based on an optional search term (WHERE is only included if a value is provided for nameQuery)
-SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome"
-FROM Dungeons
-INNER JOIN Biomes on Biomes.biome_id = Dungeons.biome_id
-WHERE dungeon_name LIKE '%:nameQuery%';
+SELECT monster_id AS "Monster ID", monster_name AS "Monster Name", description AS "Description", challenge_rating AS "Challenge Rating", 
+health_points AS "Health Points", strength AS "Strength", dexterity AS "Dexterity", constitution AS "Constitution", 
+intelligence AS "Intelligence", wisdom AS "Wisdom", charisma AS "Charisma", armor_class AS "Armor Class", talent AS "Talent(s)"
+FROM Monsters
+WHERE monster_name LIKE '%:nameQuery%';
 
 -- Create a new monster
 INSERT INTO Monsters (monster_name, description, challenge_rating, health_points, strength, 
@@ -119,11 +120,10 @@ WHERE monster_id = :monster_id_selected;
 SELECT * FROM `Information_Schema`.`columns` WHERE table_name='Items';
 
 -- Retrieve items to display based on an optional search term (WHERE is only included if a value is provided for nameQuery)
-SELECT monster_id AS "Monster ID", monster_name AS "Monster Name", description AS "Description", challenge_rating AS "Challenge Rating", 
-health_points AS "Health Points", strength AS "Strength", dexterity AS "Dexterity", constitution AS "Constitution", 
-intelligence AS "Intelligence", wisdom AS "Wisdom", charisma AS "Charisma", armor_class AS "Armor Class", talent AS "Talent(s)"
-FROM Monsters
-WHERE monster_name LIKE '%:nameQuery%';
+SELECT item_id AS "Item ID", item_name AS "Item Name", Items.description AS "Description", weight AS "Weight", value AS "Value (in copper)", Types.type_name AS "Type"
+FROM Items
+LEFT JOIN Types ON Items.type_id = Types.type_id
+WHERE item_name LIKE '%:nameQuery%'
 
 -- Create a new item
 INSERT INTO Items (item_name, description, weight, value, type_id)
