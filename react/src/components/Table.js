@@ -5,7 +5,7 @@ import TableRow from "./TableRow";
 
 export default function Table({refreshData, data, metadata, reg}) {
     //const [editMode, setEditMode] = useState(false)
-    const [editId, setEditId] = useState([])
+    const [editId, setEditId] = useState(-1)
     const [formData, setFormData] = useState([])
     const [header, setHeader] = useState([])
     const [fkData, setFkData] = useState([])

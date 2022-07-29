@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Dropdown from "./Dropdown";
 
-export default function TableFormCell({cell, datum, i, changeData, updateData, addData, regex, editId}) {
+export default function TableFormCell({cell, datum, data, i, changeData, updateData, addData, regex, editId}) {
     const [value, setValue] = useState('')
 
     // used to update the display when the underlying value changes
@@ -18,7 +18,6 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
     },[editId])
 
     const handleChange = (e) => {
-        console.log(i)
         setValue(e.target.value)
         changeData(i, e.target.value)
     }
@@ -31,7 +30,7 @@ export default function TableFormCell({cell, datum, i, changeData, updateData, a
         } else if (cell.COLUMN_KEY === 'MUL') {  // UNDO
             return (
                 <td>
-                    <Dropdown cell={cell} datum={datum} handleChange={handleChange} i={i} editId={editId} />
+                    <Dropdown cell={cell} datum={datum} changeData={changeData} keyVal={i} editId={editId} />
                 </td>
             )
         } else if (regex.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'datetime') {
