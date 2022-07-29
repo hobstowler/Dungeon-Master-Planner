@@ -40,20 +40,6 @@ app.get('/dungeon_masters', (req, res) => {
     })
 })
 
-// Retrieve a specific dungeon master by their id
-app.get('/dungeon_masters/:id', (req, res) => {
-    let dm_id = req.params.id
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeon_Masters'", (err, results) => {
-        let metadata = results
-        db.query(`SELECT * FROM Dungeon_Masters WHERE dungeon_master_id=${dm_id}`, (err, results) => {
-            return res.json({
-                'data': results,
-                'metadata': metadata
-            })
-        })
-    })
-})
-
 // Update a dungeon master
 app.put('/dungeon_masters', (req, res) => {
     let dm_id = req.body.id;
@@ -116,25 +102,11 @@ app.get('/scenarios', (req, res) => {
         let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", Dungeon_Masters.dungeon_master_name AS "Dungeon Master", Dungeons.dungeon_name AS "Dungeon" `
         query += `FROM Scenarios `
         query += `INNER JOIN Dungeon_Masters on Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id `
-        query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
+        query += `LEFT JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
         if (nameQuery !== 'undefined') {
             query += ` WHERE scenario_name LIKE '%${nameQuery}%';`
         }
         db.query(query, (err, results) => {
-            return res.json({
-                'data': results,
-                'metadata': metadata
-            })
-        })
-    })
-})
-
-// Retrieve a specific scenario by its id
-app.get('/scenarios/:id', (req, res) => {
-    let scenario_id = req_params.id
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
-        let metadata = results
-        db.query(`SELECT * FROM Scenarios WHERE scenario_id=${scenario_id}'`, (err, results) => {
             return res.json({
                 'data': results,
                 'metadata': metadata
@@ -215,7 +187,7 @@ app.get('/dungeons', (req, res) => {
         let nameQuery = req.query.name
         let query = `SELECT dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
         query += `FROM Dungeons`
-        query += ` INNER JOIN Biomes on Biomes.biome_id = Dungeons.biome_id`
+        query += ` LEFT JOIN Biomes on Biomes.biome_id = Dungeons.biome_id`
         if (nameQuery !== 'undefined') {
             query += ` WHERE dungeon_name LIKE '%${nameQuery}%'`
         }
@@ -228,50 +200,45 @@ app.get('/dungeons', (req, res) => {
     })
 })
 
-// Retrieve a specific dungeon by its id
-app.get('/dungeons/:id', (req, res) => {
-    let dungeon_id = req.params.id
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
-        let metadata = results
-        db.query(`SELECT * FROM Dungeons WHERE dungeon_id=${dungeon_id}`, (err, results) => {
-            return res.json({
-                'data': results,
-                'metadata': metadata
-            })
-        })
-    })
-})
-
 // Update a dungeon
-app.put('/dungeons/', (req, res) => {
-    let dungeon_id = req.body.id;
-    let dungeon_name = req.body.dungeon_name;
-    let description = req.body.description;
-    let light_level = req.body.light_level;
-    let biome_id = req.body.biome_id;
+app.put('/dungeons', (req, res) => {
+    let errors = {'error':{}}
+    let dungeon_id, dungeon_name, description, light_level, biome_id
+    req.body.id === undefined ? errors.error['dungeon_id'] = "Missing dungeon ID" : dungeon_id = req.body.id
+    req.body.dungeon_name === undefined || req.body.dungeon_name === '' ? errors.error['dungeon_name'] = "Missing dungeon name" : dungeon_name = `'${req.body.dungeon_name}'`
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
+    req.body.light_level === undefined ? light_level = 0 : light_level = req.body.light_level
+    req.body.biome_id === undefined || req.body.biome_id === 'undefined' ? biome_id = 'NULL' : biome_id = req.body.biome_id
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `UPDATE Dungeons `;
-    query += `SET dungeon_name='${dungeon_name}', description='${description}', `;
-    query += `light_level=${light_level}, biome_id=${biome_id} `;
-    query += `WHERE dungeon_id=${dungeon_id}`;
+    query += `SET dungeon_name=${dungeon_name}, description=${description}, light_level=${light_level}, biome_id=${biome_id} `
+    query += `WHERE dungeon_id=${dungeon_id}`
     db.query(query, (err, results) => {
         if (err) {
-            return res.status(500).json({'error': err});
+            return res.status(500).json({'error': err})
         } else if (results.affectedRows === 0) {
-            return res.status(404).json({'message': 'Row not found.'});
+            return res.status(404).json({'message': 'Row not found.'})
         } else {
-            return res.status(200).json({'message': 'Success'});
+            return res.status(200).json({'message': 'Success'})
         }
     })
 })
 
 // Add a dungeon
 app.post('/dungeons', (req, res) => {
-    let dungeon_name = req.body.dungeon_name;
-    let description = req.body.description;
-    let light_level = req.body.light_level;
-    let biome_id = req.body.biome_id;
-    let query = `INSERT INTO Dungeons (dungeon_name, description, light_level, biome_id) `;
-    query += `VALUES ('${dungeon_name}', '${description}', ${light_level}, ${biome_id});`
+    let errors = {'error':{}}
+    let dungeon_name, description, light_level, biome_id
+    req.body.dungeon_name === undefined || req.body.dungeon_name === '' ? errors.error['dungeon_name'] = "Missing dungeon name" : dungeon_name = `'${req.body.dungeon_name}'`
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
+    req.body.light_level === undefined ? light_level = 0 : light_level = req.body.light_level
+    req.body.biome_id === undefined || req.body.biome_id === 'undefined' ? biome_id = 'NULL' : biome_id = req.body.biome_id
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
+    let query = `INSERT INTO Dungeons (dungeon_name, description, light_level, biome_id) `
+    query += `VALUES (${dungeon_name}, ${description}, ${light_level}, ${biome_id});`
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -313,20 +280,6 @@ app.get('/monsters', (req, res) => {
             query += ` WHERE monster_name LIKE '%${nameQuery}%'`
         }
         db.query(query, (err, results) => {
-            return res.json({
-                'data': results,
-                'metadata': metadata
-            })
-        })
-    })
-})
-
-// Retrieve a specific monster by its id
-app.get('/monsters/:id', (req, res) => {
-    let monster_id = req.params.id
-    b.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
-        let metadata = results
-        db.query(`SELECT * FROM Monsters WHERE monster_id=${monster_id}`, (err, results) => {
             return res.json({
                 'data': results,
                 'metadata': metadata
@@ -433,37 +386,22 @@ app.get('/items', (req, res) => {
     })
 })
 
-// Retrieve a single item by its id
-app.get('/items/:id', (req, res) => {
-    let item_id = req.params.id
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Items'", (err, results) => {
-        let metadata = results
-        db.query(`SELECT * FROM Items WHERE item_id=${item_id}`, (err, results) => {
-            return res.json({
-                'data': results,
-                'metadata': metadata
-            })
-        })
-    })
-})
-
 // Update an item
 app.put('/items', (req, res) => {
     let errors = {'error':{}}
     let item_id, item_name, description, weight, value, type_id
     req.body.id === undefined ? errors.error['item_id'] = "Missing item ID" : item_id = req.body.id
     req.body.item_name === undefined || req.body.item_name === '' ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
-    req.body.description === undefined ? description = 'NULL' : description = `'${req.body.description}'`
-    req.body.weight === undefined ? 0 : weight = req.body.weight
-    req.body.value === undefined ? 0 : value = req.body.value
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
+    req.body.weight === undefined ? weight = 0 : weight = req.body.weight
+    req.body.value === undefined ? value = 0 : value = req.body.value
     req.body.type_id === undefined || req.body.type_id === 'undefined' ? type_id = 'NULL' : type_id = req.body.type_id
     
-    if (Object.keys(errors.error) > 0) return res.status(400).json(errors)
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
 
     let query = `UPDATE Items `;
     query += `SET item_name=${item_name}, description=${description}, weight=${weight}, value=${value}, type_id=${type_id} `
     query += `WHERE item_id=${item_id};`;
-    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
@@ -480,7 +418,7 @@ app.post('/items', (req, res) => {
     let errors = {'error':{}}
     let item_name, description, weight, value, type_id
     req.body.item_name === undefined || req.body.item_name === '' ? errors.error['item_name'] = "Missing item name" : item_name = `'${req.body.item_name}'`
-    req.body.description === undefined ? description = 'NULL' : description = `'${req.body.description}'`
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
     req.body.weight === undefined ? weight = 0 : weight = req.body.weight
     req.body.value === undefined ? value = 0 : value = req.body.value
     req.body.type_id === undefined || req.body.type_id === 'undefined' ? type_id = 'NULL' : type_id = req.body.type_id
@@ -537,27 +475,13 @@ app.get('/biomes', (req, res) => {
     })
 })
 
-// Retrieve a single biome by its id
-app.get('/biomes/:id', (req, res) => {
-    let biome_id = req.params.id
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Biomes'", (err, results) => {
-        let metadata = results
-        db.query(`SELECT * FROM Biomes WHERE biome_id=${biome_id}`, (err, results) => {
-            return res.json({
-                'data': results,
-                'metadata': metadata
-            })
-        })
-    })
-})
-
 // Update a biome
 app.put('/biomes', (req, res) => {
     let errors = {'error':{}}
     let biome_id, biome_name, description
     req.body.id === undefined ? errors.error[biome_id] = "Missing biome id" : biome_id = req.body.id
     req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error[biome_name] = "Missing biome name" : biome_name = `'${req.body.biome_name}'`
-    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
 
@@ -580,7 +504,7 @@ app.post('/biomes', (req, res) => {
     let errors = {'error':{}}
     let biome_name, description
     req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error[biome_name] = "Missing biome name" : biome_name = `'${req.body.biome_name}'`
-    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
 
@@ -634,27 +558,13 @@ app.get('/types', (req, res) => {
     })
 })
 
-// Retrieve a single type by its id
-app.get('/types/:id', (req, res) => {
-    let type_id = req.params.id
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Types'", (err, results) => {
-        let metadata = results
-        db.query(`SELECT * FROM Types WHERE type_id=${type_id}`, (err, results) => {
-            return res.json({
-                'data': results,
-                'metadata': metadata
-            })
-        })
-    })
-})
-
 // Update a type
 app.put('/types', (req, res) => {
     let errors = {'error':{}}
     let type_id, type_name, description
     req.body.id === undefined ? errors.error[type_id] = "Missing type id" : type_id = req.body.id
     req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${req.body.type_name}'`
-    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
 
@@ -677,7 +587,7 @@ app.post('/types', (req, res) => {
     let errors = {'error':{}}
     let type_name, description
     req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${req.body.type_name}'`
-    req.body.description === undefined ? description = "NULL" : description = `'${req.body.description}'`
+    req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
 
