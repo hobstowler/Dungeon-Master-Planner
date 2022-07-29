@@ -28,7 +28,6 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
     }
 
     const translate = (val) => {
-        //console.log('val')
         if (options === undefined) {return}
         let value = parseInt(val)
         for (let i = 0; i < options.length; i++) {
@@ -61,7 +60,6 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
         let value = parseInt(datum)
         let display = ''
         let val = -1
-        console.log('opts', opts)
         for (let i = 0; i < opts.length; i++) {
             let row = []
             for (let x in opts[i]) {
@@ -71,7 +69,6 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
                 display = datum
                 val = row[0]
             } else if (editId >= 0 && value === row[0]) {
-                console.log('yea')
                 val = row[0]
                 display = row[1]
             } else {
@@ -87,7 +84,6 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
         } else {
             compiled.splice(0,0,['',''])
         }
-        console.log(compiled)
         setDrop(compiled)
     }
     if (resetSelect) {

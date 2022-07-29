@@ -23,7 +23,6 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, refr
                 dataToSend[metadata[i].COLUMN_NAME] = data[i]
             }
         }
-        console.log(dataToSend)
         fetch(`${metadata[0].TABLE_NAME}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -42,7 +41,6 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, refr
         for (let i = 1; i < metadata.length; i++) {
             dataToSend[metadata[i].COLUMN_NAME] = data[i]
         }
-        console.log('data:', dataToSend)
         fetch(`${metadata[0].TABLE_NAME}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
