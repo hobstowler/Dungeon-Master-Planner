@@ -61,8 +61,10 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
                 row.push(opts[i][x])
             }
             if (editId >= 0 && isNaN(value) && row[1] === datum) {
+                display = datum
                 val = row[0]
             } else if (editId >= 0 && value === row[0]) {
+                console.log('yea')
                 val = row[0]
                 display = row[1]
             } else {
