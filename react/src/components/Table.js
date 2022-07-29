@@ -3,7 +3,7 @@ import TableForm from "./TableForm";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
-export default function Table({refreshData, data, metadata, reg}) {
+export default function Table({refreshData, data, metadata, setError, reg}) {
     //const [editMode, setEditMode] = useState(false)
     const [editId, setEditId] = useState(-1)
     const [formData, setFormData] = useState([])
@@ -85,6 +85,7 @@ export default function Table({refreshData, data, metadata, reg}) {
                     regex={reg}
                     editId={editId}
                     setEditId={setEditId}
+                    setError={setError}
                     refreshData={refreshData} />
             </tbody>
         </table>

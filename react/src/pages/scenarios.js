@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import Table from '../components/Table';
 
-export default function Scenarios({reg, refreshData, data, metadata}) {
+export default function Scenarios({reg, refreshData, data, metadata, setError}) {
     useEffect(() => {
         refreshData('scenarios')
     }, [])
@@ -10,7 +10,7 @@ export default function Scenarios({reg, refreshData, data, metadata}) {
         return (
             <div>
                 <h3>View the data of all scenarios in the table below, and use Edit, Delete, or Add New to modify the table.</h3>
-                <Table data={data} metadata={metadata} refreshData={refreshData} reg={reg}/>
+                <Table data={data} metadata={metadata} refreshData={refreshData} setError={setError} reg={reg}/>
             </div>
         )
     } else {

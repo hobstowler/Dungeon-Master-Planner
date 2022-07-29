@@ -17,6 +17,7 @@ import Detail from "./components/Detail";
 
 function App() {
     const [data, setData] = useState([])
+    const [error, setError] = useState('')
     const [metadata, setMetadata] = useState([])
     const [curTable, setCurTable] = useState([])
     const [showDetail, setShowDetail] =  useState(false)
@@ -68,16 +69,62 @@ function App() {
                     {window.location.pathname === '/' ? '' : <SearchForm refreshData={refreshData} />}
                     <Routes>
                         <Route path="/" element={<HomePage/>}/>
-                        <Route path="/biomes" element={<Biomes reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/dungeon_masters" element={<DungeonMasters reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/dungeons" element={<Dungeons reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/dungeons_has_monsters" element={<DungeonsHasMonsters reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/items" element={<Items reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/monsters" element={<Monsters reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/scenarios" element={<Scenarios reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/scenarios_has_items" element={<ScenariosHasItems reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
-                        <Route path="/types" element={<Types reg={reg} refreshData={refreshData} data={data} metadata={metadata} />}/>
+                        <Route path="/biomes"
+                               element={<Biomes reg={reg}
+                                                refreshData={refreshData}
+                                                data={data}
+                                                metadata={metadata}
+                                                setError={setError} />}/>
+                        <Route path="/dungeon_masters"
+                               element={<DungeonMasters reg={reg}
+                                                        refreshData={refreshData}
+                                                        data={data}
+                                                        metadata={metadata}
+                                                        setError={setError} />}/>
+                        <Route path="/dungeons"
+                               element={<Dungeons reg={reg}
+                                                  refreshData={refreshData}
+                                                  data={data}
+                                                  metadata={metadata}
+                                                  setError={setError} />}/>
+                        <Route path="/dungeons_has_monsters"
+                               element={<DungeonsHasMonsters reg={reg}
+                                                             refreshData={refreshData}
+                                                             data={data}
+                                                             metadata={metadata}
+                                                             setError={setError} />}/>
+                        <Route path="/items"
+                               element={<Items reg={reg}
+                                               refreshData={refreshData}
+                                               data={data}
+                                               metadata={metadata}
+                                               setError={setError} />}/>
+                        <Route path="/monsters"
+                               element={<Monsters reg={reg}
+                                                  refreshData={refreshData}
+                                                  data={data}
+                                                  metadata={metadata}
+                                                  setError={setError} />}/>
+                        <Route path="/scenarios"
+                               element={<Scenarios reg={reg}
+                                                   refreshData={refreshData}
+                                                   data={data}
+                                                   metadata={metadata}
+                                                   setError={setError} />}/>
+                        <Route path="/scenarios_has_items"
+                               element={<ScenariosHasItems reg={reg}
+                                                           refreshData={refreshData}
+                                                           data={data}
+                                                           metadata={metadata}
+                                                           setError={setError} />}/>
+                        <Route path="/types"
+                               element={<Types reg={reg}
+                                               refreshData={refreshData}
+                                               data={data}
+                                               metadata={metadata}
+                                               setError={setError} />}/>
                     </Routes>
+                    <div id='errorBox'>{error}</div>
                     {showDetail && window.location.pathname !== '/' ? <Detail /> : ''}
                 </BrowserRouter>
             </div>

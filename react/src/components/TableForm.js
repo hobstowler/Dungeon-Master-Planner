@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import TableFormCell from "./TableFormCell"
 
-export default function TableForm({meta, rowData, regex, editId, setEditId, refreshData}) {
+export default function TableForm({meta, rowData, regex, editId, setEditId, setError, refreshData}) {
     const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
 
@@ -49,7 +49,13 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, refr
             .then(response => {
                 if (response.status === 200) {
                     refreshData()
+                    cancelEdit()
                 }
+                return response.json()
+            })
+            .then(json => {
+                console.log(json)
+                setError(JSON.stringify(json.error))
             })
     }
     const resetData = () => {

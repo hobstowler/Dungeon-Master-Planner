@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Table from '../components/Table';
 
-export default function DungeonHasMonsters({reg, refreshData, data, metadata}) {
+export default function DungeonHasMonsters({reg, refreshData, data, metadata, setError}) {
     useEffect(() => {
         refreshData('dungeons_has_monsters', undefined)
     }, [])
@@ -9,7 +9,7 @@ export default function DungeonHasMonsters({reg, refreshData, data, metadata}) {
     if (data !== undefined && metadata !== undefined) {
         return (
             <div>
-                <Table data={data} metadata={metadata} refreshData={refreshData} reg={reg}/>
+                <Table data={data} metadata={metadata} refreshData={refreshData} setError={setError} reg={reg}/>
             </div>
         )
     } else {
