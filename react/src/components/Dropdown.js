@@ -3,18 +3,25 @@ import React, { useState, useEffect } from "react"
 export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
     const [drop, setDrop] = useState([])
     const [display, setDisplay] = useState('')
+    const [resetSelect, setSel] = useState(true)
     const [options, setOptions] = useState([])
 
     useEffect(() => {
         getDropdown()
     },[])
     useEffect(() => {
+        setSel(false)
         compileDrop()
         changeData(keyVal, translate(datum))
     },[datum])
     useEffect(() => {
         changeData(keyVal, translate(datum))
     },[drop])
+    useEffect(() => {
+        if (!resetSelect) {
+            setSel(true)
+        }
+    }, [resetSelect])
 
     const dropdownChange = (e) => {
         changeData(keyVal, translate(e.target.value))
@@ -83,12 +90,15 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
         console.log(compiled)
         setDrop(compiled)
     }
-
-    return (
+    if (resetSelect) {
+        return (
         <select onChange={dropdownChange}>
             {drop.map((opt, i) => {
                 return (<option value={opt[0]} key={i}>{opt[1]}</option>)
             })}
         </select>
     )
+    } else {
+        return (<div></div>)
+    }
 }
