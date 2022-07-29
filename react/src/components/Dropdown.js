@@ -13,7 +13,6 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
         changeData(keyVal, translate(datum))
     },[datum])
     useEffect(() => {
-        console.log(drop)
         changeData(keyVal, translate(datum))
     },[drop])
 
@@ -55,6 +54,7 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
         let value = parseInt(datum)
         let display = ''
         let val = -1
+        console.log('opts', opts)
         for (let i = 0; i < opts.length; i++) {
             let row = []
             for (let x in opts[i]) {
@@ -78,6 +78,7 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
         } else {
             compiled.splice(0,0,['',''])
         }
+        console.log(compiled)
         setDrop(compiled)
     }
 

@@ -3,10 +3,12 @@ import Dropdown from "./Dropdown";
 
 export default function TableFormCell({cell, datum, data, i, changeData, updateData, addData, regex, editId}) {
     const [value, setValue] = useState('')
-
+    console.log(datum)
     // used to update the display when the underlying value changes
     useEffect(() => {
-        let new_val = (editId >= 0) ? datum : ''
+        console.log(datum)
+        let new_val = (editId >= 0) ? data[i] : ''
+        console.log(data[i])
         setValue(new_val)
     }, [datum])
     // sets the value displayed when entering edit mode and clears it when exiting.

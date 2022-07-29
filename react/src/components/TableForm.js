@@ -5,7 +5,6 @@ import TableFormCell from "./TableFormCell"
 export default function TableForm({meta, rowData, regex, editId, setEditId, refreshData}) {
     const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
-    console.log(rowData)
 
     const cancelEdit = () => {
         //setEditMode(false)
@@ -13,7 +12,7 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, refr
     }
 
     const changeData = (i, new_val) => {
-        let new_data = [data]
+        let new_data = data
         new_data[i] = new_val
         setData(new_data)
     }
