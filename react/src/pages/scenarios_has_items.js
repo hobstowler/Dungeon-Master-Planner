@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Table from '../components/Table';
 
-export default function ScenariosHasItems({reg, refreshData, data, metadata, setError}) {
+export default function ScenariosHasItems({reg, refreshData, data, metadata, setError, showDetail, setShowDetail}) {
     useEffect(() => {
         refreshData('scenarios_has_items', undefined)
     }, [])
@@ -9,7 +9,13 @@ export default function ScenariosHasItems({reg, refreshData, data, metadata, set
     if (data !== undefined && metadata !== undefined) {
         return (
             <div>
-                <Table data={data} metadata={metadata} refreshData={refreshData} setError={setError} reg={reg}/>
+                <Table data={data}
+                       metadata={metadata}
+                       refreshData={refreshData}
+                       setError={setError}
+                       reg={reg}
+                       showDetail={showDetail}
+                       setShowDetail={setShowDetail} />
             </div>
         )
     } else {

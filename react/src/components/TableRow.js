@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react"
 import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
 import Cell from "./Cell";
 
-export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active}) {
+export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail}) {
     const [row, setRow] = useState([])
-    const [hasDetails, setHasDetails] = useState(true)
+    console.log(intersection)
 
     useEffect(() => {
         let compiled = []
@@ -38,7 +38,7 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
             .catch(error => console.log(error))
     }
     const expandDetails = () => {
-
+        setShowDetail(!showDetail)
     }
     
     return (
@@ -48,7 +48,7 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
                 <td onClick={cancel} className='rowEdit'><MdCancel /></td> :
                 <td onClick={edit} className='rowEdit'><MdEdit /></td>}
             <td onClick={del} className='rowDelete'><MdDeleteForever /></td>
-            {hasDetails ? <td><span onClick={expandDetails}>View Details >></span></td> : <td></td>}
+            {intersection !== undefined ? <td><span onClick={expandDetails}>View Details >></span></td> : <td></td>}
         </tr>
     )
 }

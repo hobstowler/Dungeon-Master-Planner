@@ -74,58 +74,76 @@ function App() {
                                                 refreshData={refreshData}
                                                 data={data}
                                                 metadata={metadata}
-                                                setError={setError} />}/>
+                                                setError={setError}
+                                                showDetail={showDetail}
+                                                setShowDetail={setShowDetail} />}/>
                         <Route path="/dungeon_masters"
                                element={<DungeonMasters reg={reg}
                                                         refreshData={refreshData}
                                                         data={data}
                                                         metadata={metadata}
-                                                        setError={setError} />}/>
+                                                        setError={setError}
+                                                        showDetail={showDetail}
+                                                        setShowDetail={setShowDetail} />}/>
                         <Route path="/dungeons"
                                element={<Dungeons reg={reg}
                                                   refreshData={refreshData}
                                                   data={data}
                                                   metadata={metadata}
-                                                  setError={setError} />}/>
+                                                  setError={setError}
+                                                  showDetail={showDetail}
+                                                  setShowDetail={setShowDetail} />}/>
                         <Route path="/dungeons_has_monsters"
                                element={<DungeonsHasMonsters reg={reg}
                                                              refreshData={refreshData}
                                                              data={data}
                                                              metadata={metadata}
-                                                             setError={setError} />}/>
+                                                             setError={setError}
+                                                             showDetail={showDetail}
+                                                             setShowDetail={setShowDetail} />}/>
                         <Route path="/items"
                                element={<Items reg={reg}
                                                refreshData={refreshData}
                                                data={data}
                                                metadata={metadata}
-                                               setError={setError} />}/>
+                                               setError={setError}
+                                               showDetail={showDetail}
+                                               setShowDetail={setShowDetail} />}/>
                         <Route path="/monsters"
                                element={<Monsters reg={reg}
                                                   refreshData={refreshData}
                                                   data={data}
                                                   metadata={metadata}
-                                                  setError={setError} />}/>
+                                                  setError={setError}
+                                                  showDetail={showDetail}
+                                                  setShowDetail={setShowDetail} />}/>
                         <Route path="/scenarios"
                                element={<Scenarios reg={reg}
                                                    refreshData={refreshData}
                                                    data={data}
                                                    metadata={metadata}
-                                                   setError={setError} />}/>
+                                                   setError={setError}
+                                                   showDetail={showDetail}
+                                                   setShowDetail={setShowDetail} />}/>
                         <Route path="/scenarios_has_items"
                                element={<ScenariosHasItems reg={reg}
                                                            refreshData={refreshData}
                                                            data={data}
                                                            metadata={metadata}
-                                                           setError={setError} />}/>
+                                                           setError={setError}
+                                                           showDetail={showDetail}
+                                                           setShowDetail={setShowDetail} />}/>
                         <Route path="/types"
                                element={<Types reg={reg}
                                                refreshData={refreshData}
                                                data={data}
                                                metadata={metadata}
-                                               setError={setError} />}/>
+                                               setError={setError}
+                                               showDetail={showDetail}
+                                               setShowDetail={setShowDetail} />}/>
                     </Routes>
                     <div id='errorBox'>{error}</div>
-                    {showDetail && window.location.pathname !== '/' ? <Detail /> : ''}
+                    {showDetail ? <Detail /> : ''}
                 </BrowserRouter>
             </div>
         </div>

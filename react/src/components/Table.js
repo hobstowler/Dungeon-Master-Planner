@@ -3,7 +3,7 @@ import TableForm from "./TableForm";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
-export default function Table({refreshData, data, metadata, setError, reg}) {
+export default function Table({refreshData, data, metadata, setError, reg, intersection, showDetail, setShowDetail}) {
     //const [editMode, setEditMode] = useState(false)
     const [editId, setEditId] = useState(-1)
     const [formData, setFormData] = useState([])
@@ -11,6 +11,13 @@ export default function Table({refreshData, data, metadata, setError, reg}) {
     const [fkData, setFkData] = useState([])
     const [tableLoad, setTableLoadMessage] = useState("Loading Table...")
     const dataDisplayTimer = setTimeout(() => {setTableLoadMessage("No data to display.")}, 5000)
+
+    useEffect(() => {
+        console.log(intersection)
+        if (setShowDetail !== undefined) {
+            setShowDetail(false)
+        }
+    }, [])
 
     useEffect(() => { // move to refreshData
         if (data !== undefined && data.length > 0) {
@@ -75,6 +82,9 @@ export default function Table({refreshData, data, metadata, setError, reg}) {
                         refreshData={refreshData}
                         tid={i}
                         active={i === editId}
+                        intersection={intersection}
+                        showDetail={showDetail}
+                        setShowDetail={setShowDetail}
                         key={i} />)}
                 <tr><td id={editId >= 0 ? 'formEdit' : 'formAddNew'} colSpan={3}>{editId >= 0 ?
                     'Edit:' :

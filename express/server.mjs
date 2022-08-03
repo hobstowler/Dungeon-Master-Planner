@@ -876,6 +876,18 @@ app.get('/get_fk/:table/:column', (req, res) => {
     })
 })
 
+app.get('/has_intersection/:table', (req, res) => {
+    let table = req.params.table
+
+    db.query(`SELECT * from Information_Schema.`)
+})
+
+app.get('/get_intersection/:table/', (req, res) => {
+    let table_name = req.params.table
+    let column_name = req.params.column
+
+})
+
 app.get('/metadata/:table', (req, res) => {
     let table_name = req.params.table
     db.query(`SELECT * FROM Information_Schema.columns where table_name='${table_name}'`, (err, results) => {

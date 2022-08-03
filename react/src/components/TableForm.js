@@ -23,6 +23,7 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
                 dataToSend[metadata[i].COLUMN_NAME] = data[i]
             }
         }
+        console.log(dataToSend)
         fetch(`${metadata[0].TABLE_NAME}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
