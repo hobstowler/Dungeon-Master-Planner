@@ -143,7 +143,7 @@ function App() {
                                                setShowDetail={setShowDetail} />}/>
                     </Routes>
                     <div id='errorBox'>{error}</div>
-                    {showDetail ? <Detail /> : ''}
+                    {showDetail ? <Detail table={detailTable} name={detailName} /> : ''}
                 </BrowserRouter>
             </div>
         </div>
