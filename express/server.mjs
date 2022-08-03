@@ -677,6 +677,44 @@ app.get('/dungeons_has_monsters', (req, res) => {
     })
 })
 
+
+// Get dungeons containing a particular monster
+app.get('/dungeons_has_monsters/:monster_id', (req, res) => {
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
+        let metadata = results
+        let monster_id = req.params.monster_id
+        let query = `SELECT dungeon_has_monster_id AS "Dungeon Has Monster ID", Dungeons.dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
+        query += `FROM Dungeons_Has_Monsters `
+        query += `INNER JOIN Dungeons ON Dungeons_Has_Monsters.dungeon_id = Dungeons.dungeon_id `
+        query += `LEFT JOIN Biomes ON Biomes.biome_id = Dungeons.biome_id `
+        query += `WHERE Dungeons_Has_Monsters.monster_id = ${monster_id}`
+        db.query(query, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+// Get monsters contained in a particular dungeon
+app.get('/dungeons_has_monsters/:dungeon_id', (req, res) => {
+    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
+        let metadata = results
+        let monster_id = req.params.monster_id
+        let query = `SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", monster_id AS "Monster ID", monster_name AS "Monster Name", description AS "Description", challenge_rating AS "Challenge Rating", health_points AS "Health Points", strength AS "Strength", dexterity AS "Dexterity", constitution AS "Constitution", intelligence AS "Intelligence", wisdom AS "Wisdom", charisma AS "Charisma", armor_class AS "Armor Class", talent AS "Talent(s)" `
+        query += `FROM Dungeons_Has_Monsters `
+        query += `INNER JOIN Monsters ON Dungeons_Has_Monsters.monster_id = Dungeons.monster_id `
+        query += `WHERE Dungeons_Has_Monsters.dungeon_id = ${dungeon_id}`
+        db.query(query, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
 // Update a relationship between a dungeon and a monster
 app.put('/dungeons_has_monsters/', (req, res) => {
     let dungeon_has_monster_id = req.body.id;
