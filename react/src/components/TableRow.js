@@ -4,7 +4,6 @@ import Cell from "./Cell";
 
 export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail, setDetail}) {
     const [row, setRow] = useState([])
-    console.log(intersection)
 
     useEffect(() => {
         let compiled = []
@@ -38,7 +37,6 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
             .catch(error => console.log(error))
     }
     const expandDetails = () => {
-        console.log(row)
         setShowDetail(true)
         setDetail(row[0], row[1])
     }

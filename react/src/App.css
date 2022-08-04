@@ -188,10 +188,6 @@ tr.active {
     width: 50px;
 }
 
-#month {
-    width:30px;
-}
-
-#day {
-    width: 30px;
+#month, #day {
+    width: 35px;
 }
