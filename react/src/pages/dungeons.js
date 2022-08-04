@@ -1,10 +1,21 @@
 import React, {useEffect} from 'react';
 import Table from '../components/Table';
 
-export default function Dungeons({reg, refreshData, data, metadata, setError, showDetail, setShowDetail}) {
+export default function Dungeons({reg, refreshData, data, metadata, setError, showDetail, setShowDetail, setDetailInfo}) {
     useEffect(() => {
         refreshData('dungeons', undefined)
     }, [])
+
+    const setDetail = (id, name) => {
+        let info = {
+            'id': id,
+            'tableName': 'Dungeons_Has_Monsters',
+            'url': 'Dungeons_Has_Monsters',
+            'columnName': 'dungeon_id',
+            'name': name
+        }
+        setDetailInfo(info)
+    }
 
     if (data !== undefined && metadata !== undefined) {
         return (
@@ -17,7 +28,8 @@ export default function Dungeons({reg, refreshData, data, metadata, setError, sh
                        reg={reg}
                        intersection={'Dungeons_Has_Monsters'}
                        showDetail={showDetail}
-                       setShowDetail={setShowDetail} />
+                       setShowDetail={setShowDetail}
+                       setDetail={setDetail}/>
             </div>
         )
     } else {

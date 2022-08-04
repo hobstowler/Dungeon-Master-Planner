@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import TableForm from "./TableForm";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
+import DetailTableForm from "./DetailTableForm";
 
-export default function Table({refreshData, data, metadata, setError, reg, intersection, showDetail, setShowDetail, setDetail}) {
-    //const [editMode, setEditMode] = useState(false)
+export default function Table({refreshData, data, metadata, setError, reg, intersection, showDetail, setShowDetail, detailInfo, setDetail}) {
     const [editId, setEditId] = useState(-1)
     const [formData, setFormData] = useState([])
     const [header, setHeader] = useState([])
     const [fkData, setFkData] = useState([])
     const [tableLoad, setTableLoadMessage] = useState("Loading Table...")
-    const dataDisplayTimer = setTimeout(() => {setTableLoadMessage("No data to display.")}, 5000)
 
     useEffect(() => {
+        setTimeout(() => {setTableLoadMessage("No data to display.")}, 5000)
         console.log(intersection)
         if (setShowDetail !== undefined) {
             setShowDetail(false)
@@ -70,35 +70,36 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
     return (
         <table cellSpacing={5}>
             <thead>
-                <TableHeader header={header} />
+            <TableHeader header={header} />
             </thead>
             <tbody>
             {(data.length === 0) ? <tr><td colSpan={metadata.length + 2}>{tableLoad}</td></tr> :
-                    data.map((row, i) => <TableRow
-                        dataRow={row}
-                        fkData={fkData}
-                        metadata={metadata}
-                        editId={editId}
-                        setEditId={setEditId}
-                        refreshData={refreshData}
-                        tid={i}
-                        active={i === editId}
-                        intersection={intersection}
-                        showDetail={showDetail}
-                        setShowDetail={setShowDetail}
-                        setDetail={setDetail}
-                        key={i} />)}
-                <tr><td id={editId >= 0 ? 'formEdit' : 'formAddNew'} colSpan={3}>{editId >= 0 ?
-                    'Edit:' :
-                    `Add new ${metadata.length > 0 ? `${metadata[0].TABLE_NAME.slice(0, metadata[0].TABLE_NAME.length - 1).replace('_', ' ')}:` : null}`}</td></tr>
-                <TableForm
-                    meta={metadata}
-                    rowData={formData}
-                    regex={reg}
+                data.map((row, i) => <TableRow
+                    dataRow={row}
+                    fkData={fkData}
+                    metadata={metadata}
                     editId={editId}
                     setEditId={setEditId}
-                    setError={setError}
-                    refreshData={refreshData} />
+                    refreshData={refreshData}
+                    tid={i}
+                    active={i === editId}
+                    intersection={intersection}
+                    showDetail={showDetail}
+                    setShowDetail={setShowDetail}
+                    setDetail={setDetail}
+                    key={i} />)}
+            <tr><td id={editId >= 0 ? 'formEdit' : 'formAddNew'} colSpan={3}>{editId >= 0 ?
+                'Edit:' :
+                `Add new ${metadata.length > 0 ? `${metadata[0].TABLE_NAME.slice(0, metadata[0].TABLE_NAME.length - 1).replace('_', ' ')}:` : null}`}</td></tr>
+            <DetailTableForm
+                meta={metadata}
+                rowData={formData}
+                regex={reg}
+                editId={editId}
+                setEditId={setEditId}
+                setError={setError}
+                detailInfo={detailInfo}
+                refreshData={refreshData} />
             </tbody>
         </table>
     )

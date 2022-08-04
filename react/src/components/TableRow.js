@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
 import Cell from "./Cell";
 
-export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail}) {
+export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail, setDetail}) {
     const [row, setRow] = useState([])
     console.log(intersection)
 
@@ -38,7 +38,9 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
             .catch(error => console.log(error))
     }
     const expandDetails = () => {
-        setShowDetail(!showDetail)
+        console.log(row)
+        setShowDetail(true)
+        setDetail(row[0], row[1])
     }
     
     return (

@@ -228,7 +228,11 @@ app.get('/dungeons', (req, res) => {
 // Update a dungeon
 app.put('/dungeons', (req, res) => {
     let errors = {'error':{}}
-    let dungeon_id, dungeon_name, description, light_level, biome_id
+    let dungeon_id
+    let dungeon_name
+    let description
+    let light_level
+    let biome_id
     req.body.id === undefined ? errors.error['dungeon_id'] = "Missing dungeon ID" : dungeon_id = req.body.id
     req.body.dungeon_name === undefined || req.body.dungeon_name === '' ? errors.error['dungeon_name'] = "Missing dungeon name" : dungeon_name = `'${req.body.dungeon_name}'`
     req.body.description === undefined ? description = `''` : description = `'${req.body.description}'`
@@ -679,15 +683,16 @@ app.get('/dungeons_has_monsters', (req, res) => {
 
 
 // Get dungeons containing a particular monster
-app.get('/dungeons_has_monsters/:monster_id', (req, res) => {
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons'", (err, results) => {
+app.get('/monsters_has_dungeons/:monster_id', (req, res) => {
+    let monster_id = req.params.monster_id
+    let metaquery = `SELECT * from Information_Schema.columns where table_name='Dungeons_Has_Monsters' `
+    metaquery += `and column_name in ('dungeon_has_monster_id', 'dungeon_id', 'quantity')`
+    db.query(metaquery, (err, results) => {
         let metadata = results
-        let monster_id = req.params.monster_id
-        let query = `SELECT dungeon_has_monster_id AS "Dungeon Has Monster ID", Dungeons.dungeon_id AS "Dungeon ID", dungeon_name AS "Dungeon Name", Dungeons.description AS "Description", light_level AS "Light Level", Biomes.biome_name AS "Biome" `
+        let query = `SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", Dungeons.dungeon_name AS "Dungeon Name", quantity as "Quantity" `
         query += `FROM Dungeons_Has_Monsters `
-        query += `INNER JOIN Dungeons ON Dungeons_Has_Monsters.dungeon_id = Dungeons.dungeon_id `
-        query += `LEFT JOIN Biomes ON Biomes.biome_id = Dungeons.biome_id `
-        query += `WHERE Dungeons_Has_Monsters.monster_id = ${monster_id}`
+        query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Dungeons_Has_Monsters.dungeon_id `
+        query += `WHERE Dungeons_Has_Monsters.monster_id=${monster_id}`
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -699,13 +704,15 @@ app.get('/dungeons_has_monsters/:monster_id', (req, res) => {
 
 // Get monsters contained in a particular dungeon
 app.get('/dungeons_has_monsters/:dungeon_id', (req, res) => {
-    db.query("SELECT * from `Information_Schema`.`columns` where table_name='Monsters'", (err, results) => {
+    let dungeon_id = req.params.dungeon_id
+    let metaquery = `SELECT * from Information_Schema.columns where table_name='Dungeons_Has_Monsters' `
+    metaquery += `and column_name in ('dungeon_has_monster_id', 'monster_id', 'quantity')`
+    db.query(metaquery, (err, results) => {
         let metadata = results
-        let monster_id = req.params.monster_id
-        let query = `SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", Monsters.monster_id AS "Monster ID", monster_name AS "Monster Name", description AS "Description", challenge_rating AS "Challenge Rating", health_points AS "Health Points", strength AS "Strength", dexterity AS "Dexterity", constitution AS "Constitution", intelligence AS "Intelligence", wisdom AS "Wisdom", charisma AS "Charisma", armor_class AS "Armor Class", talent AS "Talent(s)" `
+        let query = `SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", Monsters.monster_name AS "Monster Name", quantity as "Quantity" `
         query += `FROM Dungeons_Has_Monsters `
-        query += `INNER JOIN Monsters ON Dungeons_Has_Monsters.monster_id = Monsters.monster_id `
-        query += `WHERE Dungeons_Has_Monsters.dungeon_id = ${dungeon_id}`
+        query += `INNER JOIN Monsters ON Monsters.monster_id = Dungeons_Has_Monsters.monster_id `
+        query += `WHERE Dungeons_Has_Monsters.dungeon_id=${dungeon_id}`
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -781,6 +788,47 @@ app.get('/scenarios_has_items', (req, res) => {
         query += ` FROM Scenarios_Has_Items`
         query += ` INNER JOIN Scenarios on Scenarios.scenario_id = Scenarios_Has_Items.scenario_id`
         query += ` INNER JOIN Items on Items.item_id = Scenarios_Has_Items.item_id`
+        db.query(query, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+
+// Get dungeons containing a particular monster
+app.get('/scenarios_has_items/:scenario_id', (req, res) => {
+    let scenario_id = req.params.scenario_id
+    let metaquery = `SELECT * from Information_Schema.columns where table_name='Scenarios_Has_Items' `
+    metaquery += `and column_name in ('scenario_has_item_id', 'item_id', 'quantity')`
+    db.query(metaquery, (err, results) => {
+        let metadata = results
+        let query = `SELECT scenario_has_item_id AS "Scenarios Has Items ID", Items.item_name AS "Item Name", quantity as "Quantity" `
+        query += `FROM Scenarios_Has_Items `
+        query += `INNER JOIN Items ON Items.item_id = Scenarios_Has_Items.item_id `
+        query += `WHERE Scenarios_Has_Items.scenario_id=${scenario_id}`
+        db.query(query, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+// Get monsters contained in a particular dungeon
+app.get('/items_has_scenarios/:item_id', (req, res) => {
+    let item_id = req.params.item_id
+    let metaquery = `SELECT * from Information_Schema.columns where table_name='Scenarios_Has_Items' `
+    metaquery += `and column_name in ('scenario_has_item_id', 'scenario_id', 'quantity')`
+    db.query(metaquery, (err, results) => {
+        let metadata = results
+        let query = `SELECT scenario_has_item_id AS "Scenarios Has Items ID", Scenarios.scenario_name AS "Scenario Name", quantity as "Quantity" `
+        query += `FROM Scenarios_Has_Items `
+        query += `INNER JOIN Scenarios ON Scenarios.scenario_id = Scenarios_Has_Items.scenario_id `
+        query += `WHERE Scenarios_Has_Items.item_id=${item_id}`
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,

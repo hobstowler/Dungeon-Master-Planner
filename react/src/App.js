@@ -21,6 +21,7 @@ function App() {
     const [metadata, setMetadata] = useState([])
     const [curTable, setCurTable] = useState([])
     const [showDetail, setShowDetail] =  useState(false)
+    const [detailInfo, setDetailInfo] = useState('')
     const reg_varchar = new RegExp('varchar*')
     const reg_text = new RegExp('text*')
     const reg_int = new RegExp('int*')
@@ -92,7 +93,8 @@ function App() {
                                                   metadata={metadata}
                                                   setError={setError}
                                                   showDetail={showDetail}
-                                                  setShowDetail={setShowDetail} />}/>
+                                                  setShowDetail={setShowDetail}
+                                                  setDetailInfo={setDetailInfo} />}/>
                         <Route path="/dungeons_has_monsters"
                                element={<DungeonsHasMonsters reg={reg}
                                                              refreshData={refreshData}
@@ -108,7 +110,8 @@ function App() {
                                                metadata={metadata}
                                                setError={setError}
                                                showDetail={showDetail}
-                                               setShowDetail={setShowDetail} />}/>
+                                               setShowDetail={setShowDetail}
+                                               setDetailInfo={setDetailInfo} />}/>
                         <Route path="/monsters"
                                element={<Monsters reg={reg}
                                                   refreshData={refreshData}
@@ -116,7 +119,8 @@ function App() {
                                                   metadata={metadata}
                                                   setError={setError}
                                                   showDetail={showDetail}
-                                                  setShowDetail={setShowDetail} />}/>
+                                                  setShowDetail={setShowDetail}
+                                                  setDetailInfo={setDetailInfo} />}/>
                         <Route path="/scenarios"
                                element={<Scenarios reg={reg}
                                                    refreshData={refreshData}
@@ -124,7 +128,8 @@ function App() {
                                                    metadata={metadata}
                                                    setError={setError}
                                                    showDetail={showDetail}
-                                                   setShowDetail={setShowDetail} />}/>
+                                                   setShowDetail={setShowDetail}
+                                                   setDetailInfo={setDetailInfo} />}/>
                         <Route path="/scenarios_has_items"
                                element={<ScenariosHasItems reg={reg}
                                                            refreshData={refreshData}
@@ -143,7 +148,7 @@ function App() {
                                                setShowDetail={setShowDetail} />}/>
                     </Routes>
                     <div id='errorBox'>{error}</div>
-                    {showDetail ? <Detail table={detailTable} name={detailName} /> : ''}
+                    {showDetail ? <Detail detailInfo={detailInfo} setError={setError} reg={reg}/> : ''}
                 </BrowserRouter>
             </div>
         </div>

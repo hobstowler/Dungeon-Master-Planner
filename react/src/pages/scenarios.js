@@ -1,10 +1,21 @@
 import React, {useEffect} from 'react';
 import Table from '../components/Table';
 
-export default function Scenarios({reg, refreshData, data, metadata, setError, showDetail, setShowDetail}) {
+export default function Scenarios({reg, refreshData, data, metadata, setError, showDetail, setShowDetail, setDetailInfo}) {
     useEffect(() => {
         refreshData('scenarios')
     }, [])
+
+    const setDetail = (id, name) => {
+        let info = {
+            'id': id,
+            'tableName': 'Scenarios_Has_Items',
+            'url': 'Scenarios_Has_Items',
+            'columnName': 'scenario_id',
+            'name': name
+        }
+        setDetailInfo(info)
+    }
 
     if (data !== undefined && metadata !== undefined) {
         return (
@@ -17,7 +28,8 @@ export default function Scenarios({reg, refreshData, data, metadata, setError, s
                        reg={reg}
                        intersection={'Scenarios_Has_Items'}
                        showDetail={showDetail}
-                       setShowDetail={setShowDetail} />
+                       setShowDetail={setShowDetail}
+                       setDetail={setDetail} />
             </div>
         )
     } else {
