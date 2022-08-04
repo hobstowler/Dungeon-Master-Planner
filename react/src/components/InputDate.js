@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 
+// Controls for a date input
 export default function InputDate({cell, datum, changeData, keyVal}) {
     const [year, setYear] = useState()
     const [month, setMonth] = useState()
     const [day, setDay] = useState()
 
+    // When underlying data changes, rebuild the date and call changeData()
     useEffect(() => {
         if (datum !== undefined && typeof datum === 'string') {
             let date_comp = datum.split('-')

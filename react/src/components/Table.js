@@ -4,7 +4,6 @@ import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
 export default function Table({refreshData, data, metadata, setError, reg, intersection, showDetail, setShowDetail, setDetail}) {
-    //const [editMode, setEditMode] = useState(false)
     const [editId, setEditId] = useState(-1)
     const [formData, setFormData] = useState([])
     const [header, setHeader] = useState([])
