@@ -605,6 +605,7 @@ app.get('/types', (req, res) => {
 // Update a type
 app.put('/types', (req, res) => {
     let errors = {'error':{}}
+    console.log(req.body)
     let type_id, type_name, description
     req.body.id === undefined ? errors.error[type_id] = "Missing type id" : type_id = req.body.id
     req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${sanitizeString(req.body.type_name)}'`
@@ -801,7 +802,7 @@ app.get('/scenarios_has_items', (req, res) => {
 })
 
 
-// Get dungeons containing a particular monster
+// Get items that exist in a particular scenario
 app.get('/scenarios_has_items/:scenario_id', (req, res) => {
     let scenario_id = req.params.scenario_id
     let metaquery = `SELECT * from Information_Schema.columns where table_name='Scenarios_Has_Items' `
@@ -821,7 +822,7 @@ app.get('/scenarios_has_items/:scenario_id', (req, res) => {
     })
 })
 
-// Get monsters contained in a particular dungeon
+// Get scenarios in which a particular item exists
 app.get('/items_has_scenarios/:item_id', (req, res) => {
     let item_id = req.params.item_id
     let metaquery = `SELECT * from Information_Schema.columns where table_name='Scenarios_Has_Items' `
@@ -843,9 +844,10 @@ app.get('/items_has_scenarios/:item_id', (req, res) => {
 
 // Update a relationship between a scenario and an item
 app.put('/scenarios_has_items/', (req, res) => {
+    console.log(req.body)
     let scenario_has_item_id = req.body.id;
-    let scenario_id = req.body.dungeon_id;
-    let item_id = req.body.monster_id;
+    let scenario_id = req.body.scenario_id;
+    let item_id = req.body.item_id;
     let quantity = req.body.quantity;
     let query = `UPDATE Scenarios_Has_Items `;
     query += `SET scenario_id=${scenario_id}, item_id=${item_id}, quantity=${quantity} `;

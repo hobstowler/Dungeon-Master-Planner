@@ -37,7 +37,9 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
     }
     const updateData = () => {
         let id = metadata[0].TABLE_NAME.slice(0,metadata[0].TABLE_NAME.length-1) + ' ID'
-        id = id.replace('_', ' ')
+        id = id.replaceAll('_', ' ')
+        id = id.replace('Has', 'has')
+        id = id.replace(/s\b/, "")
         let dataToSend = {'id': rowData[id]}
         for (let i = 1; i < metadata.length; i++) {
             dataToSend[metadata[i].COLUMN_NAME] = data[i]
