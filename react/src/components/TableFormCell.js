@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Dropdown from "./Dropdown";
+import InputDate from "./InputDate";
 
 export default function TableFormCell({cell, datum, data, i, changeData, updateData, addData, regex, editId}) {
     const [value, setValue] = useState('')
@@ -35,9 +36,13 @@ export default function TableFormCell({cell, datum, data, i, changeData, updateD
                     <Dropdown cell={cell} datum={datum} changeData={changeData} keyVal={i} editId={editId} />
                 </td>
             )
-        } else if (regex.char.test(cell.COLUMN_TYPE) || cell.COLUMN_TYPE === 'datetime') {
+        } else if (regex.char.test(cell.COLUMN_TYPE)) {
             return (
                 <td><input type='text' maxLength={cell.CHARACTER_MAXIMUM_LENGTH} onChange={handleChange} value={value || ''} /></td>
+            )
+        } else if (cell.COLUMN_TYPE === 'datetime') {
+            return (
+                <InputDate cell={cell} datum={datum} changeData={changeData} keyVal={i} />
             )
         } else if (regex.text.test(cell.COLUMN_TYPE)) {
             return (

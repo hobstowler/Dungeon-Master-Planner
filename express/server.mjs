@@ -111,7 +111,7 @@ app.get('/scenarios', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios'", (err, results) => {
         let metadata = results
         let nameQuery = req.query.name
-        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", session_time AS "Session Time", Dungeon_Masters.dungeon_master_name AS "Dungeon Master", Dungeons.dungeon_name AS "Dungeon" `
+        let query = `SELECT scenario_id AS "Scenario ID", scenario_name AS "Scenario Name", summary AS "Summary", target_level AS "Target Level", Date_format(session_time, '%Y-%m-%e') AS "Session Time", Dungeon_Masters.dungeon_master_name AS "Dungeon Master", Dungeons.dungeon_name AS "Dungeon" `
         query += `FROM Scenarios `
         query += `INNER JOIN Dungeon_Masters on Dungeon_Masters.dungeon_master_id = Scenarios.dungeon_master_id `
         query += `LEFT JOIN Dungeons ON Dungeons.dungeon_id = Scenarios.dungeon_id `
@@ -896,13 +896,9 @@ app.delete('/scenarios_has_items/:id', (req, res) => {
 
 // TODO make this work???
 app.get('/reload_data', (req, res) => {
-    let result = db.query('schema.sql')
+    db.query('schema.sql')
     console.log(result)
     return res.send('Database Reloaded.<br /><a href="/">Home</a>')
-})
-
-app.get('/testing', (req, res) => {
-    db.query(`SELECT * from inform`)
 })
 
 app.get('/get_fk/:table/:column', (req, res) => {
@@ -922,18 +918,6 @@ app.get('/get_fk/:table/:column', (req, res) => {
             return res.status(404)
         }
     })
-})
-
-app.get('/has_intersection/:table', (req, res) => {
-    let table = req.params.table
-
-    db.query(`SELECT * from Information_Schema.`)
-})
-
-app.get('/get_intersection/:table/', (req, res) => {
-    let table_name = req.params.table
-    let column_name = req.params.column
-
 })
 
 app.get('/metadata/:table', (req, res) => {

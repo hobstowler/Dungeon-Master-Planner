@@ -175,3 +175,23 @@ svg {
 tr.active {
     background-color: lightblue;
 }
+
+#date {
+    min-width: calc(100% - 4px);
+}
+
+#date input {
+    display: inline-block;
+}
+
+#year {
+    width: 50px;
+}
+
+#month {
+    width:30px;
+}
+
+#day {
+    width: 30px;
+}
