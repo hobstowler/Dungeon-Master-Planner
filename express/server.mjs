@@ -684,9 +684,49 @@ app.get('/dungeons_has_monsters', (req, res) => {
     })
 })
 
+
+// Get dungeons containing a particular monster
+app.get('/monsters_has_dungeons/:monster_id', (req, res) => {
+    let monster_id = req.params.monster_id
+    let metaquery = `SELECT * from Information_Schema.columns where table_name='Dungeons_Has_Monsters' `
+    metaquery += `and column_name in ('dungeon_has_monster_id', 'dungeon_id', 'quantity')`
+    db.query(metaquery, (err, results) => {
+        let metadata = results
+        let query = `SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", Dungeons.dungeon_name AS "Dungeon Name", quantity as "Quantity" `
+        query += `FROM Dungeons_Has_Monsters `
+        query += `INNER JOIN Dungeons ON Dungeons.dungeon_id = Dungeons_Has_Monsters.dungeon_id `
+        query += `WHERE Dungeons_Has_Monsters.monster_id=${monster_id}`
+        db.query(query, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
+// Get monsters contained in a particular dungeon
+app.get('/dungeons_has_monsters/:dungeon_id', (req, res) => {
+    let dungeon_id = req.params.dungeon_id
+    let metaquery = `SELECT * from Information_Schema.columns where table_name='Dungeons_Has_Monsters' `
+    metaquery += `and column_name in ('dungeon_has_monster_id', 'monster_id', 'quantity')`
+    db.query(metaquery, (err, results) => {
+        let metadata = results
+        let query = `SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", Monsters.monster_name AS "Monster Name", quantity as "Quantity" `
+        query += `FROM Dungeons_Has_Monsters `
+        query += `INNER JOIN Monsters ON Monsters.monster_id = Dungeons_Has_Monsters.monster_id `
+        query += `WHERE Dungeons_Has_Monsters.dungeon_id=${dungeon_id}`
+        db.query(query, (err, results) => {
+            return res.json({
+                'data': results,
+                'metadata': metadata
+            })
+        })
+    })
+})
+
 // Update a relationship between a dungeon and a monster
 app.put('/dungeons_has_monsters/', (req, res) => {
-    console.log(req.body)
     let dungeon_has_monster_id = req.body.id;
     let dungeon_id = req.body.dungeon_id;
     let monster_id = req.body.monster_id;
