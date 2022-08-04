@@ -9,6 +9,7 @@ export default function DungeonHasMonsters({reg, refreshData, data, metadata, se
     if (data !== undefined && metadata !== undefined) {
         return (
             <div>
+                <h3>View the data of all dungeon-monster relationships in the table below, and use Edit, Delete, or Add New to modify the table.</h3>
                 <Table data={data}
                        metadata={metadata}
                        refreshData={refreshData}
