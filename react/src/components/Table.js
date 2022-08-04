@@ -10,10 +10,9 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
     const [header, setHeader] = useState([])
     const [fkData, setFkData] = useState([])
     const [tableLoad, setTableLoadMessage] = useState("Loading Table...")
-    const dataDisplayTimer = setTimeout(() => {setTableLoadMessage("No data to display.")}, 5000)
+    const dataDisplayTimer = setTimeout(() => {setTableLoadMessage("No data to display.")}, 1000)
 
     useEffect(() => {
-        console.log(intersection)
         if (setShowDetail !== undefined) {
             setShowDetail(false)
         }
@@ -90,7 +89,7 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
                         key={i} />)}
                 <tr><td id={editId >= 0 ? 'formEdit' : 'formAddNew'} colSpan={3}>{editId >= 0 ?
                     'Edit:' :
-                    `Add new ${metadata.length > 0 ? `${metadata[0].TABLE_NAME.slice(0, metadata[0].TABLE_NAME.length - 1).replace('_', ' ')}:` : null}`}</td></tr>
+                    `Add new ${metadata.length > 0 ? `${metadata[0].TABLE_NAME.slice(0, metadata[0].TABLE_NAME.length - 1).replaceAll('_', ' ')}:` : null}`}</td></tr>
                 <TableForm
                     meta={metadata}
                     rowData={formData}
