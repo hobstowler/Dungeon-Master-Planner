@@ -19,7 +19,7 @@ app.use(express.json())
 
 
 function sanitizeString(inputString) {
-    return inputString.replace(/\'/g, '\'\'')
+    return inputString.replaceAll('\'', '\'\'')
 }
 
 /***************************************************************
