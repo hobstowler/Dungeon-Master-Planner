@@ -66,7 +66,7 @@ function App() {
             <div className="App">
                 <BrowserRouter>
                     <Header clearData={clearData} />
-                    {window.location.pathname === '/' ? <h2>The Home Page</h2> : <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : '<<Loading>>'} Table</h2>}
+                    {window.location.pathname === '/' ? <h2>The Home Page</h2> : <h2 id='tableName'>{(metadata.length > 0) ? metadata[0].TABLE_NAME : 'Loading'} Table</h2>}
                     {window.location.pathname === '/' ? '' : <SearchForm refreshData={refreshData} />}
                     <Routes>
                         <Route path="/" element={<HomePage/>}/>

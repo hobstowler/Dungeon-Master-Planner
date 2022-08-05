@@ -10,7 +10,6 @@ export default function TableFormCell({cell, datum, data, i, changeData, updateD
         let new_val = (editId >= 0) ? data[i] : ''
         setValue(new_val)
     }, [datum])
-
     // sets the value displayed when entering edit mode and clears it when exiting.
     useEffect(() => {
         if (editId < 0) {setValue('')}

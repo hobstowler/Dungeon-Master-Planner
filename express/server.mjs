@@ -148,9 +148,6 @@ app.put('/scenarios/', (req, res) => {
     query += `SET scenario_name=${scenario_name}, summary=${summary}, target_level=${target_level}, `;
     query += `session_time=${session_time}, dungeon_master_id=${dungeon_master_id}, dungeon_id=${dungeon_id} `;
     query += `WHERE scenario_id=${scenario_id};`;
-
-    console.log(errors)
-    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -379,8 +376,6 @@ app.post('/monsters', (req, res) => {
     query += `dexterity, constitution, intelligence, wisdom, charisma, armor_class, talent) `;
     query += `VALUES (${monster_name}, ${description}, ${challenge_rating}, ${health_points}, ${strength}, `;
     query += `${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${armor_class}, ${talent});`;
-    console.log(errors)
-    console.log(query)
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err});
@@ -605,7 +600,6 @@ app.get('/types', (req, res) => {
 // Update a type
 app.put('/types', (req, res) => {
     let errors = {'error':{}}
-    console.log(req.body)
     let type_id, type_name, description
     req.body.id === undefined ? errors.error[type_id] = "Missing type id" : type_id = req.body.id
     req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${sanitizeString(req.body.type_name)}'`
@@ -844,7 +838,6 @@ app.get('/items_has_scenarios/:item_id', (req, res) => {
 
 // Update a relationship between a scenario and an item
 app.put('/scenarios_has_items/', (req, res) => {
-    console.log(req.body)
     let scenario_has_item_id = req.body.id;
     let scenario_id = req.body.scenario_id;
     let item_id = req.body.item_id;
@@ -928,7 +921,6 @@ app.get('/get_fk/:table/:column', (req, res) => {
 app.get('/metadata/:table', (req, res) => {
     let table_name = req.params.table
     db.query(`SELECT * FROM Information_Schema.columns where table_name='${table_name}'`, (err, results) => {
-        console.log(results)
         res.send(results)
     })
 })

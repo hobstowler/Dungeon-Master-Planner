@@ -4,22 +4,11 @@ import Cell from "./Cell";
 
 export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail, setDetail}) {
     const [row, setRow] = useState([])
-
-    useEffect(() => {
-        let compiled = []
-        for (let x in dataRow) {
-            compiled.push(dataRow[x])
-        }
-        setRow(compiled)
-    }, [dataRow])
-
     const edit = () => {
         setEditId(tid)
-        //setEditMode(true)
     }
     const cancel = () => {
         setEditId(-1)
-        //setEditMode(false)
     }
     const del = () => {
         let table = metadata[0].TABLE_NAME
@@ -40,7 +29,15 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
         setShowDetail(true)
         setDetail(row[0], row[1])
     }
-    
+
+    useEffect(() => {
+        let compiled = []
+        for (let x in dataRow) {
+            compiled.push(dataRow[x])
+        }
+        setRow(compiled)
+    }, [dataRow])
+
     return (
         <tr className={active ? 'active' : 'inactive'}>
             {row.map((cell, i) => <td><Cell fkData={fkData} metadata={metadata[i]} key={i} i={i} value={cell} /></td>)}

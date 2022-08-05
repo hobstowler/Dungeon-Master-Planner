@@ -5,13 +5,9 @@ import TableFormCell from "./TableFormCell"
 export default function DetailTableForm({meta, rowData, regex, editId, setEditId, setError, refreshData, detailInfo}) {
     const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
-    console.log(rowData)
-
     const cancelEdit = () => {
-        //setEditMode(false)
         setEditId(-1)
     }
-
     const changeData = (i, new_val) => {
         let new_data = data
         new_data[i] = new_val
@@ -40,7 +36,6 @@ export default function DetailTableForm({meta, rowData, regex, editId, setEditId
     const updateData = () => {
         let id = metadata[0].TABLE_NAME.slice(0,metadata[0].TABLE_NAME.length-1) + 's ID'
         id = id.replaceAll('_', ' ')
-        console.log(id)
         let dataToSend = {'id': rowData[id]}
         dataToSend[detailInfo.columnName] = detailInfo.id
         for (let i = 1; i < metadata.length; i++) {

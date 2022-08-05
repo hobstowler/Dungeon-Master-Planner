@@ -10,31 +10,10 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
     const [header, setHeader] = useState([])
     const [fkData, setFkData] = useState([])
     const [tableLoad, setTableLoadMessage] = useState("Loading Table...")
-
-    useEffect(() => {
-        setTimeout(() => {setTableLoadMessage("No data to display.")}, 5000)
-        console.log(intersection)
-        if (setShowDetail !== undefined) {
-            setShowDetail(false)
-        }
-    }, [])
-
-    useEffect(() => { // move to refreshData
-        if (data !== undefined && data.length > 0) {
-            compileHeader()
-        }
-        getFkData()
-    }, [data])
-
-    useEffect(() => {
-        if (editId >= 0) {
-            setFormData(data[editId])
-        } else {
-            setFormData([])
-        }
-    },[editId])
-
-
+    const [timerId, setTimerId] = useState('')
+    const detailTimer = () => setTimeout(() => {
+        setTableLoadMessage("No data to display.")
+    }, 2000)
     const compileHeader = () => {
         let compiled = []
         if (data !== undefined) {
@@ -66,6 +45,30 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
             }
         }
     }
+
+    useEffect(() => {
+        setTimerId(detailTimer())
+        if (setShowDetail !== undefined) {
+            setShowDetail(false)
+        }
+    }, [])
+    useEffect(() => {
+        setTableLoadMessage('Loading Table...')
+        setTimerId(detailTimer())
+        if (data !== undefined && data.length > 0) {
+            console.log(data)
+            clearTimeout(timerId)
+            compileHeader()
+        }
+        getFkData()
+    }, [data])
+    useEffect(() => {
+        if (editId >= 0) {
+            setFormData(data[editId])
+        } else {
+            setFormData([])
+        }
+    },[editId])
 
     return (
         <table cellSpacing={5}>
