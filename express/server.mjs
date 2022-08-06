@@ -662,15 +662,20 @@ app.delete('/types/:id', (req, res) => {
 ******************  DUNGEONS HAS MONSTERS   ********************
 ****************************************************************/
 
+// View intersection table of all relationships between dungeons and monsters
 app.get('/dungeons_has_monsters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeons_Has_Monsters'", (err, results) => {
         let metadata = results
+        let nameQuery = req.query.name
         let query = `SELECT dungeon_has_monster_id as "Dungeon has Monster ID", `
         query += `Dungeons.dungeon_name as "Dungeon Name", `
         query += `Monsters.monster_name as "Monster Name", `
         query += `quantity as "Quantity" FROM Dungeons_Has_Monsters `
         query += `INNER JOIN Dungeons on Dungeons.dungeon_id = Dungeons_Has_Monsters.dungeon_id `
         query += `INNER JOIN Monsters on Monsters.monster_id = Dungeons_Has_Monsters.monster_id `
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE Dungeons.dungeon_name LIKE '%${nameQuery}%' OR Monsters.monster_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
@@ -790,6 +795,7 @@ app.delete('/dungeons_has_monsters/:id', (req, res) => {
 app.get('/scenarios_has_items', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Scenarios_Has_Items'", (err, results) => {
         let metadata = results
+        let nameQuery = req.query.name
         let query = `SELECT scenario_has_item_id as "Scenario has Item ID",`
         query += ` Scenarios.scenario_name as "Scenario Name",`
         query += ` Items.item_name as "Item Name",`
@@ -797,6 +803,9 @@ app.get('/scenarios_has_items', (req, res) => {
         query += ` FROM Scenarios_Has_Items`
         query += ` INNER JOIN Scenarios on Scenarios.scenario_id = Scenarios_Has_Items.scenario_id`
         query += ` INNER JOIN Items on Items.item_id = Scenarios_Has_Items.item_id`
+        if (nameQuery !== 'undefined') {
+            query += ` WHERE Scenarios.scenario_name LIKE '%${nameQuery}%' OR Items.item_name LIKE '%${nameQuery}%'`
+        }
         db.query(query, (err, results) => {
             return res.json({
                 'data': results,
