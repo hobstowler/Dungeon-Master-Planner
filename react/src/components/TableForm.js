@@ -2,20 +2,24 @@ import React, { useState, useEffect } from "react"
 
 import TableFormCell from "./TableFormCell"
 
+// form for a table
 export default function TableForm({meta, rowData, regex, editId, setEditId, setError, refreshData}) {
     const [metadata, setMetadata] = useState([])
     const [data, setData] = useState([])
 
+    // cancels edit mode by clearing the edit id
     const cancelEdit = () => {
-        //setEditMode(false)
         setEditId(-1)
     }
 
+    // changes the data to be sent when updating or adding. called when input detects change
     const changeData = (i, new_val) => {
         let new_data = data
         new_data[i] = new_val
         setData(new_data)
     }
+
+    // sends a POST request to add an entry to the database
     const addData = () => {
         let dataToSend = {}
         for (let i = 1; i < metadata.length; i++) {
@@ -23,7 +27,6 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
                 dataToSend[metadata[i].COLUMN_NAME] = data[i]
             }
         }
-        console.log(dataToSend)
         fetch(`${metadata[0].TABLE_NAME}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -34,7 +37,10 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
                     refreshData()
                 }
             })
+            .catch(error => console.log(error))
     }
+
+    // sends a PUT request to update existing data in the db
     const updateData = () => {
         let id = metadata[0].TABLE_NAME.slice(0,metadata[0].TABLE_NAME.length-1) + ' ID'
         id = id.replaceAll('_', ' ')
@@ -61,6 +67,8 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
                 setError(JSON.stringify(json.error))
             })
     }
+
+    // resets data in the form when the editing row changes
     const resetData = () => {
         if (editId => 0) {
             let compiled = []
@@ -74,7 +82,8 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
     }
 
     useEffect(() => {
-        resetData()},[editId])
+        resetData()
+    },[editId])
     useEffect(() => {
         if (meta !== undefined) {
             setMetadata(meta)

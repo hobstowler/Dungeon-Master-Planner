@@ -4,6 +4,7 @@ import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import DetailTableForm from "./DetailTableForm";
 
+// a table tweaked for an intersection table view
 export default function Table({refreshData, data, metadata, setError, reg, intersection, showDetail, setShowDetail, detailInfo, setDetail}) {
     const [editId, setEditId] = useState(-1)
     const [formData, setFormData] = useState([])
@@ -14,6 +15,8 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
     const detailTimer = () => setTimeout(() => {
         setTableLoadMessage("No data to display.")
     }, 2000)
+
+    // compiles the data into a digestible 2d array
     const compileHeader = () => {
         let compiled = []
         if (data !== undefined) {
@@ -23,6 +26,8 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
         }
         setHeader(compiled)
     }
+
+    // gets foreign key named data
     const getFkData = () => {
         for (let i = 0; i < metadata.length; i++) {
             if (metadata[i].COLUMN_KEY === 'MUL') {
@@ -46,22 +51,26 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
         }
     }
 
+    // sets timer while data is loading initially to display a no data/timeout message
     useEffect(() => {
         setTimerId(detailTimer())
         if (setShowDetail !== undefined) {
             setShowDetail(false)
         }
     }, [])
+
+    // loads new data and clears any timers
     useEffect(() => {
         setTableLoadMessage('Loading Table...')
         setTimerId(detailTimer())
         if (data !== undefined && data.length > 0) {
-            console.log(data)
             clearTimeout(timerId)
             compileHeader()
         }
         getFkData()
     }, [data])
+
+    // sets form data when edit mode changes
     useEffect(() => {
         if (editId >= 0) {
             setFormData(data[editId])

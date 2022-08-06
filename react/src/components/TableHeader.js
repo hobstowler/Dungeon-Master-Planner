@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+// header row for the table
 export default function TableHeader({header}) {
     const [head, setHead] = useState([])
 

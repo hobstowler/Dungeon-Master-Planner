@@ -1,32 +1,40 @@
 import React, { useState, useEffect } from "react"
 
+// a dropdown menu for a form
 export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
     const [drop, setDrop] = useState([])
-    const [display, setDisplay] = useState('')
     const [resetSelect, setSel] = useState(true)
     const [options, setOptions] = useState([])
 
     useEffect(() => {
         getDropdown()
     },[])
+
+    // resets when the data changes
     useEffect(() => {
         setSel(false)
         compileDrop()
         changeData(keyVal, translate(datum))
     },[datum])
+
+    // resets the dropdown when the list of values changes
     useEffect(() => {
         changeData(keyVal, translate(datum))
     },[drop])
+
+    // literally just forces a rerender to ensure correct values float to the top
     useEffect(() => {
         if (!resetSelect) {
             setSel(true)
         }
     }, [resetSelect])
 
+    // handles value changes for dropdown menu
     const dropdownChange = (e) => {
         changeData(keyVal, translate(e.target.value))
     }
 
+    // translates from FK IDs to named values
     const translate = (val) => {
         if (options === undefined) {return}
         let value = parseInt(val)
@@ -44,6 +52,7 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
         }
     }
 
+    // pulls FK data for the dropdown.
     const getDropdown = () => {
         let table = cell.TABLE_NAME
         let column = cell.COLUMN_NAME
@@ -54,6 +63,8 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
                 compileDrop(json)
             })
     }
+
+    //compiles the dropdown and floats the current value of the row to the top (if edit mode)
     const compileDrop = (opts) => {
         if (opts === undefined) {opts = options}
         let compiled = []
@@ -79,7 +90,6 @@ export default function Dropdown({cell, datum, changeData, keyVal, editId}) {
             compiled.splice(0,0,['undefined', 'None'])
         }
         if (editId >= 0) {
-            //if (isNaN(display)) {}
             compiled.splice(0,0,[val, display])
         } else {
             compiled.splice(0,0,['',''])

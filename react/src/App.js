@@ -32,6 +32,8 @@ function App() {
         'int': reg_int,
         'dec': reg_dec
     }
+
+    // refreshes table data and populates the data and metadata variables on success
     const refreshData = (tableName, nameFilter) => {
         setData([])
         setMetadata([])
@@ -56,6 +58,8 @@ function App() {
             })
             .catch(error => console.log(error))
     }
+
+    // clears data between page changes
     const clearData = () => {
         setMetadata([])
         setData([])

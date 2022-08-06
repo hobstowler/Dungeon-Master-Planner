@@ -3,6 +3,7 @@ import TableForm from "./TableForm";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
+// a table for holding data
 export default function Table({refreshData, data, metadata, setError, reg, intersection, showDetail, setShowDetail, setDetail}) {
     const [editId, setEditId] = useState(-1)
     const [formData, setFormData] = useState([])
@@ -13,6 +14,8 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
     const dataDisplayTimer = () => setTimeout(() => {
         setTableLoadMessage("No data to display.")
     }, 2000)
+
+    // compiles the data into a digestible 2d array
     const compileHeader = () => {
         let compiled = []
         if (data !== undefined) {
@@ -22,6 +25,8 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
         }
         setHeader(compiled)
     }
+
+    // gets foreign key data for converting a FK ID to a name value from the foreign table
     const getFkData = () => {
         for (let i = 0; i < metadata.length; i++) {
             if (metadata[i].COLUMN_KEY === 'MUL') {

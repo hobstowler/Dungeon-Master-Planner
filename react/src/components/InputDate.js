@@ -21,12 +21,15 @@ export default function InputDate({cell, datum, changeData, keyVal}) {
         }
     },[datum])
 
+    // handles changes for the year
     const yearChange =(e) => {
         let new_year = e.target.value
         new_year = (new_year < 1) ? 1 : new_year
         setYear(new_year)
         changeData(keyVal, `${new_year}-${month}-${day}`)
     }
+
+    //handles changes for the month
     const monthChange = (e) => {
         let new_month = e.target.value
         new_month = (new_month < 1) ? 1 : new_month
@@ -34,6 +37,8 @@ export default function InputDate({cell, datum, changeData, keyVal}) {
         setMonth(new_month)
         changeData(keyVal, `${year}-${new_month}-${day}`)
     }
+
+    // handles changes for the day
     const dayChange = (e) => {
         let new_day = e.target.value
         new_day = (new_day < 1) ? 1 : new_day

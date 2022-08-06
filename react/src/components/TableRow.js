@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react"
 import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
 import Cell from "./Cell";
 
+// a row in a table
 export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail, setDetail}) {
     const [row, setRow] = useState([])
+
+    // toggle edit mode by passing a row id
     const edit = () => {
         setEditId(tid)
     }
+
+    // cancel edit mode by clearing a row id
     const cancel = () => {
         setEditId(-1)
     }
+
+    // delete a row
     const del = () => {
         let table = metadata[0].TABLE_NAME
         console.log(row[0])
@@ -25,11 +32,14 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
             })
             .catch(error => console.log(error))
     }
+
+    // expands the details for an intersection table
     const expandDetails = () => {
         setShowDetail(true)
         setDetail(row[0], row[1])
     }
 
+    // compiles the dict into a more easily digested 2d array
     useEffect(() => {
         let compiled = []
         for (let x in dataRow) {

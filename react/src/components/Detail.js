@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DetailTable from "./DetailTable";
 
+// detail pane for intersection table views
 export default function Detail({detailInfo, setError, reg}) {
     const [data, setData] = useState([])
     const [metadata, setMetadata] = useState([])
@@ -10,6 +11,7 @@ export default function Detail({detailInfo, setError, reg}) {
         refreshData()
     }, [detailInfo])
 
+    // populates data for the table
     const refreshData = () => {
         setData([])
         fetch(`/${detailInfo.url}/${detailInfo.id}`, {
@@ -24,11 +26,13 @@ export default function Detail({detailInfo, setError, reg}) {
             .catch(error => console.log(error))
     }
 
+    // fake constants to allow reusing of components
     const showDetail = false
     const setShowDetail = () => {
         //do nothing
     }
 
+    // don't render if there's no data
     if (data !== undefined && metadata !== undefined) {
         return (
             <div>

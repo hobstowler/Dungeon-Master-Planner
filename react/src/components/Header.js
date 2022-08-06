@@ -1,6 +1,7 @@
 import React from 'react';
 import NavBar from './NavBar'
 
+// header for each page
 export default function Header({clearData}) {
     return (
         <div className='header'>
