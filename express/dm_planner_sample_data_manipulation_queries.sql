@@ -190,27 +190,35 @@ WHERE type_id = :type_id_selected;
 -- Queries for Dungeons_Has_Monsters page
 -- -----------------------------------------------------
 
--- Retrieve metadata for Types table
+-- Retrieve metadata for Dungeons_Has_Monsters table
 SELECT * FROM `Information_Schema`.`columns` WHERE table_name='Dungeons_Has_Monsters';
 
+-- Retrieve metadata for dungeons in Dungeons_Has_Monsters
+SELECT * FROM Information_Schema.columns 
+WHERE table_name='Dungeons_Has_Monsters' AND column_name IN ('dungeon_has_monster_id', 'dungeon_id', 'quantity');
+
+-- Retrieve metadata for monsters in Dungeons_Has_Monsters
+SELECT * FROM Information_Schema.columns 
+WHERE table_name='Dungeons_Has_Monsters' AND column_name IN ('dungeon_has_monster_id', 'monster_id', 'quantity');
+
 -- View intersection table of all monsters associated with dungeons
-SELECT dungeon_has_monster_id, dungeon_name, monster_name, quantity
-FROM Dungeons_Has_Monsters
-INNER JOIN Dungeons ON Dungeons_Has_Monsters.dungeon_id = Dungeons.dungeon_id
-INNER JOIN Monsters ON Dungeons_Has_Monsters.monster_id = Monsters.monster_id
-ORDER BY dungeon_name;
+SELECT dungeon_has_monster_id AS "Dungeon has Monster ID", Dungeons.dungeon_name AS "Dungeon Name", 
+        Monsters.monster_name AS "Monster Name", quantity AS "Quantity" FROM Dungeons_Has_Monsters 
+INNER JOIN Dungeons ON Dungeons.dungeon_id = Dungeons_Has_Monsters.dungeon_id
+INNER JOIN Monsters ON Monsters.monster_id = Dungeons_Has_Monsters.monster_id
+WHERE Dungeons.dungeon_name LIKE '%nameQuery%' OR Monsters.monster_name LIKE '%nameQuery%';
 
 -- View all monsters in a particular dungeon
-SELECT dungeon_has_monster_id, Monsters.monster_id, Monsters.monster_name, Monsters.description, Dungeons_Has_Monsters.quantity 
-FROM Dungeons_Has_Monsters 
-INNER JOIN Monsters ON Dungeons_Has_Monsters.monster_id = Monsters.monster_id
-WHERE Dungeons_Has_Monsters.dungeon_id = :id_of_selected_dungeon;
+SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", Monsters.monster_name AS "Monster Name", quantity AS "Quantity"
+FROM Dungeons_Has_Monsters
+INNER JOIN Monsters ON Monsters.monster_id = Dungeons_Has_Monsters.monster_id;
+WHERE Dungeons_Has_Monsters.dungeon_id= :dungeon_id_selected;
 
 -- View all dungeons that host a particular monster
-SELECT dungeon_has_monster_id, Dungeons.dungeon_id, Dungeons.dungeon_name, Dungeons.description, Dungeons_Has_Monsters.quantity 
+SELECT dungeon_has_monster_id AS "Dungeons Has Monsters ID", Dungeons.dungeon_name AS "Dungeon Name", quantity AS "Quantity"
 FROM Dungeons_Has_Monsters 
-INNER JOIN Dungeons ON Dungeons_Has_Monsters.dungeon_id = Dungeons.dungeon_id
-WHERE Dungeons_Has_Monsters.monster_id = :id_of_selected_monster;
+INNER JOIN Dungeons ON Dungeons.dungeon_id = Dungeons_Has_Monsters.dungeon_id 
+WHERE Dungeons_Has_Monsters.monster_id= :monster_id_selected;
 
 -- Create a new relationship between Dungeons and Monsters
 INSERT INTO Dungeons_Has_Monsters (dungeon_id, monster_id, quantity)
@@ -229,26 +237,35 @@ WHERE dungeon_has_monster_id = :dungeon_has_monster_id_selected;
 -- -----------------------------------------------------
 
 -- Retrieve metadata for Scenarios_Has_Items table
-SELECT * FROM `Information_Schema`.`columns` WHERE table_name='Dungeons_Has_Monsters';
+SELECT * FROM `Information_Schema`.`columns` WHERE table_name='Scenarios_Has_Items';
+
+-- Retrieve metadata for items in Scenarios_Has_Items
+SELECT * FROM Information_Schema.columns 
+WHERE table_name='Scenarios_Has_Items' AND column_name IN ('scenario_has_item_id', 'item_id', 'quantity');
+
+-- Retrieve metadata for scenarios in Scenarios_Has_Items
+SELECT * FROM Information_Schema.columns 
+WHERE table_name='Scenarios_Has_Items' AND column_name IN ('scenario_has_item_id', 'scenario_id', 'quantity');
 
 -- View intersection table of all items associated with scenarios
-SELECT scenario_has_item_id, scenario_name, item_name, quantity
+SELECT scenario_has_item_id AS "Scenario has Item ID", Scenarios.scenario_name AS "Scenario Name",
+       Items.item_name AS "Item Name", quantity AS "Quantity"
 FROM Scenarios_Has_Items
-INNER JOIN Scenarios ON Scenarios_Has_Items.scenario_id = Scenarios.scenario_id
-INNER JOIN Items ON Scenarios_Has_Items.item_id = Items.item_id
-ORDER BY scenario_name;
+INNER JOIN Scenarios ON Scenarios.scenario_id = Scenarios_Has_Items.scenario_id
+INNER JOIN Items ON Items.item_id = Scenarios_Has_Items.item_id
+WHERE Scenarios.scenario_name LIKE '%nameQuery%' OR Items.item_name LIKE '%nameQuery%';
 
 -- View all items in a particular scenario
-SELECT scenario_has_item_id, Items.item_id, item_name, Items.description, quantity 
-FROM Scenarios_Has_Items 
-INNER JOIN Items ON Scenarios_Has_Items.item_id = Items.item_id
-WHERE Scenarios_Has_Items.scenario_id = :id_of_selected_scenario;
+SELECT scenario_has_item_id AS "Scenarios Has Items ID", Items.item_name AS "Item Name", quantity as "Quantity"
+FROM Scenarios_Has_Items
+INNER JOIN Items ON Items.item_id = Scenarios_Has_Items.item_id
+WHERE Scenarios_Has_Items.scenario_id= :scenario_id_selected;
 
 -- View all scenarios that host a particular item
-SELECT scenario_has_item_id, Scenarios.scenario_id, scenario_name, Scenarios.summary, quantity 
+SELECT scenario_has_item_id AS "Scenarios Has Items ID", Scenarios.scenario_name AS "Scenario Name", quantity as "Quantity"
 FROM Scenarios_Has_Items
-INNER JOIN Scenarios ON Scenarios_Has_Items.scenario_id = Scenarios.scenario_id
-WHERE Scenarios_Has_Items.item_id = :id_of_selected_item;
+INNER JOIN Scenarios ON Scenarios.scenario_id = Scenarios_Has_Items.scenario_id
+WHERE Scenarios_Has_Items.item_id = :item_id_selected;
 
 -- Create a new relationship between Scenarios and Items
 INSERT INTO Scenarios_Has_Items (scenario_id, item_id, quantity)
