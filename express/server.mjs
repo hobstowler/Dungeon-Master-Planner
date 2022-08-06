@@ -19,7 +19,8 @@ app.use(express.json())
 
 
 function sanitizeString(inputString) {
-    return inputString.replaceAll('\'', '\'\'')
+    if (String.prototype.replaceAll !== undefined) return inputString.replaceAll('\'', '\'\'')
+    return inputString.replace(/\'/g, '\'\'')
 }
 
 /***************************************************************
@@ -137,7 +138,7 @@ app.put('/scenarios/', (req, res) => {
     req.body.id === undefined ? errors.error['scenario_id'] = "Missing scenario ID" : scenario_id = req.body.id
     req.body.scenario_name === undefined || req.body.scenario_name === '' ? errors.error['scenario_name'] = "Missing scenario name" : scenario_name = `'${sanitizeString(req.body.scenario_name)}'`
     req.body.summary === undefined ? summary = `''` : summary = `'${sanitizeString(req.body.summary)}'`
-    req.body.target_level === undefined ? target_level = 0 : target_level = req.body.target_level
+    req.body.target_level === undefined || req.body.target_level === '' ? target_level = 0 : target_level = req.body.target_level
     req.body.session_time === undefined ? session_time = `NULL` : session_time = `'${req.body.session_time}'`
     req.body.dungeon_master_id === undefined || req.body.dungeon_master_id === 'undefined' ? errors.error['dungeon_master_id'] = "Missing dungeon master ID" : dungeon_master_id = req.body.dungeon_master_id
     req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? dungeon_id = 'NULL' : dungeon_id = req.body.dungeon_id
@@ -165,7 +166,7 @@ app.post('/scenarios', (req, res) => {
     let scenario_name, summary, target_level, session_time, dungeon_master_id, dungeon_id
     req.body.scenario_name === undefined || req.body.scenario_name === '' ? errors.error['scenario_name'] = "Missing scenario name" : scenario_name = `'${sanitizeString(req.body.scenario_name)}'`
     req.body.summary === undefined ? summary = `''` : summary = `'${sanitizeString(req.body.summary)}'`
-    req.body.target_level === undefined ? target_level = 0 : target_level = req.body.target_level
+    req.body.target_level === undefined || req.body.target_level === '' ? target_level = 0 : target_level = req.body.target_level
     req.body.session_time === undefined ? session_time = `NULL` : session_time = `'${req.body.session_time}'`
     req.body.dungeon_master_id === undefined || req.body.dungeon_master_id === 'undefined' ? errors.error['dungeon_master_id'] = "Missing dungeon master ID" : dungeon_master_id = req.body.dungeon_master_id
     req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? dungeon_id = 'NULL' : dungeon_id = req.body.dungeon_id
@@ -236,7 +237,7 @@ app.put('/dungeons', (req, res) => {
     req.body.id === undefined ? errors.error['dungeon_id'] = "Missing dungeon ID" : dungeon_id = req.body.id
     req.body.dungeon_name === undefined || req.body.dungeon_name === '' ? errors.error['dungeon_name'] = "Missing dungeon name" : dungeon_name = `'${sanitizeString(req.body.dungeon_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
-    req.body.light_level === undefined ? light_level = 0 : light_level = req.body.light_level
+    req.body.light_level === undefined || req.body.light_level === '' ? light_level = 0 : light_level = req.body.light_level
     req.body.biome_id === undefined || req.body.biome_id === 'undefined' ? biome_id = 'NULL' : biome_id = req.body.biome_id
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -261,7 +262,7 @@ app.post('/dungeons', (req, res) => {
     let dungeon_name, description, light_level, biome_id
     req.body.dungeon_name === undefined || req.body.dungeon_name === '' ? errors.error['dungeon_name'] = "Missing dungeon name" : dungeon_name = `'${sanitizeString(req.body.dungeon_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
-    req.body.light_level === undefined ? light_level = 0 : light_level = req.body.light_level
+    req.body.light_level === undefined || req.body.light_level === '' ? light_level = 0 : light_level = req.body.light_level
     req.body.biome_id === undefined || req.body.biome_id === 'undefined' ? biome_id = 'NULL' : biome_id = req.body.biome_id
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -324,15 +325,15 @@ app.put('/monsters', (req, res) => {
     req.body.id === undefined ? errors.error['monster_id'] = "Missing monster ID" : monster_id = req.body.id
     req.body.monster_name === undefined || req.body.monster_name === '' ? errors.error['monster_name'] = "Missing monster name" : monster_name = `'${sanitizeString(req.body.monster_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
-    req.body.challenge_rating === undefined ? challenge_rating = 0 : challenge_rating = req.body.challenge_rating
-    req.body.health_points === undefined ? health_points = 0 : health_points = req.body.health_points
-    req.body.strength === undefined ? strength = 0 : strength = req.body.strength
-    req.body.dexterity === undefined ? dexterity = 0 : dexterity = req.body.dexterity
-    req.body.constitution === undefined ? constitution = 0 : constitution = req.body.constitution
-    req.body.intelligence === undefined ? intelligence = 0 : intelligence = req.body.intelligence
-    req.body.wisdom === undefined ? wisdom = 0 : wisdom = req.body.wisdom
-    req.body.charisma === undefined ? charisma = 0 : charisma = req.body.charisma
-    req.body.armor_class === undefined ? armor_class = 0 : armor_class = req.body.armor_class
+    req.body.challenge_rating === undefined || req.body.challenge_rating === '' ? challenge_rating = 0 : challenge_rating = req.body.challenge_rating
+    req.body.health_points === undefined || req.body.health_points === '' ? health_points = 0 : health_points = req.body.health_points
+    req.body.strength === undefined || req.body.strength === '' ? strength = 0 : strength = req.body.strength
+    req.body.dexterity === undefined || req.body.dexterity === '' ? dexterity = 0 : dexterity = req.body.dexterity
+    req.body.constitution === undefined || req.body.constitution === '' ? constitution = 0 : constitution = req.body.constitution
+    req.body.intelligence === undefined || req.body.intelligence === '' ? intelligence = 0 : intelligence = req.body.intelligence
+    req.body.wisdom === undefined || req.body.wisdom === '' ? wisdom = 0 : wisdom = req.body.wisdom
+    req.body.charisma === undefined || req.body.charisma === '' ? charisma = 0 : charisma = req.body.charisma
+    req.body.armor_class === undefined || req.body.armor_class === '' ? armor_class = 0 : armor_class = req.body.armor_class
     req.body.talent === undefined || req.body.talent === 'undefined' ? talent = `''` : talent = `'${sanitizeString(req.body.talent)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -359,15 +360,15 @@ app.post('/monsters', (req, res) => {
     let monster_name, description, challenge_rating, health_points, strength, dexterity, constitution, intelligence, wisdom, charisma, armor_class, talent
     req.body.monster_name === undefined || req.body.monster_name === '' ? errors.error['monster_name'] = "Missing monster name" : monster_name = `'${sanitizeString(req.body.monster_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
-    req.body.challenge_rating === undefined ? challenge_rating = 0 : challenge_rating = req.body.challenge_rating
-    req.body.health_points === undefined ? health_points = 0 : health_points = req.body.health_points
-    req.body.strength === undefined ? strength = 0 : strength = req.body.strength
-    req.body.dexterity === undefined ? dexterity = 0 : dexterity = req.body.dexterity
-    req.body.constitution === undefined ? constitution = 0 : constitution = req.body.constitution
-    req.body.intelligence === undefined ? intelligence = 0 : intelligence = req.body.intelligence
-    req.body.wisdom === undefined ? wisdom = 0 : wisdom = req.body.wisdom
-    req.body.charisma === undefined ? charisma = 0 : charisma = req.body.charisma
-    req.body.armor_class === undefined ? armor_class = 0 : armor_class = req.body.armor_class
+    req.body.challenge_rating === undefined || req.body.challenge_rating === '' ? challenge_rating = 0 : challenge_rating = req.body.challenge_rating
+    req.body.health_points === undefined || req.body.health_points === '' ? health_points = 0 : health_points = req.body.health_points
+    req.body.strength === undefined || req.body.strength === '' ? strength = 0 : strength = req.body.strength
+    req.body.dexterity === undefined || req.body.dexterity === '' ? dexterity = 0 : dexterity = req.body.dexterity
+    req.body.constitution === undefined || req.body.constitution === '' ? constitution = 0 : constitution = req.body.constitution
+    req.body.intelligence === undefined || req.body.intelligence === '' ? intelligence = 0 : intelligence = req.body.intelligence
+    req.body.wisdom === undefined || req.body.wisdom === '' ? wisdom = 0 : wisdom = req.body.wisdom
+    req.body.charisma === undefined || req.body.charisma === '' ? charisma = 0 : charisma = req.body.charisma
+    req.body.armor_class === undefined || req.body.armor_class === '' ? armor_class = 0 : armor_class = req.body.armor_class
     req.body.talent === undefined || req.body.talent === 'undefined' ? talent = `''` : talent = `'${sanitizeString(req.body.talent)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -432,8 +433,8 @@ app.put('/items', (req, res) => {
     req.body.id === undefined ? errors.error['item_id'] = "Missing item ID" : item_id = req.body.id
     req.body.item_name === undefined || req.body.item_name === '' ? errors.error['item_name'] = "Missing item name" : item_name = `'${sanitizeString(req.body.item_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
-    req.body.weight === undefined ? weight = 0 : weight = req.body.weight
-    req.body.value === undefined ? value = 0 : value = req.body.value
+    req.body.weight === undefined || req.body.weight === '' ? weight = 0 : weight = req.body.weight
+    req.body.value === undefined || req.body.value === '' ? value = 0 : value = req.body.value
     req.body.type_id === undefined || req.body.type_id === 'undefined' ? type_id = 'NULL' : type_id = req.body.type_id
     
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -458,8 +459,8 @@ app.post('/items', (req, res) => {
     let item_name, description, weight, value, type_id
     req.body.item_name === undefined || req.body.item_name === '' ? errors.error['item_name'] = "Missing item name" : item_name = `'${sanitizeString(req.body.item_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
-    req.body.weight === undefined ? weight = 0 : weight = req.body.weight
-    req.body.value === undefined ? value = 0 : value = req.body.value
+    req.body.weight === undefined || req.body.weight === '' ? weight = 0 : weight = req.body.weight
+    req.body.value === undefined || req.body.value === '' ? value = 0 : value = req.body.value
     req.body.type_id === undefined || req.body.type_id === 'undefined' ? type_id = 'NULL' : type_id = req.body.type_id
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -722,10 +723,15 @@ app.get('/dungeons_has_monsters/:dungeon_id', (req, res) => {
 
 // Update a relationship between a dungeon and a monster
 app.put('/dungeons_has_monsters/', (req, res) => {
-    let dungeon_has_monster_id = req.body.id;
-    let dungeon_id = req.body.dungeon_id;
-    let monster_id = req.body.monster_id;
-    let quantity = req.body.quantity;
+    let errors = {'error':{}}
+    let dungeon_has_monster_id, dungeon_id, monster_id, quantity
+    req.body.id === undefined ? errors.error[dungeon_has_monster_id] = "Missing dungeon_has_monster id" : dungeon_has_monster_id = req.body.id
+    req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? errors.error[dungeon_id] = "Missing dungeon id" : dungeon_id = req.body.dungeon_id
+    req.body.monster_id === undefined || req.body.monster_id === 'undefined' ? errors.error[monster_id] = "Missing monster id" : monster_id = req.body.monster_id
+    req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `UPDATE Dungeons_Has_Monsters `;
     query += `SET dungeon_id=${dungeon_id}, monster_id=${monster_id}, quantity=${quantity} `;
     query += `WHERE dungeon_has_monster_id=${dungeon_has_monster_id};`;
@@ -742,9 +748,14 @@ app.put('/dungeons_has_monsters/', (req, res) => {
 
 // Create a new relationship between a dungeon and a monster
 app.post('/dungeons_has_monsters', (req, res) => {
-    let dungeon_id = req.body.dungeon_id;
-    let monster_id = req.body.monster_id;
-    let quantity = req.body.quantity;
+    let errors = {'error':{}}
+    let dungeon_id, monster_id, quantity
+    req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? errors.error[dungeon_id] = "Missing dungeon id" : dungeon_id = req.body.dungeon_id
+    req.body.monster_id === undefined || req.body.monster_id === 'undefined' ? errors.error[monster_id] = "Missing monster id" : monster_id = req.body.monster_id
+    req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `INSERT INTO Dungeons_Has_Monsters (dungeon_id, monster_id, quantity) `;
     query += `VALUES (${dungeon_id}, ${monster_id}, ${quantity});`;
     db.query(query, (err, results) => {
@@ -838,10 +849,15 @@ app.get('/items_has_scenarios/:item_id', (req, res) => {
 
 // Update a relationship between a scenario and an item
 app.put('/scenarios_has_items/', (req, res) => {
-    let scenario_has_item_id = req.body.id;
-    let scenario_id = req.body.scenario_id;
-    let item_id = req.body.item_id;
-    let quantity = req.body.quantity;
+    let errors = {'error':{}}
+    let scenario_has_item_id, scenario_id, item_id, quantity
+    req.body.id === undefined ? errors.error[scenario_has_item_id] = "Missing scenario_has_item id" : scenario_has_item_id = req.body.id
+    req.body.scenario_id === undefined || req.body.scenario_id === 'undefined' ? errors.error[scenario_id] = "Missing scenario id" : scenario_id = req.body.scenario_id
+    req.body.item_id === undefined || req.body.item_id === 'undefined' ? errors.error[item_id] = "Missing item id" : item_id = req.body.item_id
+    req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `UPDATE Scenarios_Has_Items `;
     query += `SET scenario_id=${scenario_id}, item_id=${item_id}, quantity=${quantity} `;
     query += `WHERE scenario_has_item_id=${scenario_has_item_id};`;
@@ -858,9 +874,14 @@ app.put('/scenarios_has_items/', (req, res) => {
 
 // Create a new relationship between a scenario and an item
 app.post('/scenarios_has_items', (req, res) => {
-    let scenario_id = req.body.scenario_id;
-    let item_id = req.body.item_id;
-    let quantity = req.body.quantity;
+    let errors = {'error':{}}
+    let scenario_id, item_id, quantity
+    req.body.scenario_id === undefined || req.body.scenario_id === 'undefined' ? errors.error[scenario_id] = "Missing scenario id" : scenario_id = req.body.scenario_id
+    req.body.item_id === undefined || req.body.item_id === 'undefined' ? errors.error[item_id] = "Missing item id" : item_id = req.body.item_id
+    req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
+
+    if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
+
     let query = `INSERT INTO Scenarios_Has_Items (scenario_id, item_id, quantity) `;
     query += `VALUES (${scenario_id}, ${item_id}, ${quantity});`;
     db.query(query, (err, results) => {
@@ -891,14 +912,7 @@ app.delete('/scenarios_has_items/:id', (req, res) => {
     METADATA QUERIES
 #################################### */
 
-
-// TODO make this work???
-app.get('/reload_data', (req, res) => {
-    db.query('schema.sql')
-    console.log(result)
-    return res.send('Database Reloaded.<br /><a href="/">Home</a>')
-})
-
+// Retrieve IDs and names for the dropdown selections
 app.get('/get_fk/:table/:column', (req, res) => {
     let table = req.params.table
     let column = req.params.column
@@ -918,12 +932,6 @@ app.get('/get_fk/:table/:column', (req, res) => {
     })
 })
 
-app.get('/metadata/:table', (req, res) => {
-    let table_name = req.params.table
-    db.query(`SELECT * FROM Information_Schema.columns where table_name='${table_name}'`, (err, results) => {
-        res.send(results)
-    })
-})
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
