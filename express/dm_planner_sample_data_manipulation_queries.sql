@@ -201,7 +201,7 @@ WHERE table_name='Dungeons_Has_Monsters' AND column_name IN ('dungeon_has_monste
 SELECT * FROM Information_Schema.columns 
 WHERE table_name='Dungeons_Has_Monsters' AND column_name IN ('dungeon_has_monster_id', 'monster_id', 'quantity');
 
--- View intersection table of all monsters associated with dungeons
+-- View intersection table of all monsters associated with dungeons (WHERE clause only included when a value is provided for nameQuery)
 SELECT dungeon_has_monster_id AS "Dungeon has Monster ID", Dungeons.dungeon_name AS "Dungeon Name", 
         Monsters.monster_name AS "Monster Name", quantity AS "Quantity" FROM Dungeons_Has_Monsters 
 INNER JOIN Dungeons ON Dungeons.dungeon_id = Dungeons_Has_Monsters.dungeon_id
@@ -247,7 +247,7 @@ WHERE table_name='Scenarios_Has_Items' AND column_name IN ('scenario_has_item_id
 SELECT * FROM Information_Schema.columns 
 WHERE table_name='Scenarios_Has_Items' AND column_name IN ('scenario_has_item_id', 'scenario_id', 'quantity');
 
--- View intersection table of all items associated with scenarios
+-- View intersection table of all items associated with scenarios (WHERE clause only included when a value is provided for nameQuery)
 SELECT scenario_has_item_id AS "Scenario has Item ID", Scenarios.scenario_name AS "Scenario Name",
        Items.item_name AS "Item Name", quantity AS "Quantity"
 FROM Scenarios_Has_Items
