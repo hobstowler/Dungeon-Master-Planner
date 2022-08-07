@@ -51,8 +51,8 @@ app.get('/dungeon_masters', (req, res) => {
 app.put('/dungeon_masters', (req, res) => {
     let errors = {'error':{}}
     let dungeon_master_id, dungeon_master_name, lucky_dice
-    req.body.id === undefined ? errors.error[dungeon_master_id] = "Missing dungeon master id" : dungeon_master_id = req.body.id
-    req.body.dungeon_master_name === undefined || req.body.dungeon_master_name === '' ? errors.error[dungeon_master_name] = "Missing dungeon master name" : dungeon_master_name = `'${sanitizeString(req.body.dungeon_master_name)}'`
+    req.body.id === undefined ? errors.error['dungeon_master_id'] = "Missing dungeon master id" : dungeon_master_id = req.body.id
+    req.body.dungeon_master_name === undefined || req.body.dungeon_master_name === '' ? errors.error['dungeon_master_name'] = "Missing dungeon master name" : dungeon_master_name = `'${sanitizeString(req.body.dungeon_master_name)}'`
     req.body.lucky_dice === undefined ? lucky_dice = `''` : lucky_dice = `'${sanitizeString(req.body.lucky_dice)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -75,7 +75,7 @@ app.put('/dungeon_masters', (req, res) => {
 app.post('/dungeon_masters', (req, res) => {
     let errors = {'error':{}}
     let dungeon_master_name, lucky_dice
-    req.body.dungeon_master_name === undefined || req.body.dungeon_master_name === '' ? errors.error[dungeon_master_name] = "Missing dungeon master name" : dungeon_master_name = `'${sanitizeString(req.body.dungeon_master_name)}'`
+    req.body.dungeon_master_name === undefined || req.body.dungeon_master_name === '' ? errors.error['dungeon_master_name'] = "Missing dungeon master name" : dungeon_master_name = `'${sanitizeString(req.body.dungeon_master_name)}'`
     req.body.lucky_dice === undefined ? lucky_dice = `''` : lucky_dice = `'${sanitizeString(req.body.lucky_dice)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -526,7 +526,7 @@ app.put('/biomes', (req, res) => {
     let errors = {'error':{}}
     let biome_id, biome_name, description
     req.body.id === undefined ? errors.error[biome_id] = "Missing biome id" : biome_id = req.body.id
-    req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error[biome_name] = "Missing biome name" : biome_name = `'${sanitizeString(req.body.biome_name)}'`
+    req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error['biome_name'] = "Missing biome name" : biome_name = `'${sanitizeString(req.body.biome_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -549,7 +549,7 @@ app.put('/biomes', (req, res) => {
 app.post('/biomes', (req, res) => {
     let errors = {'error':{}}
     let biome_name, description
-    req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error[biome_name] = "Missing biome name" : biome_name = `'${sanitizeString(req.body.biome_name)}'`
+    req.body.biome_name === undefined || req.body.biome_name === '' ? errors.error['biome_name'] = "Missing biome name" : biome_name = `'${sanitizeString(req.body.biome_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -610,7 +610,7 @@ app.put('/types', (req, res) => {
     let errors = {'error':{}}
     let type_id, type_name, description
     req.body.id === undefined ? errors.error[type_id] = "Missing type id" : type_id = req.body.id
-    req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${sanitizeString(req.body.type_name)}'`
+    req.body.type_name === undefined || req.body.type_name === '' ? errors.error['type_name'] = "Missing type name" : type_name = `'${sanitizeString(req.body.type_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -633,7 +633,7 @@ app.put('/types', (req, res) => {
 app.post('/types', (req, res) => {
     let errors = {'error':{}}
     let type_name, description
-    req.body.type_name === undefined || req.body.type_name === '' ? errors.error[type_name] = "Missing type name" : type_name = `'${sanitizeString(req.body.type_name)}'`
+    req.body.type_name === undefined || req.body.type_name === '' ? errors.error['type_name'] = "Missing type name" : type_name = `'${sanitizeString(req.body.type_name)}'`
     req.body.description === undefined ? description = `''` : description = `'${sanitizeString(req.body.description)}'`
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -738,9 +738,9 @@ app.get('/dungeons_has_monsters/:dungeon_id', (req, res) => {
 app.put('/dungeons_has_monsters/', (req, res) => {
     let errors = {'error':{}}
     let dungeon_has_monster_id, dungeon_id, monster_id, quantity
-    req.body.id === undefined ? errors.error[dungeon_has_monster_id] = "Missing dungeon_has_monster id" : dungeon_has_monster_id = req.body.id
-    req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? errors.error[dungeon_id] = "Missing dungeon id" : dungeon_id = req.body.dungeon_id
-    req.body.monster_id === undefined || req.body.monster_id === 'undefined' ? errors.error[monster_id] = "Missing monster id" : monster_id = req.body.monster_id
+    req.body.id === undefined ? errors.error['dungeon_has_monster_id'] = "Missing dungeon_has_monster id" : dungeon_has_monster_id = req.body.id
+    req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? errors.error['dungeon_id'] = "Missing dungeon id" : dungeon_id = req.body.dungeon_id
+    req.body.monster_id === undefined || req.body.monster_id === 'undefined' ? errors.error['monster_id'] = "Missing monster id" : monster_id = req.body.monster_id
     req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -763,8 +763,8 @@ app.put('/dungeons_has_monsters/', (req, res) => {
 app.post('/dungeons_has_monsters', (req, res) => {
     let errors = {'error':{}}
     let dungeon_id, monster_id, quantity
-    req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? errors.error[dungeon_id] = "Missing dungeon id" : dungeon_id = req.body.dungeon_id
-    req.body.monster_id === undefined || req.body.monster_id === 'undefined' ? errors.error[monster_id] = "Missing monster id" : monster_id = req.body.monster_id
+    req.body.dungeon_id === undefined || req.body.dungeon_id === 'undefined' ? errors.error['dungeon_id'] = "Missing dungeon id" : dungeon_id = req.body.dungeon_id
+    req.body.monster_id === undefined || req.body.monster_id === 'undefined' ? errors.error['monster_id'] = "Missing monster id" : monster_id = req.body.monster_id
     req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -869,9 +869,9 @@ app.get('/items_has_scenarios/:item_id', (req, res) => {
 app.put('/scenarios_has_items/', (req, res) => {
     let errors = {'error':{}}
     let scenario_has_item_id, scenario_id, item_id, quantity
-    req.body.id === undefined ? errors.error[scenario_has_item_id] = "Missing scenario_has_item id" : scenario_has_item_id = req.body.id
-    req.body.scenario_id === undefined || req.body.scenario_id === 'undefined' ? errors.error[scenario_id] = "Missing scenario id" : scenario_id = req.body.scenario_id
-    req.body.item_id === undefined || req.body.item_id === 'undefined' ? errors.error[item_id] = "Missing item id" : item_id = req.body.item_id
+    req.body.id === undefined ? errors.error['scenario_has_item_id'] = "Missing scenario_has_item id" : scenario_has_item_id = req.body.id
+    req.body.scenario_id === undefined || req.body.scenario_id === 'undefined' ? errors.error['scenario_id'] = "Missing scenario id" : scenario_id = req.body.scenario_id
+    req.body.item_id === undefined || req.body.item_id === 'undefined' ? errors.error['item_id'] = "Missing item id" : item_id = req.body.item_id
     req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
@@ -894,8 +894,8 @@ app.put('/scenarios_has_items/', (req, res) => {
 app.post('/scenarios_has_items', (req, res) => {
     let errors = {'error':{}}
     let scenario_id, item_id, quantity
-    req.body.scenario_id === undefined || req.body.scenario_id === 'undefined' ? errors.error[scenario_id] = "Missing scenario id" : scenario_id = req.body.scenario_id
-    req.body.item_id === undefined || req.body.item_id === 'undefined' ? errors.error[item_id] = "Missing item id" : item_id = req.body.item_id
+    req.body.scenario_id === undefined || req.body.scenario_id === 'undefined' ? errors.error['scenario_id'] = "Missing scenario id" : scenario_id = req.body.scenario_id
+    req.body.item_id === undefined || req.body.item_id === 'undefined' ? errors.error['item_id'] = "Missing item id" : item_id = req.body.item_id
     req.body.quantity === undefined || req.body.quantity === '' ? quantity = 0 : quantity = req.body.quantity
 
     if (Object.keys(errors.error).length > 0) return res.status(400).json(errors)
