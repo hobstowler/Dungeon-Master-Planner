@@ -36,6 +36,10 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
                 if (response.status === 201) {
                     refreshData()
                 }
+                return response.json()
+            })
+            .then(json => {
+                setError(JSON.stringify(json.error))
             })
             .catch(error => console.log(error))
     }
@@ -63,9 +67,9 @@ export default function TableForm({meta, rowData, regex, editId, setEditId, setE
                 return response.json()
             })
             .then(json => {
-                console.log(json)
                 setError(JSON.stringify(json.error))
             })
+            .catch(error => console.log(error))
     }
 
     // resets data in the form when the editing row changes

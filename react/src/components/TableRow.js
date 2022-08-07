@@ -3,7 +3,7 @@ import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
 import Cell from "./Cell";
 
 // a row in a table
-export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail, setDetail}) {
+export default function TableRow({dataRow, fkData, metadata, editId, setEditId, refreshData, tid, active, intersection, showDetail, setShowDetail, setDetail, setError}) {
     const [row, setRow] = useState([])
 
     // toggle edit mode by passing a row id
@@ -19,7 +19,6 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
     // delete a row
     const del = () => {
         let table = metadata[0].TABLE_NAME
-        console.log(row[0])
         fetch(`/${table}/${row[0]}`, {
             method: "DELETE",
             headers: {'Content-Type': 'application/json'}
@@ -29,6 +28,10 @@ export default function TableRow({dataRow, fkData, metadata, editId, setEditId, 
                     cancel()
                     setTimeout(refreshData(), 1500)
                 }
+                return response.json()
+            })
+            .then(json => {
+                setError(JSON.stringify(json.error))
             })
             .catch(error => console.log(error))
     }

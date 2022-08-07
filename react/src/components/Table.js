@@ -51,12 +51,14 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
     }
 
     useEffect(() => {
+        setError('')
         setTimerId(dataDisplayTimer())
         if (setShowDetail !== undefined) {
             setShowDetail(false)
         }
     }, [])
     useEffect(() => {
+        setError('')
         if (data !== undefined && data.length > 0) {
             clearTimeout(timerId)
             compileHeader()
@@ -64,6 +66,7 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
         getFkData()
     }, [data])
     useEffect(() => {
+        setError('')
         if (editId >= 0) {
             setFormData(data[editId])
         } else {
@@ -91,6 +94,7 @@ export default function Table({refreshData, data, metadata, setError, reg, inter
                         showDetail={showDetail}
                         setShowDetail={setShowDetail}
                         setDetail={setDetail}
+                        setError={setError}
                         key={i} />)}
                 <tr><td id={editId >= 0 ? 'formEdit' : 'formAddNew'} colSpan={3}>{editId >= 0 ?
                     'Edit:' :
