@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import {MdDeleteForever, MdCancel, MdEdit } from 'ui-icons/md';
+import {MdDeleteForever, MdCancel, MdEdit } from 'react-icons/md';
 import Cell from "./Cell";
 
 // a row in a table

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "ui-router-dom";
+import {Link} from "react-router-dom";
 
 // Builds the navigation bar for each page.
 export default function NavBar({clearData}) {
