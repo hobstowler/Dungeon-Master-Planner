@@ -31,7 +31,7 @@ function sanitizeString(inputString) {
 ****************************************************************/
 
 app.get('/', (req, res) => {
-    return './ui/src/'
+    res.sendFile('./ui/src/index.js')
 })
 
 // Display all dungeon masters
