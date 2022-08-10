@@ -5,7 +5,7 @@
   "main": "server.mjs",
   "scripts": {
     "start": "node server.mjs",
-    "react": "cd ui && npm start"
+    "heroku-postbuild": "cd ui && npm start"
   },
   "type": "module",
   "keywords": [],
