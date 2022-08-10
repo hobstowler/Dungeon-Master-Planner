@@ -4,6 +4,7 @@ import 'dotenv/config'
 import express, { query } from "express"
 import bodyParser from "express";
 import {pool} from "./db.js";
+import * as path from "path";
 
 const app = express();
 const PORT = process.env.PORT
@@ -13,7 +14,7 @@ app.use(express.urlencoded({
     extended: true
 }))
 app.use(express.static('style'))
-app.use(express.static(path.join(__dirname, 'ui', 'src')))
+app.use(express.static(path.join('./', 'ui', 'build')))
 app.use(bodyParser.json())
 app.use(express.json())
 
@@ -27,13 +28,13 @@ function sanitizeString(inputString) {
     }
 }
 
+app.get('/', (req, res) => {
+    res.sendFile('index.html')
+})
+
 /***************************************************************
 ********************   DUNGEON MASTERS   ***********************
 ****************************************************************/
-
-app.get('/', (req, res) => {
-    res.send('index.html')
-})
 
 // Display all dungeon masters
 app.get('/dungeon_masters', (req, res) => {
