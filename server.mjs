@@ -32,7 +32,7 @@ function sanitizeString(inputString) {
 ****************************************************************/
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html')
+    res.send('index.html')
 })
 
 // Display all dungeon masters
