@@ -19,8 +19,11 @@ app.use(express.json())
 
 
 function sanitizeString(inputString) {
-    if (String.prototype.replaceAll !== undefined) return inputString.replaceAll('\'', '\'\'')
-    return inputString.replace(/\'/g, '\'\'')
+    if (inputString === undefined || typeof inputString !== 'string') {
+        return ''
+    } else {
+        return inputString.replaceAll('\'', '\'\'')
+    }
 }
 
 /***************************************************************

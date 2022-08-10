@@ -10,7 +10,7 @@ import Monsters from './pages/monsters'
 import Scenarios from './pages/scenarios'
 import ScenariosHasItems from './pages/scenarios_has_items'
 import Types from './pages/types'
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'ui-router-dom';
 import React, {useState} from 'react';
 import SearchForm from "./components/SearchForm";
 import Detail from "./components/Detail";
