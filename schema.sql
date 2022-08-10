@@ -4,39 +4,39 @@ DROP TABLE IF EXISTS Dungeon_Masters, Biomes, Dungeons, Dungeons_has_Monsters, I
 -- -----------------------------------------------------
 -- Table Dungeon_Masters
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Dungeon_Masters (
+CREATE TABLE Dungeon_Masters (
   dungeon_master_id INT NOT NULL AUTO_INCREMENT,
   dungeon_master_name varchar(45) NOT NULL,
   lucky_dice varchar(45) NULL,
   PRIMARY KEY (dungeon_master_id),
-  UNIQUE INDEX dungeon_master_id_UNIQUE (dungeon_master_id ASC) VISIBLE
+  UNIQUE INDEX dungeon_master_id_UNIQUE (dungeon_master_id ASC)
 );
 
 
 -- -----------------------------------------------------
 -- Table Biomes
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Biomes (
+CREATE TABLE Biomes (
   biome_id INT NOT NULL AUTO_INCREMENT,
   biome_name varchar(45) NOT NULL,
   description TEXT NULL,
   PRIMARY KEY (biome_id),
-  UNIQUE INDEX biome_id_UNIQUE (biome_id ASC) VISIBLE
+  UNIQUE INDEX biome_id_UNIQUE (biome_id ASC)
 );
 
 
 -- -----------------------------------------------------
 -- Table Dungeons
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Dungeons (
+CREATE TABLE Dungeons (
   dungeon_id INT NOT NULL AUTO_INCREMENT,
   dungeon_name varchar(45) NOT NULL,
   description TEXT NULL,
   light_level INT NOT NULL,
   biome_id INT NULL,
   PRIMARY KEY (dungeon_id),
-  UNIQUE INDEX dungeon_id_UNIQUE (dungeon_id ASC) VISIBLE,
-  INDEX fk_Dungeons_Biomes1_idx (biome_id ASC) VISIBLE,
+  UNIQUE INDEX dungeon_id_UNIQUE (dungeon_id ASC),
+  INDEX fk_Dungeons_Biomes1_idx (biome_id ASC),
   CONSTRAINT fk_Dungeons_Biomes1
     FOREIGN KEY (biome_id)
     REFERENCES Biomes (biome_id)
@@ -48,7 +48,7 @@ CREATE OR REPLACE TABLE Dungeons (
 -- -----------------------------------------------------
 -- Table Scenarios
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Scenarios (
+CREATE TABLE Scenarios (
   scenario_id INT NOT NULL AUTO_INCREMENT,
   scenario_name varchar(45) NOT NULL,
   summary TEXT NULL,
@@ -57,9 +57,9 @@ CREATE OR REPLACE TABLE Scenarios (
   dungeon_master_id INT NOT NULL,
   dungeon_id INT NULL,
   PRIMARY KEY (scenario_id),
-  UNIQUE INDEX scenario_id_UNIQUE (scenario_id ASC) VISIBLE,
-  INDEX fk_Scenarios_Dungeon_Masters1_idx (dungeon_master_id ASC) VISIBLE,
-  INDEX fk_Scenarios_Dungeons1_idx (dungeon_id ASC) VISIBLE,
+  UNIQUE INDEX scenario_id_UNIQUE (scenario_id ASC),
+  INDEX fk_Scenarios_Dungeon_Masters1_idx (dungeon_master_id ASC),
+  INDEX fk_Scenarios_Dungeons1_idx (dungeon_id ASC),
   CONSTRAINT fk_Scenarios_Dungeon_Masters1
     FOREIGN KEY (dungeon_master_id)
     REFERENCES Dungeon_Masters (dungeon_master_id)
@@ -76,7 +76,7 @@ CREATE OR REPLACE TABLE Scenarios (
 -- -----------------------------------------------------
 -- Table Monsters
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Monsters (
+CREATE TABLE Monsters (
   monster_id INT NOT NULL AUTO_INCREMENT,
   monster_name varchar(45) NOT NULL,
   description TEXT NULL,
@@ -91,26 +91,26 @@ CREATE OR REPLACE TABLE Monsters (
   armor_class INT NOT NULL,
   talent varchar(256) NULL,
   PRIMARY KEY (monster_id),
-  UNIQUE INDEX monster_id_UNIQUE (monster_id ASC) VISIBLE
+  UNIQUE INDEX monster_id_UNIQUE (monster_id ASC)
 );
 
 
 -- -----------------------------------------------------
 -- Table Types
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Types (
+CREATE TABLE Types (
   type_id INT NOT NULL AUTO_INCREMENT,
   type_name varchar(45) NOT NULL,
   description TEXT NULL,
   PRIMARY KEY (type_id),
-  UNIQUE INDEX type_id_UNIQUE (type_id ASC) VISIBLE
+  UNIQUE INDEX type_id_UNIQUE (type_id ASC)
 );
 
 
 -- -----------------------------------------------------
 -- Table Items
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Items (
+CREATE TABLE Items (
   item_id INT NOT NULL AUTO_INCREMENT,
   item_name varchar(45) NOT NULL,
   description TEXT NULL,
@@ -118,8 +118,8 @@ CREATE OR REPLACE TABLE Items (
   value INT NOT NULL,
   type_id INT NULL,
   PRIMARY KEY (item_id),
-  UNIQUE INDEX item_id_UNIQUE (item_id ASC) VISIBLE,
-  INDEX fk_Items_Types1_idx (type_id ASC) VISIBLE,
+  UNIQUE INDEX item_id_UNIQUE (item_id ASC),
+  INDEX fk_Items_Types1_idx (type_id ASC),
   CONSTRAINT fk_Items_Types1
     FOREIGN KEY (type_id)
     REFERENCES Types (type_id)
@@ -131,15 +131,15 @@ CREATE OR REPLACE TABLE Items (
 -- -----------------------------------------------------
 -- Table Scenarios_has_Items
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Scenarios_Has_Items (
+CREATE TABLE Scenarios_Has_Items (
   scenario_has_item_id INT NOT NULL AUTO_INCREMENT,
   scenario_id INT NOT NULL,
   item_id INT NOT NULL,
   quantity INT NOT NULL DEFAULT 0,
   PRIMARY KEY (scenario_has_item_id),
-  INDEX fk_Scenarios_Has_Items_Items1_idx (item_id ASC) VISIBLE,
-  INDEX fk_Scenarios_Has_Items_Scenarios_idx (scenario_id ASC) VISIBLE,
-  UNIQUE INDEX scenario_has_item_id_UNIQUE (scenario_has_item_id ASC) VISIBLE,
+  INDEX fk_Scenarios_Has_Items_Items1_idx (item_id ASC),
+  INDEX fk_Scenarios_Has_Items_Scenarios_idx (scenario_id ASC),
+  UNIQUE INDEX scenario_has_item_id_UNIQUE (scenario_has_item_id ASC),
   CONSTRAINT fk_Scenarios_Has_Items_Scenarios
     FOREIGN KEY (scenario_id)
     REFERENCES Scenarios (scenario_id)
@@ -156,15 +156,15 @@ CREATE OR REPLACE TABLE Scenarios_Has_Items (
 -- -----------------------------------------------------
 -- Table Dungeons_Has_Monsters
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE Dungeons_Has_Monsters (
+CREATE TABLE Dungeons_Has_Monsters (
   dungeon_has_monster_id INT NOT NULL AUTO_INCREMENT,
   dungeon_id INT NOT NULL,
   monster_id INT NOT NULL,
   quantity INT NOT NULL DEFAULT 0,
   PRIMARY KEY (dungeon_has_monster_id),
-  INDEX fk_Dungeons_Has_Monsters_Monsters1_idx (monster_id ASC) VISIBLE,
-  INDEX fk_Dungeons_Has_Monsters_Dungeons1_idx (dungeon_id ASC) VISIBLE,
-  UNIQUE INDEX dungeon_has_monster_id_UNIQUE (dungeon_has_monster_id ASC) VISIBLE,
+  INDEX fk_Dungeons_Has_Monsters_Monsters1_idx (monster_id ASC),
+  INDEX fk_Dungeons_Has_Monsters_Dungeons1_idx (dungeon_id ASC),
+  UNIQUE INDEX dungeon_has_monster_id_UNIQUE (dungeon_has_monster_id ASC),
   CONSTRAINT fk_Dungeons_Has_Monsters_Dungeons1
     FOREIGN KEY (dungeon_id)
     REFERENCES Dungeons (dungeon_id)
