@@ -13,6 +13,7 @@ app.use(express.urlencoded({
     extended: true
 }))
 app.use(express.static('style'))
+app.use(express.static(path.join(__dirname, 'ui', 'src')))
 app.use(bodyParser.json())
 app.use(express.json())
 
