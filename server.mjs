@@ -30,6 +30,10 @@ function sanitizeString(inputString) {
 ********************   DUNGEON MASTERS   ***********************
 ****************************************************************/
 
+app.get('/', (req, res) => {
+    return './ui/src/'
+})
+
 // Display all dungeon masters
 app.get('/dungeon_masters', (req, res) => {
     db.query("SELECT * from `Information_Schema`.`columns` where table_name='Dungeon_Masters'", (err, results) => {

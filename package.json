@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.mjs",
   "scripts": {
-    "start": "node server.mjs",
+    "start": "nodemon server.mjs",
     "heroku-postbuild": "cd ui && npm install && npm start"
   },
   "type": "module",
