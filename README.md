@@ -1,1 +1,1 @@
-# Dungeon-Master-s-Planner
+# The Dungeon Master's Planner
