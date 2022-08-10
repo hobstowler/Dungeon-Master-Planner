@@ -29,7 +29,7 @@ function sanitizeString(inputString) {
 }
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html')
+    res.sendFile('./ui/build/index.html')
 })
 
 /***************************************************************
