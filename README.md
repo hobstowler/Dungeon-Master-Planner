@@ -18,14 +18,14 @@ At its heart, this is just a simple CRUD app pointed at a database that holds al
 
 ## Create
 
-Create new entries in the database with integrated forms.
+Create new entries in the database with integrated forms. Fill in the details and click 'Add New' when you're done.
 
 ![image](https://user-images.githubusercontent.com/91224707/186285893-a914f8b7-8c21-4f8b-94ea-8eb5aa786016.png)
 
 
 ## Read
 
-Read from the database by visiting each table's page.
+Read from the database by visiting each table's page. Some pages will have the option to see a detailed view of the intersection between two tables. Just click 'See Details' to check out the detailed view.
 
 ![image](https://user-images.githubusercontent.com/91224707/186286049-e8145f25-7e90-45b5-9b5e-a242facc976c.png)
 
@@ -37,4 +37,4 @@ Update existing entries in the database by clicking on the edit icon next to a r
 
 ## Delete
 
-Delete anything and watch the change cascade through the database.
+Delete anything by clicking the 'delete' icon next to any row and watch the change cascade through the database.
