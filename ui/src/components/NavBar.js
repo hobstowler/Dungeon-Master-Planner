@@ -9,6 +9,7 @@ export default function NavBar({clearData}) {
             <Link to="/dungeon_masters">Dungeon Masters</Link>
             <Link to="/scenarios">Scenarios</Link>
             <Link to="/dungeons">Dungeons</Link>
+            <Link to="/dungeons_has_monsters">Dungeons Has Monsters</Link>
             <Link to="/monsters">Monsters</Link>
             <Link to="/items">Items</Link>
             <Link to="/biomes">Biomes</Link>
